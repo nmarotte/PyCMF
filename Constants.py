@@ -1,1 +1,1 @@
-DELTA_T = 1 / 16  # 16 ticks per second
+DELTA_T = 1 / 320  # 16 ticks per second
