@@ -3,13 +3,13 @@ from pylab import *
 from tqdm import tqdm
 import numpy as np
 
-from WaterBody import WaterBody
+from CubeOfWater import CubeOfWater
 
 
 class Earth:
-    def __init__(self, shape_water_component=(10, 10, 10), max_t=10):
+    def __init__(self, shape_water_component=(25, 25, 25), max_t=10):
         self.shape = shape_water_component
-        self.water_bodies = WaterBody.generate_as_shape(self.shape)
+        self.water_bodies = CubeOfWater.generate_as_shape(self.shape)
         self.t = 0
         self.max_t = max_t
 
@@ -70,8 +70,8 @@ class Earth:
 
 
 if __name__ == '__main__':
-    terre = Earth(max_t=300)
-    for i in range(50):
-        terre.get_random_wb().temperature = 373
+    terre = Earth(shape_water_component=(25, 25, 25), max_t=300)
+    # for i in range(50):
+    #     terre.get_random_wb().temperature = 373
 
     terre.animate()

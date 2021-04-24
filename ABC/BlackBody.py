@@ -1,19 +1,18 @@
 from abc import abstractmethod, ABC
 
 from ABC.MassBody import MassBody
-from ABC.SurfaceBody import SurfaceBody
+from ABC.AreaBody import AreaBody
 from Constants import DELTA_T
 
 
-class BlackBody(MassBody, SurfaceBody, ABC):
+class BlackBody(MassBody, AreaBody, ABC):
     # https://en.wikipedia.org/wiki/Black_body#Radiative_cooling
     stefan_boltzmann_constant: float = 5.67 * 10 ** (-8)  # [W m^2 K^4]
-    area: float
 
     def __init__(self, area: float, mass: float, temperature: float, parent_system=None):
         MassBody.__init__(self, mass, temperature)
-        SurfaceBody.__init__(self, area)
-        self.parent_system = None
+        AreaBody.__init__(self, area)
+        self.parent_system = parent_system
 
     def tick(self):
         self.radiate_to(self.parent_system)

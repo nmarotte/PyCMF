@@ -7,8 +7,8 @@ class MassBody:
     specific_heat_capacity: float  # [j/(kg*K)]
 
     def __init__(self, mass: float, temperature: float):
-        self.mass = mass
-        self.temperature = temperature
+        self.mass = mass  # [kg]
+        self.temperature = temperature  # [K]
 
     @property
     @abstractmethod
