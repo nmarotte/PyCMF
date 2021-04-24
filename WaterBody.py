@@ -12,17 +12,18 @@ class WaterBody:
     index: int
     temperature: float
     neighbors: list[WaterBody]
-    co2_diffusivity: float = 0.143  # https://en.wikipedia.org/wiki/Thermal_diffusivity
+    thermal_diffusivity: float = 0.143  # https://en.wikipedia.org/wiki/Thermal_diffusivity
+    co2_diffusivity: float = 1  # ???
     surface = 10  # m^2
 
     def __init__(self, index: int, temperature: float = 300, co2_ppmv: float = 300):
         self.index = index
         self.temperature = temperature  # In °K
-        self.co2_ppmv = co2_ppmv
+        self.co2_ppmv = co2_ppmv  # In Part Per Million Volume
         self.neighbors = []
 
     def __repr__(self):
-        return str(f"Température : {round(self.temperature, 2)}, CO2 PPMV : {round(self.co2_ppmv,2)}")
+        return str(f"Température : {round(self.temperature, 2)}, CO2 PPMV : {round(self.co2_ppmv, 2)}")
 
     @classmethod
     def generate_as_shape(cls: WaterBody.__class__, shape: tuple):
@@ -55,7 +56,7 @@ class WaterBody:
 
     def average_temperature(self, other: WaterBody):
         diff = abs(other.temperature - self.temperature)
-        rate_of_temperature_change = WaterBody.co2_diffusivity * WaterBody.surface * diff * DELTA_T
+        rate_of_temperature_change = WaterBody.thermal_diffusivity * WaterBody.surface * diff * DELTA_T
         if self.temperature > other.temperature:
             self.temperature -= rate_of_temperature_change
             other.temperature += rate_of_temperature_change

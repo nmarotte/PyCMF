@@ -1,9 +1,7 @@
-import numpy as np
 import imageio
-import matplotlib.pyplot as plt
 from pylab import *
 from tqdm import tqdm
-import random
+import numpy as np
 
 from WaterBody import WaterBody
 
