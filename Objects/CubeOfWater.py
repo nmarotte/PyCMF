@@ -54,23 +54,6 @@ class CubeOfWater(BlackBody, VolumetricBody):
     def __repr__(self):
         return str(f"Température : {round(self.temperature, 2)}, CO2 PPMV : {round(self.co2_ppmv, 2)}")
 
-    @staticmethod
-    def generate_as_shape(shape: tuple):
-        flat_shape = np.product(shape)
-        volumes = np.full(flat_shape, fill_value=1000)
-        masses = np.full(flat_shape, fill_value=1000)
-        energies = np.random.normal(1255200000, 104600000, flat_shape)
-        co2_ppmvs = np.random.normal(300, 25, flat_shape)
-        res = np.empty(flat_shape, dtype=CubeOfWater)
-        for i in range(len(res)):
-            res[i] = CubeOfWater(i, volumes[i], masses[i], energies[i], co2_ppmvs[i])
-            for j in neighbors(i, shape):
-                res[j].add_neighbor(res[i])
-                res[i].add_neighbor(res[j])
-        res.reshape(shape)
-
-        return res
-
     def add_neighbor(self, neighbor: CubeOfWater):
         self.neighbors.append(neighbor)
 
