@@ -4,17 +4,20 @@ from pylab import *
 from tqdm import tqdm
 
 from ABC.Ticked import Ticked
+from Agregations.SoilComponent import SoilComponent
 from Agregations.WaterComponent import WaterComponent
 
 
 class Earth(Ticked):
-    def __init__(self, shape_water_component=(25, 25, 25), max_t=100):
-        super().__init__(t_stop=max_t)
-        self.shape = shape_water_component
-        self.water_component = WaterComponent(self.shape)
+    def __init__(self, shape, t_stop):
+        super().__init__(t_stop=t_stop)
+        self.shape = shape
+        self.water_component = WaterComponent(shape, t_stop)
+        self.soil_component = SoilComponent(shape, t_stop)
 
     def tick(self):
         self.water_component.tick()
+        self.soil_component.tick()
         self.one_tick_passed()
 
     def save_current_plot(self):
@@ -68,6 +71,6 @@ class Earth(Ticked):
 
 
 if __name__ == '__main__':
-    terre = Earth(shape_water_component=(25, 25, 25), max_t=300)
+    terre = Earth(shape=(25, 25, 25), t_stop=300)
 
     terre.animate()

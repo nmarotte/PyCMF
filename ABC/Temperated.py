@@ -23,7 +23,6 @@ class Temperated(AreaBody):
         diff = abs(other.temperature - self.temperature)
         rate_of_t_change = self.thermal_diffusivity * self.area * diff * DELTA_T
         rate_of_t_change = rate_of_t_change if self.temperature > other.temperature else -rate_of_t_change
-
         self.temperature -= rate_of_t_change
         other.temperature += rate_of_t_change
 
