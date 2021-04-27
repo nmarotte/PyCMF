@@ -19,8 +19,8 @@ class CubeOfWater(CubeOfMaterial):
         self.co2_ppmv = co2_ppmv  # In Part Per Million Volume
 
     def tick(self):
+        self.average_temperature(self.neighbors)
         for neighbor in self.neighbors:
-            self.average_temperature(neighbor)
             self.average_co2(neighbor)
 
     def average_co2(self, other: CubeOfWater):

@@ -11,5 +11,4 @@ class CubeOfSoil(CubeOfMaterial):
         CubeOfMaterial.__init__(self, index, volume, mass, temperature)
 
     def tick(self):
-        for neighbor in self.neighbors:
-            self.average_temperature(neighbor)
+        self.average_temperature(self.neighbors)

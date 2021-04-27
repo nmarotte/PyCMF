@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from collections import Iterable, Collection
 from functools import cache
 
 from ABC.AreaBody import AreaBody
@@ -41,17 +42,16 @@ class Temperated(AreaBody, MassBody, ABC):
         energy = temperature * self.specific_heat_capacity * mass
         MassBody.__init__(self, mass, energy)
 
-    def average_temperature(self, other: Temperated):
+    def average_temperature(self, neighbors: Collection[Temperated]):
         """
         As much as I would like to compute the energy transfer, this is unrealistic. However temperature do transfer
-        :param other:
+        :param neighbors:
         :return:
         """
-        diff = abs(other.temperature - self.temperature)
-        rate_of_t_change = self.thermal_diffusivity * self.area * diff * DELTA_T  # [m^2 s^-1] * [m^2] * [t] * s
-        rate_of_t_change = rate_of_t_change if self.temperature > other.temperature else -rate_of_t_change
-        self.temperature -= rate_of_t_change
-        other.temperature += rate_of_t_change
+        average = sum([n.temperature for n in neighbors]) / len(neighbors)
+        diff = average - self.temperature
+        self.temperature += DELTA_T * diff * self.thermal_diffusivity  # [K m^2] = [s] * [K] * [m^2 s^-1]
+
 
     @property
     @cache

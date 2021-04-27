@@ -22,5 +22,4 @@ class CubeOfAir(CubeOfMaterial):
         self.composition = AirComposition()
 
     def tick(self):
-        for neighbor in self.neighbors:
-            self.average_temperature(neighbor)
+        self.average_temperature(self.neighbors)

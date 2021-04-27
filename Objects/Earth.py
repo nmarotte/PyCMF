@@ -19,8 +19,8 @@ class Earth(Ticked):
 
     def tick(self):
         self.water_component.tick()
-        self.soil_component.tick()
-        self.air_component.tick()
+        # self.soil_component.tick()
+        # self.air_component.tick()
         self.one_tick_passed()
 
     def save_current_plot(self):
@@ -43,7 +43,7 @@ class Earth(Ticked):
         zs = np.array(zs)
 
         colmap = cm.ScalarMappable(cmap=cm.hsv)
-        colmap.set_array(np.linspace(273, 373, 100))
+        colmap.set_array(np.linspace(min(temperatures), max(temperatures), 100))
 
         ax.scatter(xs, ys, zs, c=cm.hsv(temperatures / 373), marker='o')
         cb = fig.colorbar(colmap)
@@ -75,6 +75,6 @@ class Earth(Ticked):
 
 if __name__ == '__main__':
     np.seterr('raise')
-    terre = Earth(shape=(25, 25, 10), t_stop=300)
+    terre = Earth(shape=(5, 5, 5), t_stop=100)
 
     terre.animate()
