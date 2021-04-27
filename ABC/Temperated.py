@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import abstractmethod
+from functools import cache
 
 from ABC.AreaBody import AreaBody
 from ABC.MassBody import MassBody
@@ -13,7 +14,7 @@ class Temperated(AreaBody, MassBody, ABC):
     @abstractmethod
     def thermal_conductivity(self) -> float:
         """
-        The thermal conductivity of the material
+        The ability of the material to conduct heat.
         :return: a constant for the material in Watt per meter Kelvin ( [W m^-1 K^-1] )
         """
 
@@ -26,8 +27,18 @@ class Temperated(AreaBody, MassBody, ABC):
         :return: a constant for the material in Joule per kilogram Kelvin ( [J kg^-1 K^-1] )
         """
 
-    def __init__(self, mass: float, area: float, energy: float):
+    @property
+    @abstractmethod
+    def density(self) -> float:
+        """
+        The density of the material
+        In this class because it is necessary for the computation of thermal_diffusivity
+        :return:
+        """
+
+    def __init__(self, mass: float, area: float, temperature: float):
         AreaBody.__init__(self, area)
+        energy = temperature * self.specific_heat_capacity * mass
         MassBody.__init__(self, mass, energy)
 
     def average_temperature(self, other: Temperated):
@@ -37,20 +48,25 @@ class Temperated(AreaBody, MassBody, ABC):
         :return:
         """
         diff = abs(other.temperature - self.temperature)
-        rate_of_t_change = self.thermal_diffusivity * self.area * diff * DELTA_T
+        rate_of_t_change = self.thermal_diffusivity * self.area * diff * DELTA_T  # [m^2 s^-1] * [m^2] * [t] * s
         rate_of_t_change = rate_of_t_change if self.temperature > other.temperature else -rate_of_t_change
         self.temperature -= rate_of_t_change
         other.temperature += rate_of_t_change
 
     @property
-    @abstractmethod
+    @cache
     def thermal_diffusivity(self) -> float:
         """
         Abstract because it requires the density of the material that depend on the object
         Is computed through thermal conductivity, density and specific heat capacity.
         https://en.wikipedia.org/wiki/Thermal_diffusivity
-        :return: return CubeOfMaterial.thermal_conductivity / (self.density * CubeOfMaterial.specific_heat_capacity)
+        [m^2 s^-1] = [W m^-1 K^-1] * [m^3 kg^-1] * [J^-1 kg^1 K^1]
+                   = [W] * [m^2] * [kg^-1 m^-2 s^2]
+                   = [kg m^2 s^-3] * [kg^-1 s^2]
+                   = [m^2 s^-1]
+        :return:
         """
+        return self.thermal_conductivity / (self.density * self.specific_heat_capacity)
 
     @property
     def temperature(self):

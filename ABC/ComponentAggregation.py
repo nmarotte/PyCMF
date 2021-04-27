@@ -3,6 +3,11 @@ from abc import ABC
 
 
 class ComponentAggregation(ABC):
+    # All cells will start at 300 K
+    # With a volume of 1000 m^3 (1 000 000 litres)
+    temperature_each_start = 300
+    volume_each = 1000
+
     def __init__(self, shape: tuple):
         flat_shape = np.product(shape)
         self.components = np.empty(flat_shape, dtype=self.__class__)

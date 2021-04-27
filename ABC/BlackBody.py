@@ -8,8 +8,8 @@ class BlackBody(Temperated, ABC):
     # https://en.wikipedia.org/wiki/Black_body#Radiative_cooling
     stefan_boltzmann_constant: float = 5.67 * 10 ** (-8)  # [W m^2 K^4]
 
-    def __init__(self, mass: float, area: float, energy: float, parent_system=None):
-        Temperated.__init__(self, mass, area, energy)
+    def __init__(self, mass: float, area: float, temperature: float, parent_system=None):
+        Temperated.__init__(self, mass, area, temperature)
         self.parent_system = parent_system
 
     def tick(self):

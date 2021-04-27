@@ -11,20 +11,12 @@ class CubeOfWater(CubeOfMaterial):
     thermal_conductivity: float = 0.5918  # [W m^-1 K^-1]
     # Specific heat capacity of water : https://en.wikipedia.org/wiki/Specific_heat_capacity
     specific_heat_capacity: float = 4184  # [J kg^-1 K^-1]
-    # CO2 diffusivity of Water : ???
+    # TODO CO2 diffusivity of Water : ???
     co2_diffusivity = 0.00014
 
-    @property
-    @cache
-    def thermal_diffusivity(self) -> float:
-        return CubeOfWater.thermal_conductivity / (self.density * CubeOfWater.specific_heat_capacity)
-
-    def __init__(self, index: int, volume: float, mass: float, energy: float, co2_ppmv: float = 300):
-        CubeOfMaterial.__init__(self, index, volume, mass, energy)
+    def __init__(self, index: int, volume: float, mass: float, temperature: float, co2_ppmv: float = 300):
+        CubeOfMaterial.__init__(self, index, volume, mass, temperature)
         self.co2_ppmv = co2_ppmv  # In Part Per Million Volume
-
-    def __repr__(self):
-        return str(f"Température : {round(self.temperature, 2)}, CO2 PPMV : {round(self.co2_ppmv, 2)}")
 
     def tick(self):
         for neighbor in self.neighbors:
