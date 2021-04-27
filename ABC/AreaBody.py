@@ -1,6 +1,7 @@
-class AreaBody:
-    area: float
+from abc import ABC
 
+
+class AreaBody(ABC):
     def __init__(self, area: float):
-        self.area = area
+        self.area: float = area  # [m^2]
 

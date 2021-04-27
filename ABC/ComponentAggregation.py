@@ -1,7 +1,8 @@
 import numpy as np
+from abc import ABC
 
 
-class ComponentAggregation:
+class ComponentAggregation(ABC):
     def __init__(self, shape: tuple):
         flat_shape = np.product(shape)
         self.components = np.empty(flat_shape, dtype=self.__class__)

@@ -1,7 +1,8 @@
 from __future__ import annotations
+from abc import ABC
 
 
-class Neighbored:
+class Neighbored(ABC):
     def __init__(self, index: int):
         self.index = index
         self.neighbors = []
