@@ -42,7 +42,6 @@ class Temperated(AreaBody, MassBody, ABC):
         self.temperature -= rate_of_t_change
         other.temperature += rate_of_t_change
 
-
     @property
     @abstractmethod
     def thermal_diffusivity(self) -> float:
@@ -75,4 +74,5 @@ class Temperated(AreaBody, MassBody, ABC):
         :param new_t: the new temperature
         :return:
         """
-        self.energy = new_t * self.specific_heat_capacity * self.mass  # [J] = [K] * [J K^-1 kg^-1] * [kg]
+        self.set_energy(new_t * self.specific_heat_capacity * self.mass)  # [J] = [K] * [J K^-1 kg^-1] * [kg]
+
