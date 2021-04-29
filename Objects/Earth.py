@@ -1,7 +1,8 @@
 import imageio
 import numpy as np
-from pylab import *
+from matplotlib import cm
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 from ABC.Ticked import Ticked
 from Agregations.AirComponent import AirComponent
@@ -75,6 +76,6 @@ class Earth(Ticked):
 
 if __name__ == '__main__':
     np.seterr('raise')
-    terre = Earth(shape=(1, 10, 10), t_stop=300)
+    terre = Earth(shape=(10, 10, 1), t_stop=300)
 
     terre.animate()
