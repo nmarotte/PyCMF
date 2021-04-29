@@ -4,7 +4,7 @@ from abc import ABC
 
 class Neighbored(ABC):
     def __init__(self, index: int):
-        self.index = index
+        self.index: int = index
         self.neighbors = []
 
     def add_neighbor(self, neighbor: Neighbored):

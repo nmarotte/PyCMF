@@ -3,11 +3,13 @@ from ABC.CubeOfMaterial import CubeOfMaterial
 
 class AirComposition(dict):
     def __init__(self, **kwargs):
+        # Source : Allen's Astrophysical Quantities of Clabon Walter Allen, Arthur N. Cox,  Fourth Edition
+        # page 258
         super().__init__()
-        self['N'] = 0.7803
-        self['O'] = 0.21
-        self['Ar'] = 0.0093
-        self['CO2'] = 0.0004
+        self['N'] = 0.7808
+        self['O'] = 0.2095
+        self['Ar'] = 0.00934
+        self['CO2'] = 0.000345
         self.update(kwargs)
 
 
@@ -22,4 +24,4 @@ class CubeOfAir(CubeOfMaterial):
         self.composition = AirComposition()
 
     def tick(self):
-        self.average_temperature(self.neighbors)
+        self.average_temperature()

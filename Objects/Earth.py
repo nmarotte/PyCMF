@@ -75,6 +75,6 @@ class Earth(Ticked):
 
 if __name__ == '__main__':
     np.seterr('raise')
-    terre = Earth(shape=(5, 5, 5), t_stop=100)
+    terre = Earth(shape=(1, 10, 10), t_stop=300)
 
     terre.animate()

@@ -42,17 +42,6 @@ class Temperated(AreaBody, MassBody, ABC):
         energy = temperature * self.specific_heat_capacity * mass
         MassBody.__init__(self, mass, energy)
 
-    def average_temperature(self, neighbors: Collection[Temperated]):
-        """
-        As much as I would like to compute the energy transfer, this is unrealistic. However temperature do transfer
-        :param neighbors:
-        :return:
-        """
-        average = sum([n.temperature for n in neighbors]) / len(neighbors)
-        diff = average - self.temperature
-        self.temperature += DELTA_T * diff * self.thermal_diffusivity  # [K m^2] = [s] * [K] * [m^2 s^-1]
-
-
     @property
     @cache
     def thermal_diffusivity(self) -> float:
@@ -69,6 +58,7 @@ class Temperated(AreaBody, MassBody, ABC):
         return self.thermal_conductivity / (self.density * self.specific_heat_capacity)
 
     @property
+    @cache
     def temperature(self):
         """
         The temperature of the system computed via its energy
@@ -91,4 +81,3 @@ class Temperated(AreaBody, MassBody, ABC):
         :return:
         """
         self.set_energy(new_t * self.specific_heat_capacity * self.mass)  # [J] = [K] * [J K^-1 kg^-1] * [kg]
-

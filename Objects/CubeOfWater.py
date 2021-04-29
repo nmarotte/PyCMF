@@ -14,12 +14,12 @@ class CubeOfWater(CubeOfMaterial):
     # TODO CO2 diffusivity of Water : ???
     co2_diffusivity = 0.00014
 
-    def __init__(self, index: int, volume: float, mass: float, temperature: float, co2_ppmv: float = 300):
+    def __init__(self, index: int, volume: float, mass: float, temperature: float, co2_ppmv: float = 345):
         CubeOfMaterial.__init__(self, index, volume, mass, temperature)
         self.co2_ppmv = co2_ppmv  # In Part Per Million Volume
 
     def tick(self):
-        self.average_temperature(self.neighbors)
+        self.average_temperature()
         for neighbor in self.neighbors:
             self.average_co2(neighbor)
 
