@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from functools import cache
-
 from ABC.CubeOfMaterial import CubeOfMaterial
 from Constants import DELTA_T
 
@@ -11,8 +9,10 @@ class CubeOfWater(CubeOfMaterial):
     thermal_conductivity: float = 0.5918  # [W m^-1 K^-1]
     # Specific heat capacity of water : https://en.wikipedia.org/wiki/Specific_heat_capacity
     specific_heat_capacity: float = 4184  # [J kg^-1 K^-1]
+    heat_transfer_factor: float = 0.05
     # TODO CO2 diffusivity of Water : ???
     co2_diffusivity = 0.00014
+    material_density = 1024  # [kg m-3]
 
     def __init__(self, index: int, volume: float, mass: float, temperature: float, co2_ppmv: float = 345):
         CubeOfMaterial.__init__(self, index, volume, mass, temperature)

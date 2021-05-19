@@ -23,3 +23,9 @@ class ComponentAggregation(ABC):
 
     def __iter__(self):
         return self.components.__iter__()
+
+    def __getitem__(self, key):
+        return self.components.__getitem__(key)
+
+    def add(self, component, index):
+        self.components[index] = component

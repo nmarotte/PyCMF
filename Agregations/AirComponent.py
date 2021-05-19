@@ -3,7 +3,7 @@ import numpy as np
 from ABC.ComponentAggregation import ComponentAggregation
 from ABC.Ticked import Ticked
 from Objects.CubeOfAir import CubeOfAir
-from Utils import neighbors
+from Utils import neighbors_single
 
 
 class AirComponent(ComponentAggregation, Ticked):
@@ -21,7 +21,7 @@ class AirComponent(ComponentAggregation, Ticked):
 
         for i in range(len(self.components)):
             self.components[i] = CubeOfAir(i, AirComponent.volume_each, mass_each, temperatures[i])
-            for j in neighbors(i, shape):
+            for j in neighbors_single(i, shape):
                 self.components[j].add_neighbor(self.components[i])
                 self.components[i].add_neighbor(self.components[j])
         self.components.reshape(shape)

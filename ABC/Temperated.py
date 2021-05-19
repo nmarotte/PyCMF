@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from abc import abstractmethod
 from collections import Iterable, Collection
-from functools import cache
 
 from ABC.AreaBody import AreaBody
 from ABC.MassBody import MassBody
@@ -30,6 +29,13 @@ class Temperated(AreaBody, MassBody, ABC):
 
     @property
     @abstractmethod
+    def heat_transfer_factor(self) -> float:
+        """
+        An abstraction for tuning the speed at which temperature balance
+        """
+
+    @property
+    @abstractmethod
     def density(self) -> float:
         """
         The density of the material
@@ -43,7 +49,6 @@ class Temperated(AreaBody, MassBody, ABC):
         MassBody.__init__(self, mass, energy)
 
     @property
-    @cache
     def thermal_diffusivity(self) -> float:
         """
         Abstract because it requires the density of the material that depend on the object
@@ -58,7 +63,6 @@ class Temperated(AreaBody, MassBody, ABC):
         return self.thermal_conductivity / (self.density * self.specific_heat_capacity)
 
     @property
-    @cache
     def temperature(self):
         """
         The temperature of the system computed via its energy

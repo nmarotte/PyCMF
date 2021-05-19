@@ -1,7 +1,6 @@
 from __future__ import annotations
 from abc import ABC
 from collections import Collection
-from functools import cache
 
 from ABC.BlackBody import BlackBody
 from ABC.Neighbored import Neighbored
@@ -16,7 +15,6 @@ class CubeOfMaterial(BlackBody, VolumetricBody, Neighbored, ABC):
         Neighbored.__init__(self, index)
 
     @property
-    @cache
     def density(self) -> float:
         return self.mass / self.volume
 
@@ -27,4 +25,4 @@ class CubeOfMaterial(BlackBody, VolumetricBody, Neighbored, ABC):
         """
         average = sum([n.temperature for n in self.neighbors]) / len(self.neighbors)
         diff = average - self.temperature
-        self.temperature += diff * DELTA_T * self.thermal_conductivity / self.specific_heat_capacity
+        self.temperature += diff * DELTA_T * self.heat_transfer_factor

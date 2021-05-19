@@ -18,6 +18,7 @@ class CubeOfAir(CubeOfMaterial):
     # /!\ TODO : this could be made more accurate by being dependant of the composition of the atsmosphere
     thermal_conductivity = 0.025  # [W m^-1 K^-1]
     specific_heat_capacity = 1000.35  # [J kg^-1 K^-1]
+    heat_transfer_factor: float = 0.05
 
     def __init__(self, index: int, volume: float, mass: float, temperature: float):
         CubeOfMaterial.__init__(self, index, volume, mass, temperature)
