@@ -1,0 +1,54 @@
+Hello, in this presentation we will learn about climate modelling and the use of current technologies in that field. I will also present to you the reason behind why it could seem that climatologist don't make very efficient simulator and why it isn't the case.
+
+SLIDE
+Forthis presentation, I'll start with a quick overview of the history of climate modelling with regards to the use of mathematics and computers, then we will briefly see the basis of climate modelling. Then I will show you what I am actually doing, followed by the challenges of this problem. Finaly you'll see some of the Input and Output of my current program
+
+SLIDE
+It all starts in 1922 when a book titled Weather Prediction by Numerical Process by Lewis Fry Richardson is published. This book presents ways to predict the weather with several differential equations, trust me you don't want to read those.
+
+After that date, more and more research is done on the subject but still at a very slow pace.
+In 1946, the famous mathematician John von Neumann proposes to use new computers such as the Eletronic Numerical Integrator And Computer, or ENIAC, a general-purpose computer for weather forecasting, hoping that if we could forecast regional weather, then maybe one day we could simulate the whole atmosphere
+
+In 1954 our favourite programming language FORTRAN was released alongside its scientific article. This release coincidentally accelerated the advancements in climate modelisation and simulation
+
+Fast forward to today, the most common language used for developping such tools is still fortran, so why is that the case ? 
+
+And you can see a screenshot of the current installer of EdGCM, an educational tool for modelling and simulating the climate, as of 2021
+
+SLIDE
+To understand the predominance of that language we must first see what problem those programs are trying to solve. Over time, we got better and better at understanding the climate by acquiring knowledge about the different processes at play in the atmosphere. This allowed us to build better models, but also way more complex with all the interactions
+
+SLIDE
+For modelling the atmosphere, the current and most common approach is to divide the world in many cubes interacting with each of their neighbors. Then, as computers got more powerful, we started to increase the precision of this representation by shortening the cube length. The problem with that is that if you decide you want to double the precision, that is having cubes with half the length, you end up with 8 cubes in the same area. Even my the worst program I ever wrote didn't have such a high complexity
+
+And finally, the worst for the end :
+SLIDE
+At each time step, you redo the whole simulation on the entire world. Isn't that wonderful ? We now understand why programs made by climatologist are so slow, because they require enormous computation to be precise
+
+SLIDE
+As we saw before, since most of the programs are written in good old Fortran, they are probably not the most easy to read or understand if you, as a beginner, want to learn more about climate simulation. This is why my work will be to reorganize some fortran climate model in object oriented programming
+
+I will try to bring as much clarity into the code as possible, while still not exploding the already high complexity of such modelling. This will obviously cost some speed but this work will help us know how bad the transition from fortran to Object Oriented really is
+
+SLIDE
+The challenges coming at me are that most of the current research is focussed on climate change and search engines aren't really helping to bring complex information since it is overloaded by flashy websites for the general public and for politician about the consequences of climate change
+
+
+With this work, we will also see what is the cost of such technological change. There is a big difference between the low level and highly efficient assembly produced Fortran compared to Python, eventhough some libraries help to bridge that gap
+
+Since the models have to be realistic and that the biosphere is complex, there is no point of going through the hassle of building a model in fortran that only consider a few processes, that will inevitably be unrealistic
+
+Also I am no climatologist so the accuracy of the program with the real physical world might not be good, since it requires good knowledge of that subject which I currently do not have, except for maybe that class I took in first year that was 5 ECTS of basically studying rocks.
+
+This means my program will obviously not be used for actual predictions, but more in a educational way for the climatology community
+
+SLIDE
+Now some flashy animations to wake you up. See this beautiful gif? That's my program equilibrating the temperature of more than fifteen thousands water temperature points. It was able to compute 5 time steps each second while still doing some other calculations.
+
+We can see each object averaging its temperature with its neighbors until they all have the same temperature
+
+SLIDE
+Also the program will be able to take as an input a map, convert it to black and white and then use each pixel on the map to build a cube of land or a cube of ocean for preparing the model. The higher the resolution of the image, the higher and slower the model
+
+SLIDE
+And that's all I have for you, so thank you for your attention !
