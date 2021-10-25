@@ -16,7 +16,7 @@ class Grid(list[Optional[GridComponent]]):
 
     def not_nones(self):
         for elem in self:
-            if elem:
+            if elem is not None:
                 yield elem
 
     def by_row(self):
@@ -86,8 +86,7 @@ class Grid(list[Optional[GridComponent]]):
 
     def update(self):
         for elem in self.not_nones():
-            for n in self.neighbours(elem.index):
-                pass
+            delta = elem.average(self.neighbours(elem.index))
 
 
 if __name__ == '__main__':
