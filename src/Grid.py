@@ -8,9 +8,10 @@ from GridComponent import GridComponent
 
 
 class Grid(list[Optional[GridComponent]]):
-    def __init__(self, shape: tuple):
+    def __init__(self, shape: tuple, *, parent=None):
         super().__init__()
         self.shape = shape
+        self.parent = parent
         for _ in range(numpy.product(self.shape)):
             self.append(None)
 
@@ -50,9 +51,9 @@ class Grid(list[Optional[GridComponent]]):
         # 1D
         if len(self.shape) == 1:
             if index >= 1:  # Left
-                yield self[index-1]
+                yield self[index - 1]
             if index < len(self) - 1:  # Right
-                yield self[index+1]
+                yield self[index + 1]
         # 2D
         elif len(self.shape) == 2:
             if index >= self.shape[0]:  # Top
@@ -86,14 +87,14 @@ class Grid(list[Optional[GridComponent]]):
 
     def update(self):
         for elem in self.not_nones():
-            delta = elem.average(self.neighbours(elem.index))
+            elem.update()
 
 
 if __name__ == '__main__':
     start = timer()
     # Test neighbours 1D
-    shape1D = (15, )
-    grid1D = Grid((15, ))
+    shape1D = (15,)
+    grid1D = Grid((15,))
     assert list(grid1D.by_row()) == [None] * numpy.product(shape1D)
     for i_test in range(len(grid1D)):
         grid1D[i_test] = i_test

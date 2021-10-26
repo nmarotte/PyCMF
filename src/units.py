@@ -25,6 +25,9 @@ class Temperature(Unit):
     def __new__(cls, *, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
         return super().__new__(cls, Temperature.to_kelvin(kelvin=kelvin, celsius=celsius, fahrenheit=fahrenheit))
 
+    def copy(self):
+        return Temperature(kelvin=float(self))
+
     @staticmethod
     def to_kelvin(*, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
         if kelvin:
@@ -44,6 +47,9 @@ class Temperature(Unit):
 class Mass(Unit):
     def __new__(cls, *, kilograms: float = None, grams: float = None, pounds: float = None):
         return super().__new__(cls, Mass.to_kilograms(kilograms=kilograms, grams=grams, pounds=pounds))
+
+    def copy(self):
+        return Mass(kilograms=self)
 
     @staticmethod
     def to_kilograms(*, kilograms: float = None, grams: float = None, pounds: float = None):
@@ -125,6 +131,11 @@ class Time(Unit):
             return super().__new__(cls, round(hours * 3600, Time.precision))
         if days:
             return super().__new__(cls, round(days * 86400, Time.precision))
+
+
+class Energy(Unit):
+    def __new__(cls, *, joules: float = None):
+        return super().__new__(cls, round(joules, Energy.precision))
 
 
 if __name__ == '__main__':

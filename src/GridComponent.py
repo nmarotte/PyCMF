@@ -13,3 +13,11 @@ class GridComponent(ABC):
     @abstractmethod
     def average(components):
         pass
+
+    @abstractmethod
+    def update(self):
+        pass
+
+    @abstractmethod
+    def add_energy(self, input_energy: Energy):
+        pass
