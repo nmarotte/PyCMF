@@ -1,11 +1,12 @@
 from random import random
 from typing import Optional
+from tqdm import tqdm
 
 from Earth import Earth
 from Water import Water
 from constants import TIME_DELTA
 from sun import Sun
-from units import Temperature, Mass
+from units import Temperature, Mass, Volume
 
 
 class Universe:
@@ -23,16 +24,12 @@ class Universe:
 
 if __name__ == '__main__':
     """
-    If we assume that the earth has 10 * 10 * 10 * 1000000000000000000 = 1e21 kilograms of water, each second that the 
-    sun shines on earth, we have
     """
     uni = Universe()
-    earth = Earth((10, 10, 10), parent=uni)
-    for i in range(len(earth)):
-        earth[i] = Water(mass=Mass(kilograms=1000000000000000000), temperature=Temperature(celsius=21 * random()), parent=earth, index=i)
-    uni.earth = earth
+    uni.earth = Earth((10, 10, 10), parent=uni)
+    uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
     uni.sun = Sun(parent=uni)
-    print(earth.compute_average_temperature())
-    for i in range(int(1//TIME_DELTA)):
+    print(uni.earth.compute_average_temperature())
+    for i in tqdm(range(int(1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()
-    print(earth.compute_average_temperature())
+    print(uni.earth.compute_average_temperature())

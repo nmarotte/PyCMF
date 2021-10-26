@@ -5,7 +5,7 @@ from tqdm import tqdm
 from Earth import Earth
 from Water import Water
 from sun import Sun
-from units import Temperature, Mass
+from units import Temperature, Mass, Volume
 from universe import Universe
 
 if __name__ == '__main__':
@@ -22,14 +22,13 @@ if __name__ == '__main__':
     nb_iter = 100
 
     initial_water_temperature = Temperature(celsius=21)
-    initial_water_mass = Mass(kilograms=1e21)
     simulation_duration_total = 0
     after_total = 0
     print(f"Temperature at the beginning of the simulation : {initial_water_temperature}°K ")
     for n in tqdm(range(nb_iter)):
         uni = Universe()
         uni.earth = Earth((1, 1, 1), parent=uni)
-        uni.earth[0] = Water(mass=initial_water_mass.copy(), temperature=initial_water_temperature.copy(), parent=uni.earth, index=0)
+        uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), initial_water_temperature)
         uni.sun = Sun()
         start = time_ns()
         for i in range(24 * 60 * 60):

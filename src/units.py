@@ -25,6 +25,9 @@ class Temperature(Unit):
     def __new__(cls, *, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
         return super().__new__(cls, Temperature.to_kelvin(kelvin=kelvin, celsius=celsius, fahrenheit=fahrenheit))
 
+    def __truediv__(self, other):
+        return Temperature(kelvin=super().__truediv__(other))
+
     def copy(self):
         return Temperature(kelvin=float(self))
 
@@ -36,6 +39,7 @@ class Temperature(Unit):
             return round(celsius + 273.15, Temperature.precision)
         if fahrenheit:
             return round((fahrenheit + 459.67) * (5 / 9), Temperature.precision)
+        return 0.0
 
     def to_celsius(self):
         return self - 273.15
@@ -48,6 +52,9 @@ class Mass(Unit):
     def __new__(cls, *, kilograms: float = None, grams: float = None, pounds: float = None):
         return super().__new__(cls, Mass.to_kilograms(kilograms=kilograms, grams=grams, pounds=pounds))
 
+    def __truediv__(self, other):
+        return Mass(kilograms=super().__truediv__(other))
+
     def copy(self):
         return Mass(kilograms=self)
 
@@ -59,6 +66,7 @@ class Mass(Unit):
             return round(grams / 1000, Mass.precision)
         if pounds:
             return round(pounds / 2.20462, Mass.precision)
+        return 0.0
 
     def to_grams(self):
         return 1000 * self
@@ -77,6 +85,7 @@ class Distance(Unit):
             return super().__new__(cls, round(feet / 3.2808, Distance.precision))
         if inches:
             return super().__new__(cls, round(inches / 39.370, Distance.precision))
+        return super().__new__(cls, 0.0)
 
 
 class Area(Unit):
@@ -89,6 +98,7 @@ class Area(Unit):
             return super().__new__(cls, round(feet2 / (3.2808 ** 2), Area.precision))
         if inches2:
             return super().__new__(cls, round(inches2 / (39.370 ** 2), Area.precision))
+        return super().__new__(cls, 0.0)
 
     def to_yards2(self):
         return self * (1.0936 ** 2)
@@ -110,6 +120,13 @@ class Volume(Unit):
             return super().__new__(cls, round(feet3 / (3.2808 ** 3), Area.precision))
         if inches3:
             return super().__new__(cls, round(inches3 / (39.370 ** 3), Area.precision))
+        return super().__new__(cls, 0.0)
+
+    def __truediv__(self, other):
+        return Volume(meters3=super().__truediv__(other))
+
+    def copy(self):
+        return Volume(meters3=self)
 
     def to_yards3(self):
         return self * (1.0936 ** 3)
@@ -131,11 +148,14 @@ class Time(Unit):
             return super().__new__(cls, round(hours * 3600, Time.precision))
         if days:
             return super().__new__(cls, round(days * 86400, Time.precision))
+        return super().__new__(cls, 0.0)
 
 
 class Energy(Unit):
     def __new__(cls, *, joules: float = None):
-        return super().__new__(cls, round(joules, Energy.precision))
+        if joules:
+            return super().__new__(cls, round(joules, Energy.precision))
+        return super().__new__(cls, 0.0)
 
 
 if __name__ == '__main__':
