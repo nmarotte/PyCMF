@@ -2,8 +2,7 @@ import datetime
 from time import time_ns
 from tqdm import tqdm
 
-from Earth import Earth
-from Water import Water
+from Earth.earth import Earth
 from sun import Sun
 from units import Temperature, Mass, Volume
 from universe import Universe

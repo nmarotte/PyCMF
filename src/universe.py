@@ -1,9 +1,8 @@
-from random import random
 from typing import Optional
+
 from tqdm import tqdm
 
-from Earth import Earth
-from Water import Water
+from Earth.earth import Earth
 from constants import TIME_DELTA
 from sun import Sun
 from units import Temperature, Mass, Volume
@@ -13,6 +12,13 @@ class Universe:
     def __init__(self):
         self.earth: Optional[Earth] = None
         self.sun: Optional[Sun] = None
+
+    def compute_step(self, *, skip_earth=False, skip_sun=True):
+        if not skip_earth and self.earth:
+            self.earth.compute_step()
+        if not skip_sun and self.sun:
+            input_energy = self.sun.radiate()
+            self.earth.add_energy(input_energy)
 
     def update(self, *, skip_earth=False, skip_sun=False):
         if not skip_earth and self.earth:

@@ -1,10 +1,9 @@
-from collections import namedtuple
 from timeit import default_timer as timer
 from typing import Optional
 
 import numpy
 
-from GridComponent import GridComponent
+from Earth.Components.grid_component import GridComponent
 
 
 class Grid(list[Optional[GridComponent]]):
@@ -16,9 +15,7 @@ class Grid(list[Optional[GridComponent]]):
             self.append(None)
 
     def not_nones(self):
-        for elem in self:
-            if elem is not None:
-                yield elem
+        return [elem for elem in self if elem is not None]
 
     def by_row(self):
         if len(self.shape) == 1:
@@ -84,6 +81,10 @@ class Grid(list[Optional[GridComponent]]):
             # Back
             if index + self.shape[0] * self.shape[1] < numpy.product(self.shape):
                 yield self[index + self.shape[0] * self.shape[1]]
+
+    def compute_step(self):
+        for elem in self.not_nones():
+            print(elem.compute_step())
 
     def update(self):
         for elem in self.not_nones():

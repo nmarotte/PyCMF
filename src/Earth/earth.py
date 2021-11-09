@@ -1,5 +1,5 @@
-from Grid import Grid
-from Water import Water
+from Earth.grid import Grid
+from Earth.Components.water import Water
 from units import Energy, Mass, Volume, Temperature
 
 
