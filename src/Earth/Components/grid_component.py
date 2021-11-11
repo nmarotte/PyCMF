@@ -10,8 +10,9 @@ class GridComponent(ABC):
     _neighbours: list
 
     def __init__(self, volume: Volume = Volume(meters3=1), mass: Mass = Mass(kilograms=1000),
-                 temperature: Temperature = Temperature(celsius=21), *, parent = None, index: int = None):
+                 temperature: Temperature = Temperature(celsius=21), *, parent=None, index: int = None):
         self.volume = volume
+        self.surface = Area(meters2=(volume**(1/3))**2)
         self.mass = mass
         self.temperature = temperature
         self.parent = parent
@@ -34,4 +35,8 @@ class GridComponent(ABC):
 
     @abstractmethod
     def compute_step(self):
+        pass
+
+    @abstractmethod
+    def apply_step(self, deltas):
         pass

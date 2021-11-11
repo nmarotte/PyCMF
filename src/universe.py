@@ -13,19 +13,24 @@ class Universe:
         self.earth: Optional[Earth] = None
         self.sun: Optional[Sun] = None
 
-    def compute_step(self, *, skip_earth=False, skip_sun=True):
+    def compute_step(self, *, skip_earth=False, skip_sun=False):
+        deltas = {"earth": None, "sun": None}
         if not skip_earth and self.earth:
-            self.earth.compute_step()
+            deltas["earth"] = self.earth.compute_step()
         if not skip_sun and self.sun:
-            input_energy = self.sun.radiate()
-            self.earth.add_energy(input_energy)
+            deltas["sun"] = self.sun.compute_step()
+        return deltas
+
+    def apply_step(self, deltas, *, skip_earth=False, skip_sun=False):
+        if not skip_earth and self.earth:
+            self.earth.apply_step(deltas["earth"])
+        if not skip_sun and self.sun:
+            self.sun.apply_step(deltas["sun"])
+            self.earth.add_energy(deltas["sun"]["energy"])
 
     def update(self, *, skip_earth=False, skip_sun=False):
-        if not skip_earth and self.earth:
-            self.earth.update()
-        if not skip_sun and self.sun:
-            input_energy = self.sun.radiate()
-            self.earth.add_energy(input_energy)
+        deltas = self.compute_step(skip_earth=skip_earth, skip_sun=skip_sun)
+        self.apply_step(deltas, skip_earth=skip_earth, skip_sun=skip_sun)
 
 
 if __name__ == '__main__':

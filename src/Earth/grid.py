@@ -3,7 +3,7 @@ from typing import Optional
 
 import numpy
 
-from Earth.Components.grid_component import GridComponent
+from Earth.Components.grid_component import GridComponent, Unit
 
 
 class Grid(list[Optional[GridComponent]]):
@@ -82,12 +82,18 @@ class Grid(list[Optional[GridComponent]]):
             if index + self.shape[0] * self.shape[1] < numpy.product(self.shape):
                 yield self[index + self.shape[0] * self.shape[1]]
 
-    def compute_step(self):
-        for elem in self.not_nones():
-            print(elem.compute_step())
+    def compute_step(self) -> list[list[dict[str, Unit]]]:
+        deltas = []
+        for elem in self:
+            deltas.append(elem.compute_step())
+        return deltas
+
+    def apply_step(self, deltas: list[list[dict[str, Unit]]]):
+        for i, elem in enumerate(self):
+            elem.apply_step(deltas[i])
 
     def update(self):
-        for elem in self.not_nones():
+        for elem in self:
             elem.update()
 
 
