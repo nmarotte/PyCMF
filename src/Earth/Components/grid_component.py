@@ -76,15 +76,6 @@ class GridComponent(ABC):
             "mass": (other.mass - self.mass),
         }
 
-    def compute_step(self) -> list[dict[str, Unit]]:
-        return [self.get_diff(n) for n in self.parent.neighbours(self.index)]
-
-    def apply_step(self, deltas: list[dict[str, Unit]]):
-        joule_per_time_scale = Energy(joules=self.heat_transfer_coefficient * self.surface * TIME_DELTA)
-        for i, n in enumerate(self.neighbours):
-            self.add_energy(joule_per_time_scale * deltas[i]["temperature"])
-            n.add_energy(-joule_per_time_scale * deltas[i]["temperature"])
-
     def update(self):
         joule_per_time_scale = Energy(joules=self.heat_transfer_coefficient * self.surface * TIME_DELTA)
         for n in self.neighbours:

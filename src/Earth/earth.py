@@ -2,19 +2,22 @@ from typing import Optional
 
 from Earth.grid import Grid
 from Earth.Components.water import Water
-from units import Energy, Mass, Volume, Temperature
+from constants import TIME_DELTA, STEFAN_BOLTZMANN
+from units import Energy, Mass, Volume, Temperature, Unit, Area
 
 
 class Earth(Grid):
     __mass: Optional[Mass]
     __temperature: Optional[Temperature]
+    __surface: Optional[Area]
 
-    def __init__(self, shape: tuple, *, parent=None):
+    def __init__(self, shape: tuple, surface: Area = Area(meters2=510.1e9), *, parent=None):
         super().__init__(shape, parent=parent)
         for i in range(len(self)):
-            self[i] = Water(mass=Mass(), volume=Volume(), temperature=Temperature(), parent=self, index=i)
+            self[i] = Water(mass=Mass(kilograms=1000), volume=Volume(meters3=1), temperature=Temperature(celsius=21), parent=self, index=i)
         self.__mass = None
         self.__temperature = None
+        self.__surface = surface
 
     @property
     def mass(self) -> Mass:
@@ -52,15 +55,11 @@ class Earth(Grid):
 - Composition: {self.composition['water'] * 100}% Water"""
         return res
 
-    def add_energy(self, input_energy: Energy):
-        """
-        Distribute energy on all the components of the planet uniformly
-        :param input_energy:
-        :return:
-        """
-        energy_each = input_energy / len(self)
-        for elem in self:
-            elem.add_energy(energy_each)
+    def black_body_radiate(self):
+        heat = STEFAN_BOLTZMANN * self.temperature**4 * self.__surface * TIME_DELTA
+        print(heat, self.__temperature)
+        self.__temperature -= heat
+        return heat
 
     def add_water(self, total_mass: Mass, total_volume: Volume, temperature: Temperature):
         """
@@ -76,3 +75,7 @@ class Earth(Grid):
             elem.mass = mass_each.copy()
             elem.volume = volume_each.copy()
             elem.temperature = temperature.copy()
+
+    def update(self):
+        self.black_body_radiate()
+        super(Earth, self).update()

@@ -34,7 +34,7 @@ class Universe:
             self.earth.apply_step(deltas["earth"])
         if not skip_sun and self.sun:
             self.sun.apply_step(deltas["sun"])
-            self.earth.add_energy(deltas["sun"]["energy"])
+            self.earth.energy += deltas["sun"]["energy"]
 
     def update(self, *, skip_earth=False, skip_sun=False):
         deltas = self.compute_step(skip_earth=skip_earth, skip_sun=skip_sun)

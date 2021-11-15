@@ -15,7 +15,9 @@ class Grid(list[Optional[GridComponent]]):
             self.append(None)
 
     def not_nones(self):
-        return [elem for elem in self if elem is not None]
+        for elem in self:
+            if elem is not None:
+                yield elem
 
     def by_row(self):
         if len(self.shape) == 1:
@@ -82,18 +84,8 @@ class Grid(list[Optional[GridComponent]]):
             if index + self.shape[0] * self.shape[1] < numpy.product(self.shape):
                 yield self[index + self.shape[0] * self.shape[1]]
 
-    def compute_step(self) -> list[list[dict[str, Unit]]]:
-        deltas = []
-        for elem in self:
-            deltas.append(elem.compute_step())
-        return deltas
-
-    def apply_step(self, deltas: list[list[dict[str, Unit]]]):
-        for i, elem in enumerate(self):
-            elem.apply_step(deltas[i])
-
     def update(self):
-        for elem in self:
+        for elem in self.not_nones():
             elem.update()
 
 
