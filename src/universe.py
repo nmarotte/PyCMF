@@ -13,6 +13,14 @@ class Universe:
         self.earth: Optional[Earth] = None
         self.sun: Optional[Sun] = None
 
+    def __str__(self):
+        res = ""
+        if self.sun is not None:
+            res += f"{self.sun.__str__()}\n"
+        if self.earth is not None:
+            res += f"{self.earth.__str__()}\n"
+        return res
+
     def compute_step(self, *, skip_earth=False, skip_sun=False):
         deltas = {"earth": None, "sun": None}
         if not skip_earth and self.earth:
@@ -40,7 +48,7 @@ if __name__ == '__main__':
     uni.earth = Earth((10, 10, 10), parent=uni)
     uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
     uni.sun = Sun(parent=uni)
-    print(uni.earth.compute_average_temperature())
+    print(uni.earth.temperature)
     for i in tqdm(range(int(1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()
-    print(uni.earth.compute_average_temperature())
+    print(uni.earth.temperature)

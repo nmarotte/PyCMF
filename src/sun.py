@@ -14,6 +14,15 @@ class Sun:
         self.energy_radiated_per_second = energy_radiated_per_second  # Energy radiated towards the earth ! Not total amount radiated by the sun
         self.parent = parent
 
+    def __str__(self):
+        res = f"Sun :\n"
+        if self.total_energy != math.inf:
+            res += f"- Total energy remaining {self.total_energy} J\n"
+        res += f"- Radiating {self.energy_radiated_per_second} J/s towards the earth"
+        if self.parent is not None:
+            res += f"\n- Located in {self.parent.__class__}"
+        return res
+
     def radiate(self):
         """
         Energy radiated per TIME_DELTA towards the Earth

@@ -17,12 +17,12 @@ if __name__ == '__main__':
 
     for elem in uni.earth:
         print(elem.temperature)
-    print(uni.earth.compute_average_temperature())
+    print(uni.earth.temperature)
     number_of_steps = int(6000 // TIME_DELTA)  # 60 times the number of steps in 1 seconds
     for i in tqdm(range(number_of_steps)):
         deltas = uni.compute_step()
         uni.apply_step(deltas)
     for elem in uni.earth:
         print(elem.temperature)
-    print(uni.earth.compute_average_temperature())
+    print(uni.earth.temperature)
 

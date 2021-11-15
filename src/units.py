@@ -1,9 +1,18 @@
+from abc import abstractmethod
+
+
 class Unit(float):
     precision = 2
     epsilon = 1 / (10 ** precision)  # We recommend matching epsilon and the precision
 
+    @property
+    @abstractmethod
+    def default(self):
+        """Specifies the default unit of the Unit class, for example seconds for Time, meters for Distance, ..."""
+
     def __eq__(self, other):
-        return abs(self - other) <= self.epsilon
+        # Either they are equal, or they are very close to each other
+        return super(Unit, self).__eq__(other) or abs(self - other) <= self.epsilon
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -20,43 +29,41 @@ class Unit(float):
     def __le__(self, other):
         return self.__lt__(other) or self.__eq__(other)
 
-
-class Temperature(Unit):
-    def __new__(cls, *, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
-        return super().__new__(cls, Temperature.to_kelvin(kelvin=kelvin, celsius=celsius, fahrenheit=fahrenheit))
-
-    def __truediv__(self, other):
-        return Temperature(kelvin=super().__truediv__(other))
+    def __truediv__(self, other) -> "Unit":
+        return self.__class__(**{self.default: super().__truediv__(other)})
 
     def copy(self):
-        return Temperature(kelvin=float(self))
+        return self.__class__(**{self.default: self})
+
+
+class Temperature(Unit):
+    default = "celsius"
+
+    def __new__(cls, *, celsius: float = None, kelvin: float = None, fahrenheit: float = None):
+        return super().__new__(cls, Temperature.to_celsius(celsius=celsius, kelvin=kelvin, fahrenheit=fahrenheit))
 
     @staticmethod
-    def to_kelvin(*, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
+    def to_celsius(*, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
         if kelvin:
-            return round(kelvin, Temperature.precision)
+            return round(kelvin - 273.15, Temperature.precision)
         if celsius:
-            return round(celsius + 273.15, Temperature.precision)
+            return round(celsius, Temperature.precision)
         if fahrenheit:
-            return round((fahrenheit + 459.67) * (5 / 9), Temperature.precision)
+            return round((fahrenheit - 32) * (5 / 9), Temperature.precision)
         return 0.0
 
-    def to_celsius(self):
-        return self - 273.15
+    def to_kelvin(self):
+        return self + 273.15
 
     def to_fahrenheit(self):
         return (self - 273.15) * (9 / 5) + 32
 
 
 class Mass(Unit):
+    default = "kilograms"
+
     def __new__(cls, *, kilograms: float = None, grams: float = None, pounds: float = None):
         return super().__new__(cls, Mass.to_kilograms(kilograms=kilograms, grams=grams, pounds=pounds))
-
-    def __truediv__(self, other):
-        return Mass(kilograms=super().__truediv__(other))
-
-    def copy(self):
-        return Mass(kilograms=self)
 
     @staticmethod
     def to_kilograms(*, kilograms: float = None, grams: float = None, pounds: float = None):
@@ -76,6 +83,8 @@ class Mass(Unit):
 
 
 class Distance(Unit):
+    default = "meters"
+
     def __new__(cls, *, meters: float = None, yards: float = None, feet: float = None, inches: float = None):
         if meters:
             return super().__new__(cls, round(meters, Distance.precision))
@@ -89,6 +98,8 @@ class Distance(Unit):
 
 
 class Area(Unit):
+    default = "meters2"
+
     def __new__(cls, *, meters2: float = None, yards2: float = None, feet2: float = None, inches2: float = None):
         if meters2:
             return super().__new__(cls, round(meters2, Area.precision))
@@ -111,6 +122,8 @@ class Area(Unit):
 
 
 class Volume(Unit):
+    default = "meters3"
+
     def __new__(cls, *, meters3: float = None, yards3: float = None, feet3: float = None, inches3: float = None):
         if meters3:
             return super().__new__(cls, round(meters3, Area.precision))
@@ -121,12 +134,6 @@ class Volume(Unit):
         if inches3:
             return super().__new__(cls, round(inches3 / (39.370 ** 3), Area.precision))
         return super().__new__(cls, 0.0)
-
-    def __truediv__(self, other):
-        return Volume(meters3=super().__truediv__(other))
-
-    def copy(self):
-        return Volume(meters3=self)
 
     def to_yards3(self):
         return self * (1.0936 ** 3)
@@ -139,6 +146,8 @@ class Volume(Unit):
 
 
 class Time(Unit):
+    default = "seconds"
+
     def __new__(cls, *, seconds: float = None, minutes: float = None, hours: float = None, days: float = None):
         if seconds:
             return super().__new__(cls, round(seconds, Time.precision))
@@ -152,6 +161,8 @@ class Time(Unit):
 
 
 class Energy(Unit):
+    default = "joules"
+
     def __new__(cls, *, joules: float = None):
         if joules:
             return super().__new__(cls, round(joules, Energy.precision))
@@ -192,3 +203,12 @@ if __name__ == '__main__':
     h = Time(hours=273.97805555555556)
     d = Time(days=11.415752314814815)
     assert s == mi == h == d
+
+    s = Time(seconds=986321)
+    assert isinstance(s/500, Time)
+
+    m = Mass(kilograms=1)
+    m2 = m.copy()
+    m += 1
+    assert m == 2
+    assert m2 == 1

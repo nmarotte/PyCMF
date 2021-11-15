@@ -34,7 +34,7 @@ if __name__ == '__main__':
             uni.update(skip_earth=True)
         stop = time_ns()
         simulation_duration_total += stop - start
-        after_total += uni.earth.compute_average_temperature()
+        after_total += uni.earth.temperature
     simulation_duration_average = simulation_duration_total / nb_iter
     after_average = after_total / nb_iter
     print(f"Total simulation time for {nb_iter} runs : {simulation_duration_total / (10 ** 9)} seconds")
