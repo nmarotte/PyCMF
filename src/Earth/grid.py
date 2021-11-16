@@ -14,10 +14,11 @@ class Grid(list[Optional[GridComponent]]):
         for _ in range(numpy.product(self.shape)):
             self.append(None)
 
+    def __len__(self):
+        return numpy.product(self.shape)
+
     def not_nones(self):
-        for elem in self:
-            if elem is not None:
-                yield elem
+        return (elem for elem in self if elem is not None)
 
     def by_row(self):
         if len(self.shape) == 1:
@@ -85,7 +86,7 @@ class Grid(list[Optional[GridComponent]]):
                 yield self[index + self.shape[0] * self.shape[1]]
 
     def update(self):
-        for elem in self.not_nones():
+        for elem in self:
             elem.update()
 
 

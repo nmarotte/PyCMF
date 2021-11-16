@@ -1,5 +1,3 @@
-from random import random
-
 from tqdm import tqdm
 
 from Earth.Components.water import Water
@@ -12,15 +10,13 @@ from universe import Universe
 if __name__ == '__main__':
     uni = Universe()
     uni.earth = Earth((10, 10, 10), parent=uni)
-    for i in range(len(uni.earth)):
-        uni.earth[i] = Water(temperature=Temperature(celsius=10 + 20 * random()), parent=uni.earth, index=i)
-
-
+    uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
+    uni.sun = Sun(parent=uni)
+    #print(uni)
+    uni.earth[0].temperature += Temperature(kelvin=20)
     print(uni.earth[0].temperature)
-    print(uni.earth.average_temperature)
-    number_of_steps = int(600 // TIME_DELTA)  # 60 times the number of steps in 1 seconds
-    for i in tqdm(range(number_of_steps)):
+    for i in tqdm(range(int(600 // TIME_DELTA))):  # Computes for 600 seconds of physical time
         uni.update()
     print(uni.earth[0].temperature)
-    print(uni.earth.average_temperature)
+    #print(uni)
 

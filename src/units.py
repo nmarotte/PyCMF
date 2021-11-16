@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 
 class Unit(float):
-    precision = 2
+    precision = 25
     epsilon = 1 / (10 ** precision)  # We recommend matching epsilon and the precision
 
     @property
@@ -37,23 +37,23 @@ class Unit(float):
 
 
 class Temperature(Unit):
-    default = "celsius"
+    default = "kelvin"
 
     def __new__(cls, *, celsius: float = None, kelvin: float = None, fahrenheit: float = None):
-        return super().__new__(cls, Temperature.to_celsius(celsius=celsius, kelvin=kelvin, fahrenheit=fahrenheit))
+        return super().__new__(cls, Temperature.to_kelvin(celsius=celsius, kelvin=kelvin, fahrenheit=fahrenheit))
 
     @staticmethod
-    def to_celsius(*, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
-        if kelvin:
-            return round(kelvin - 273.15, Temperature.precision)
-        if celsius:
-            return round(celsius, Temperature.precision)
-        if fahrenheit:
-            return round((fahrenheit - 32) * (5 / 9), Temperature.precision)
+    def to_kelvin(*, kelvin: float = None, celsius: float = None, fahrenheit: float = None):
+        if kelvin is not None:
+            return round(kelvin, Temperature.precision)
+        if celsius is not None:
+            return round(celsius + 273.15, Temperature.precision)
+        if fahrenheit is not None:
+            return round((fahrenheit + 459.67) * (5 / 9), Temperature.precision)
         return 0.0
 
-    def to_kelvin(self):
-        return self + 273.15
+    def to_celsius(self):
+        return self - 273.15
 
     def to_fahrenheit(self):
         return (self - 273.15) * (9 / 5) + 32
@@ -67,11 +67,11 @@ class Mass(Unit):
 
     @staticmethod
     def to_kilograms(*, kilograms: float = None, grams: float = None, pounds: float = None):
-        if kilograms:
+        if kilograms is not None:
             return round(kilograms, Mass.precision)
-        if grams:
+        if grams is not None:
             return round(grams / 1000, Mass.precision)
-        if pounds:
+        if pounds is not None:
             return round(pounds / 2.20462, Mass.precision)
         return 0.0
 
@@ -86,13 +86,13 @@ class Distance(Unit):
     default = "meters"
 
     def __new__(cls, *, meters: float = None, yards: float = None, feet: float = None, inches: float = None):
-        if meters:
+        if meters is not None:
             return super().__new__(cls, round(meters, Distance.precision))
-        if yards:
+        if yards is not None:
             return super().__new__(cls, round(yards / 1.0936, Distance.precision))
-        if feet:
+        if feet is not None:
             return super().__new__(cls, round(feet / 3.2808, Distance.precision))
-        if inches:
+        if inches is not None:
             return super().__new__(cls, round(inches / 39.370, Distance.precision))
         return super().__new__(cls, 0.0)
 
@@ -101,13 +101,13 @@ class Area(Unit):
     default = "meters2"
 
     def __new__(cls, *, meters2: float = None, yards2: float = None, feet2: float = None, inches2: float = None):
-        if meters2:
+        if meters2 is not None:
             return super().__new__(cls, round(meters2, Area.precision))
-        if yards2:
+        if yards2 is not None:
             return super().__new__(cls, round(yards2 / (1.0936 ** 2), Area.precision))
-        if feet2:
+        if feet2 is not None:
             return super().__new__(cls, round(feet2 / (3.2808 ** 2), Area.precision))
-        if inches2:
+        if inches2 is not None:
             return super().__new__(cls, round(inches2 / (39.370 ** 2), Area.precision))
         return super().__new__(cls, 0.0)
 
@@ -125,13 +125,13 @@ class Volume(Unit):
     default = "meters3"
 
     def __new__(cls, *, meters3: float = None, yards3: float = None, feet3: float = None, inches3: float = None):
-        if meters3:
+        if meters3 is not None:
             return super().__new__(cls, round(meters3, Area.precision))
-        if yards3:
+        if yards3 is not None:
             return super().__new__(cls, round(yards3 / (1.0936 ** 3), Area.precision))
-        if feet3:
+        if feet3 is not None:
             return super().__new__(cls, round(feet3 / (3.2808 ** 3), Area.precision))
-        if inches3:
+        if inches3 is not None:
             return super().__new__(cls, round(inches3 / (39.370 ** 3), Area.precision))
         return super().__new__(cls, 0.0)
 
@@ -149,13 +149,13 @@ class Time(Unit):
     default = "seconds"
 
     def __new__(cls, *, seconds: float = None, minutes: float = None, hours: float = None, days: float = None):
-        if seconds:
+        if seconds is not None:
             return super().__new__(cls, round(seconds, Time.precision))
-        if minutes:
+        if minutes is not None:
             return super().__new__(cls, round(minutes * 60, Time.precision))
-        if hours:
+        if hours is not None:
             return super().__new__(cls, round(hours * 3600, Time.precision))
-        if days:
+        if days is not None:
             return super().__new__(cls, round(days * 86400, Time.precision))
         return super().__new__(cls, 0.0)
 
@@ -164,7 +164,7 @@ class Energy(Unit):
     default = "joules"
 
     def __new__(cls, *, joules: float = None):
-        if joules:
+        if joules is not None:
             return super().__new__(cls, round(joules, Energy.precision))
         return super().__new__(cls, 0.0)
 
@@ -180,6 +180,9 @@ if __name__ == '__main__':
     k = Temperature(kelvin=323.15)
     f = Temperature(fahrenheit=122)
     assert c == k == f
+
+    c1 = Temperature(celsius=0)
+    assert c1 == Temperature(kelvin=273.15)
 
     kg = Mass(kilograms=1)
     g = Mass(grams=1000)
@@ -205,7 +208,7 @@ if __name__ == '__main__':
     assert s == mi == h == d
 
     s = Time(seconds=986321)
-    assert isinstance(s/500, Time)
+    assert isinstance(s / 500, Time)
 
     m = Mass(kilograms=1)
     m2 = m.copy()

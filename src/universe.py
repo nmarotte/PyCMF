@@ -9,9 +9,8 @@ from units import Temperature, Mass, Volume
 
 
 class Universe:
-    def __init__(self):
-        self.earth: Optional[Earth] = None
-        self.sun: Optional[Sun] = None
+    earth: Optional[Earth] = None
+    sun: Optional[Sun] = None
 
     def __str__(self):
         res = ""
@@ -21,24 +20,14 @@ class Universe:
             res += f"{self.earth.__str__()}\n"
         return res
 
-    def compute_step(self, *, skip_earth=False, skip_sun=False):
-        deltas = {"earth": None, "sun": None}
-        if not skip_earth and self.earth:
-            deltas["earth"] = self.earth.compute_step()
-        if not skip_sun and self.sun:
-            deltas["sun"] = self.sun.compute_step()
-        return deltas
-
-    def apply_step(self, deltas, *, skip_earth=False, skip_sun=False):
-        if not skip_earth and self.earth:
-            self.earth.apply_step(deltas["earth"])
-        if not skip_sun and self.sun:
-            self.sun.apply_step(deltas["sun"])
-            self.earth.energy += deltas["sun"]["energy"]
-
     def update(self, *, skip_earth=False, skip_sun=False):
-        deltas = self.compute_step(skip_earth=skip_earth, skip_sun=skip_sun)
-        self.apply_step(deltas, skip_earth=skip_earth, skip_sun=skip_sun)
+        radiation = None
+        if not skip_sun and self.sun is not None:
+            radiation = self.sun.radiate()
+        if not skip_earth and self.earth is not None:
+            self.earth.update()
+            if radiation:
+                self.earth.add_energy(radiation)
 
 
 if __name__ == '__main__':
@@ -48,7 +37,7 @@ if __name__ == '__main__':
     uni.earth = Earth((10, 10, 10), parent=uni)
     uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
     uni.sun = Sun(parent=uni)
-    print(uni.earth.temperature)
+    print(uni.earth.average_temperature)
     for i in tqdm(range(int(1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()
-    print(uni.earth.temperature)
+    print(uni.earth.average_temperature)
