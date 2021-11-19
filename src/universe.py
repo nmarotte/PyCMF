@@ -29,14 +29,17 @@ class Universe:
             if radiation:
                 self.earth.add_energy(radiation)
 
+    def setup(self, shape=(10, 10, 10)):
+        self.earth = Earth(shape, parent=self)
+        # self.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
+        self.sun = Sun(parent=self)
+
 
 if __name__ == '__main__':
     """
     """
     uni = Universe()
-    uni.earth = Earth((10, 10, 10), parent=uni)
-    uni.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
-    uni.sun = Sun(parent=uni)
+    uni.setup()
     print(uni.earth.average_temperature)
     for i in tqdm(range(int(1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()

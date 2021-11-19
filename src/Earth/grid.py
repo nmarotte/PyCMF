@@ -1,5 +1,5 @@
 from timeit import default_timer as timer
-from typing import Optional
+from typing import Optional, Iterator
 
 import numpy
 
@@ -16,6 +16,9 @@ class Grid(list[Optional[GridComponent]]):
 
     def __len__(self):
         return numpy.product(self.shape)
+
+    def __iter__(self) -> Iterator[GridComponent]:
+        return super(Grid, self).__iter__()
 
     def not_nones(self):
         return (elem for elem in self if elem is not None)
