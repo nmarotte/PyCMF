@@ -5,7 +5,7 @@ import PyQt5.QtWidgets as QtWidgets
 from universe import Universe
 if TYPE_CHECKING:
     from sun import Sun
-    from Earth.earth import Earth
+    from models.Earth.earth import Earth
 from views.EarthWidget import EarthWidget
 from views.SunWidget import SunWidget
 
@@ -27,11 +27,3 @@ class UniverseWidget(QtWidgets.QWidget):
     def __add_earth_tab(self, model_instance: "Earth"):
         sun = EarthWidget(model_instance, parent=self)
         self.tabs.addTab(sun, sun.model_name)
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication([])
-    uni = Universe()
-    uni.setup(shape=(10, 10))
-    universe = UniverseWidget(uni)
-    app.exec()

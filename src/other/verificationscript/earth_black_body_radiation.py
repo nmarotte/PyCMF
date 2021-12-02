@@ -1,4 +1,4 @@
-from Earth.earth import Earth
+from models.Earth.earth import Earth
 
 if __name__ == '__main__':
     earth = Earth((10,10,10))

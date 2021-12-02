@@ -1,7 +1,5 @@
-from typing import Optional
-
-from Earth.grid import Grid
-from Earth.Components.water import Water
+from models.Earth.grid import Grid
+from models.Earth.Components.water import Water
 from constants import water_earth_volume, water_earth_mass
 from units import Energy, Mass, Volume, Temperature
 

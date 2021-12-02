@@ -1,4 +1,4 @@
-from Earth.Components.grid_component import GridComponent
+from models.Earth.Components.grid_component import GridComponent
 
 
 class Water(GridComponent):

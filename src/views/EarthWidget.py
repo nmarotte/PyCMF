@@ -1,6 +1,5 @@
 import PyQt5.QtWidgets as QtWidgets
 
-from Earth.Components.grid_component import GridComponent
 from views.AggregationWidget import AggregationWidget
 
 

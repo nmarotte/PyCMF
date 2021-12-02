@@ -1,4 +1,4 @@
-from Earth.Components.water import Water
+from models.Earth.Components.water import Water
 from units import Mass, Energy, Temperature
 
 if __name__ == '__main__':

@@ -3,7 +3,7 @@ from typing import Optional, Iterator
 
 import numpy
 
-from Earth.Components.grid_component import GridComponent, Unit
+from models.Earth.Components.grid_component import GridComponent
 
 
 class Grid(list[Optional[GridComponent]]):

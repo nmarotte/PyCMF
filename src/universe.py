@@ -2,10 +2,9 @@ from typing import Optional
 
 from tqdm import tqdm
 
-from Earth.earth import Earth
+from models.Earth.earth import Earth
 from constants import TIME_DELTA
 from sun import Sun
-from units import Temperature, Mass, Volume
 
 
 class Universe:

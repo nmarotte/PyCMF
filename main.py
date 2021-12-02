@@ -1,11 +1,6 @@
-from random import random
-from time import time_ns
-
 from tqdm import tqdm
 
-from Earth.earth import Earth
-from Earth.grid import Grid
-from Earth.Components.water import Water
+from models.Earth.earth import Earth
 from sun import Sun
 from units import *
 from universe import Universe

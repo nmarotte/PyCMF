@@ -2,11 +2,10 @@ from random import random
 
 from tqdm import tqdm
 
-from Earth.Components.water import Water
-from Earth.earth import Earth
+from models.Earth.Components.water import Water
+from models.Earth.earth import Earth
 from constants import TIME_DELTA
-from sun import Sun
-from units import Mass, Temperature, Volume
+from units import Temperature
 from universe import Universe
 
 if __name__ == '__main__':
