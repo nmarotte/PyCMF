@@ -24,9 +24,10 @@ class GridComponent(ABC):
         self.index = index if index is not None else self.parent and self.parent.index(self)
         self.__neighbours = None
 
-    def init_default(self):
-        self.__init__(volume=Volume(meters3=1), mass=Mass(kilograms=1000),temperature=Temperature(celsius=21),
-                      ratio=self.ratio, parent=self.parent, index=self.index)
+    @classmethod
+    def init_default(cls, *, ratio=1.0, parent=None, index: int = None):
+        return cls(volume=Volume(meters3=1), mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
+                   ratio=ratio, parent=parent, index=index)
 
     def __str__(self):
         res = f"""{self.__class__} Component
@@ -73,12 +74,14 @@ Temperature : {self.temperature} ({self.__energy} J)
     def neighbours(self, value: list["GridComponent"]):
         self.__neighbours = value
 
-    def get_diff(self, other: "GridComponent") -> dict[str, Unit]:
+    def get_diff(self, other: "GridComponent") -> Optional[dict[str, Unit]]:
         """
         Computes and returns the difference between the physical attributes of two GridComponent
         :param other: the other GridComponent to inspect
         :return:
         """
+        if other is None:
+            return None
         return {
             "temperature": (other.temperature - self.temperature),
             "volume": (other.volume - self.volume),
@@ -89,5 +92,6 @@ Temperature : {self.temperature} ({self.__energy} J)
         joule_per_time_scale = self.heat_transfer_coefficient * self.surface * TIME_DELTA
         for n in self.neighbours:
             diff = self.get_diff(n)
-            self.energy += joule_per_time_scale * diff["temperature"] * TIME_DELTA
-            n.energy -= joule_per_time_scale * diff["temperature"] * TIME_DELTA
+            if diff:
+                self.energy += joule_per_time_scale * diff["temperature"] * TIME_DELTA
+                n.energy -= joule_per_time_scale * diff["temperature"] * TIME_DELTA

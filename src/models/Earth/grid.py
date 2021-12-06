@@ -42,6 +42,18 @@ class Grid(list[Optional[GridComponent]]):
             for j in range(self.shape[1]):  # Over all the columns, yield one element
                 yield self[i + j * self.shape[0]]
 
+    def get_component_at(self, x, y, z=None):
+        if z is None:
+            return self[x + y * self.shape[0]]
+        else:
+            return self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])]
+
+    def set_component_at(self, component: GridComponent, x, y, z=None):
+        if z is None:
+            self[x + y * self.shape[0]] = component
+        else:
+            self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])] = component
+
     def neighbours(self, index: int) -> list[GridComponent]:
         """
         Yields the neighbouring element of the index, from front top left to back bottom right
@@ -90,7 +102,8 @@ class Grid(list[Optional[GridComponent]]):
 
     def update(self):
         for elem in self:
-            elem.update()
+            if elem is not None:
+                elem.update()
 
 
 if __name__ == '__main__':

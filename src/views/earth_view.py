@@ -14,6 +14,10 @@ from universe import Universe
 
 
 class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController, ResumeButtonController, ClearButtonController):
+    AIR_COLOR = QtGui.QColor("white")
+    WATER_COLOR = QtGui.QColor("blue")
+    LAND_COLOR = QtGui.QColor("brown")
+
     def clear_pressed(self):
         self.canvas.clear()
 
@@ -22,7 +26,9 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.canvas.setEnabled(False)
         # Starts the simulation
         self.model.running = True
-        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage())
+        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage(), air_color=EarthView.AIR_COLOR,
+                                             water_color=EarthView.WATER_COLOR, land_color=EarthView.LAND_COLOR)
+        print(self.model.earth)
         self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
         self.simulation_thread.start()
 
