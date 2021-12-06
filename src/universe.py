@@ -10,6 +10,7 @@ from sun import Sun
 class Universe:
     earth: Optional[Earth] = None
     sun: Optional[Sun] = None
+    running: bool = False
 
     def __str__(self):
         res = ""
@@ -32,6 +33,13 @@ class Universe:
         self.earth = Earth(shape, parent=self)
         # self.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
         self.sun = Sun(parent=self)
+
+    def start_updating(self):
+        while True:
+            if not self.running:
+                break
+            self.update()
+        print("done")
 
 
 if __name__ == '__main__':

@@ -1,11 +1,14 @@
 import PyQt5.QtWidgets as QtWidgets
+import qtawesome as qta
 
 
 class BrushSizeSelector(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.setLayout(QtWidgets.QHBoxLayout())
-        self.layout().addWidget(QtWidgets.QLabel("Brush Size"))
+        self.setLayout(QtWidgets.QVBoxLayout())
+        label = QtWidgets.QLabel("\uf1fc" + "Brush Size")
+        label.setFont(qta.font('fa', 12))
+        self.layout().addWidget(label)
         self.spinbox = QtWidgets.QSpinBox()
         self.spinbox.setValue(10)
         self.layout().addWidget(self.spinbox)
