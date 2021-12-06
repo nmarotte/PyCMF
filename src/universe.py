@@ -51,6 +51,6 @@ if __name__ == '__main__':
     uni = Universe()
     uni.setup()
     print(uni.earth.average_temperature)
-    for i in tqdm(range(int(1//TIME_DELTA))):  # Computes for one second of physical time
+    for i in tqdm(range(int(600*1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()
     print(uni.earth.average_temperature)

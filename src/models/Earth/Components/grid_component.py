@@ -9,19 +9,24 @@ class GridComponent(ABC):
     index: int
     volume: Volume
     mass: Mass
+    ratio: float
     __energy: Energy = 0
     __neighbours: Optional[list["GridComponent"]]
 
-    def __init__(self, volume: Volume = Volume(meters3=1), mass: Mass = Mass(kilograms=1000),
-                 temperature: Temperature = Temperature(celsius=21), *, parent=None, index: int = None):
+    def __init__(self, volume: Volume, mass: Mass, temperature: Temperature, *, ratio=1.0, parent=None, index: int = None):
         self.volume = volume
         self.surface = Area(meters2=(volume ** (1 / 3)) ** 2)
         self.mass = mass
         self.temperature = temperature
+        self.ratio = ratio
         self.parent = parent
         # Finds yourself in the list
         self.index = index if index is not None else self.parent and self.parent.index(self)
         self.__neighbours = None
+
+    def init_default(self):
+        self.__init__(volume=Volume(meters3=1), mass=Mass(kilograms=1000),temperature=Temperature(celsius=21),
+                      ratio=self.ratio, parent=self.parent, index=self.index)
 
     def __str__(self):
         res = f"""{self.__class__} Component
