@@ -11,6 +11,7 @@ class Universe:
     earth: Optional[Earth] = None
     sun: Optional[Sun] = None
     running: bool = False
+    t = 0
 
     def __str__(self):
         res = ""
@@ -28,6 +29,7 @@ class Universe:
             self.earth.update()
             if radiation:
                 self.earth.add_energy(radiation)
+        self.t += 1
 
     def setup(self, shape=(10, 10, 10)):
         self.earth = Earth(shape, parent=self)
@@ -38,6 +40,7 @@ class Universe:
         while True:
             if not self.running:
                 break
+            print(f"Simulating t={self.t}")
             self.update()
         print("done")
 

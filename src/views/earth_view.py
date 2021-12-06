@@ -3,11 +3,13 @@ from typing import TYPE_CHECKING, Optional
 
 import PyQt5.QtWidgets as QtWidgets
 import PyQt5.QtGui as QtGui
+from PIL.ImageQt import ImageQt
 from PyQt5.QtCore import Qt
 
 import views.sub.earth.Canvas.EarthCanvas as EarthCanvas
 import views.sub.earth.TopLayout.TopLayout as TopLayout
 from controller.controllers import *
+from models.Earth.earth import Earth
 from universe import Universe
 
 
@@ -17,24 +19,29 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
 
     def start_pressed(self):
         # Locks the canvas
-        self.canvas.setDisabled(True)
+        self.canvas.setEnabled(False)
         # Starts the simulation
         self.model.running = True
+        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage())
         self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
         self.simulation_thread.start()
 
     def pause_pressed(self):
         # Unlocks the canvas
-        self.canvas.setDisabled(False)
-        self.model.running = not self.model.running
+        self.canvas.setEnabled(True)
+        self.model.running = False
 
     def resume_pressed(self):
-        pass
+        self.canvas.setEnabled(False)
+        self.model.running = True
+        self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
+        self.simulation_thread.start()
 
     def stop_pressed(self):
         # Unlocks the canvas
-        self.canvas.setDisabled(False)
+        self.canvas.setEnabled(True)
         self.model.running = False
+        self.simulation_thread = None
 
     def is_simulation_running(self):
         return self.model.running

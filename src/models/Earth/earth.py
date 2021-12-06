@@ -2,15 +2,19 @@ from models.Earth.grid import Grid
 from models.Earth.Components.water import Water
 from constants import water_earth_volume, water_earth_mass
 from units import Energy, Mass, Volume, Temperature
+import PyQt5.QtGui as QtGui
 
 
 class Earth(Grid):
     def __init__(self, shape: tuple, *, temperature=Temperature(celsius=21), populate=True, parent=None):
         super().__init__(shape, parent=parent)
-        if not populate:
-            return
-        for i in range(len(self)):
-            self[i] = Water(mass=water_earth_mass/len(self), volume=water_earth_volume/len(self), temperature=temperature, parent=self, index=i)
+        if populate:
+            for i in range(len(self)):
+                self[i] = Water(mass=water_earth_mass/len(self), volume=water_earth_volume/len(self), temperature=temperature, parent=self, index=i)
+
+    @classmethod
+    def from_qimage(cls, qimage: QtGui.QImage):
+        return cls(shape=(qimage.size().width(), qimage.size().height()))
 
     @property
     def total_mass(self) -> Mass:
