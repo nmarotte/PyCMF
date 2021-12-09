@@ -4,8 +4,7 @@ import PyQt5.QtWidgets as QtWidgets
 
 from views.sub.earth.TopLayout.ClearButton import ClearButton
 from views.sub.earth.TopLayout.ComponentAdder.ComponentAdder import ComponentAdder
-from views.sub.earth.TopLayout.ComponentPainter.BrushSizeSelector import BrushSizeSelector
-from views.sub.earth.TopLayout.ComponentPainter.PaintComponentSelector import PaintComponentSelector
+from views.sub.earth.TopLayout.ComponentPainter.PaintComponentTool import PaintComponentTool
 import views.sub.earth.TopLayout.SimulationControls.SimulationControls as SimulationControls
 from views.sub.earth.TopLayout.SimulationControls.StartButton import StartButton
 
@@ -21,14 +20,12 @@ class TopLayout(QtWidgets.QWidget):
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())
         self.component_adder = ComponentAdder(TopLayout.COMPONENTS)
-        self.paint_component_selector = PaintComponentSelector(TopLayout.COMPONENTS)
-        self.brush_size_selector = BrushSizeSelector()
+        self.paint_component_selector = PaintComponentTool(TopLayout.COMPONENTS)
         self.clear_button = ClearButton(controller=self.controller)
         self.simulation_controls = SimulationControls.SimulationControls(controller=self.controller)
 
         self.layout().addWidget(self.component_adder)
         self.layout().addWidget(self.paint_component_selector)
-        self.layout().addWidget(self.brush_size_selector)
         self.layout().addWidget(self.clear_button)
         self.layout().addWidget(self.simulation_controls)
 
@@ -36,7 +33,7 @@ class TopLayout(QtWidgets.QWidget):
         return self.paint_component_selector.get_value()
 
     def get_brush_width(self):
-        return self.brush_size_selector.get_value()
+        return self.paint_component_selector.brush_size_selector.get_value()
 
     def clear_pressed(self):
         self.parent().clear_canvas()

@@ -3,10 +3,10 @@ from typing import Optional, Iterator
 
 import numpy
 
-from models.Earth.Components.grid_component import GridComponent
+from models.Earth.Components.grid_chunk import GridChunk
 
 
-class Grid(list[Optional[GridComponent]]):
+class Grid(list[Optional[GridChunk]]):
     def __init__(self, shape: tuple, *, parent=None):
         super().__init__()
         self.shape = shape
@@ -16,9 +16,6 @@ class Grid(list[Optional[GridComponent]]):
 
     def __len__(self):
         return numpy.product(self.shape)
-
-    def __iter__(self) -> Iterator[GridComponent]:
-        return super(Grid, self).__iter__()
 
     def not_nones(self):
         return (elem for elem in self if elem is not None)
@@ -48,13 +45,13 @@ class Grid(list[Optional[GridComponent]]):
         else:
             return self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])]
 
-    def set_component_at(self, component: GridComponent, x, y, z=None):
+    def set_component_at(self, component: GridChunk, x, y, z=None):
         if z is None:
             self[x + y * self.shape[0]] = component
         else:
             self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])] = component
 
-    def neighbours(self, index: int) -> list[GridComponent]:
+    def neighbours(self, index: int) -> list[GridChunk]:
         """
         Yields the neighbouring element of the index, from front top left to back bottom right
         1D : [0,1,2,3,4,5]

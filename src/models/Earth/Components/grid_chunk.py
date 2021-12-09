@@ -1,11 +1,11 @@
 from typing import Union, Optional
 
 from constants import TIME_DELTA
-from models.Earth.Components.grid_component import GridComponent
+from models.Earth.Components.chunk_component import ChunkComponent
 from units import Volume, Temperature, Energy, Mass, Unit, Area
 
 
-class GridChunk(list[GridComponent]):
+class GridChunk(list[ChunkComponent]):
     specific_heat_capacity: float
     heat_transfer_coefficient: float
     __energy: Energy
@@ -15,8 +15,9 @@ class GridChunk(list[GridComponent]):
 
     __ratios: list[float] = None
 
-    def __init__(self, components: list[GridComponent], volume: Volume, *, index: int = None, parent=None):
+    def __init__(self, components: list[ChunkComponent], volume: Volume, *, ratios:list[float], index: int = None, parent=None):
         super(GridChunk, self).__init__()
+        self.__ratios = ratios
         self.extend(components)
         self.parent = parent
         self.index = index if index is not None else self.parent and self.parent.index(self)
@@ -25,6 +26,9 @@ class GridChunk(list[GridComponent]):
         self.main_component = self.compute_main_component()
         self.volume = volume
         self.__neighbours = None
+
+        self.specific_heat_capacity = sum(x.specific_heat_capacity * self.ratios[i] for i, x in enumerate(self))/len(self)
+        self.heat_transfer_coefficient = sum(x.heat_transfer_coefficient * self.ratios[i] for i, x in enumerate(self))/len(self)
 
     @property
     def ratios(self) -> list[float]:
@@ -75,8 +79,6 @@ class GridChunk(list[GridComponent]):
     @volume.setter
     def volume(self, value: Union[float, Volume]):
         self.__volume = value if isinstance(value, Volume) else Volume(meters3=value)
-        for c in self:
-            c.volume = self.__volume
         self.surface = Area(meters2=(self.__volume ** (1 / 3)) ** 2)
 
     @property
@@ -135,11 +137,11 @@ class GridChunk(list[GridComponent]):
 
 if __name__ == '__main__':
     components = [
-        GridComponent(volume=Volume(meters3=1), mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
-                      component_type="Water"),
-        GridComponent(volume=Volume(meters3=1), mass=Mass(kilograms=1.29),
-                      temperature=Temperature(celsius=21),
-                      component_type="Air")
+        ChunkComponent(mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
+                       component_type="Water"),
+        ChunkComponent(mass=Mass(kilograms=1.29),
+                       temperature=Temperature(celsius=21),
+                       component_type="Air")
         ]
     chunk = GridChunk(components, volume=Volume(meters3=1))
     print(chunk)

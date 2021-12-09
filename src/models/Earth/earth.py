@@ -1,33 +1,35 @@
-from models.Earth.Components.Air.air import Air
-from models.Earth.Components.land import Land
+import math
+
+from models.Earth.Components.chunk_component import ChunkComponent
+from models.Earth.Components.grid_chunk import GridChunk
 from models.Earth.grid import Grid
-from models.Earth.Components.water import Water
 from constants import water_earth_volume, water_earth_mass
 from units import Energy, Mass, Volume, Temperature
 import PyQt5.QtGui as QtGui
 
 
 class Earth(Grid):
-    def __init__(self, shape: tuple, *, temperature=Temperature(celsius=21), populate=True, parent=None):
+    def __init__(self, shape: tuple, *, parent=None):
         super().__init__(shape, parent=parent)
-        if populate:
-            for i in range(len(self)):
-                self[i] = Water(mass=water_earth_mass/len(self), volume=water_earth_volume/len(self), temperature=temperature, parent=self, index=i)
 
     @classmethod
-    def from_qimage(cls, qimage: QtGui.QImage, air_color: QtGui.QColor, water_color: QtGui.QColor, land_color: QtGui.QColor):
-        res = cls(shape=(qimage.size().width(), qimage.size().height()), populate=False)
+    def from_qimage(cls, qimage: QtGui.QImage, color_dict_ratio: dict[int, list[float]]):
+        res = cls(shape=(qimage.size().width(), qimage.size().height()))
         for y in range(qimage.size().height()):
             for x in range(qimage.size().width()):
-                if qimage.pixelColor(x, y) == air_color:
-                    component = Air.init_default(parent=res, index=x+y*qimage.size().width())
-                elif qimage.pixelColor(x, y) == water_color:
-                    component = Water.init_default(parent=res, index=x+y*qimage.size().width())
-                elif qimage.pixelColor(x, y) == land_color:
-                    component = Land.init_default(parent=res, index=x+y*qimage.size().width())
-                else:
+                if qimage.pixelColor(x,y) == QtGui.QColor("black"):
                     continue
-                res.set_component_at(component, x, y)
+                min_diff = math.inf
+                closest_value = None
+                for key, value in color_dict_ratio.items():
+                    if abs(key - qimage.pixelColor(x, y).rgba()) < min_diff:
+                        closest_value = value
+                ratios = closest_value
+                chunk = GridChunk(components=[ChunkComponent.init_default(component_type="Water", parent=res, index=x+y*qimage.size().width()),
+                                              ChunkComponent.init_default(component_type="Air", parent=res, index=x+y*qimage.size().width()),
+                                              ChunkComponent.init_default(component_type="Land", parent=res, index=x+y*qimage.size().width())],
+                                  ratios=ratios, volume=Volume(meters3=1))
+                res.set_component_at(chunk, x, y)
 
         return res
 

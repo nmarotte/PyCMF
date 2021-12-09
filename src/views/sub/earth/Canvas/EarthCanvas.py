@@ -21,7 +21,10 @@ class EarthCanvas(QtWidgets.QWidget):
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
         painter = QtGui.QPainter(self.label.pixmap())
         pen = QtGui.QPen()
-        pen.setColor(self.parent().get_brush_color())
+        brush_color = self.parent().get_brush_color()
+        if not brush_color:
+            return
+        pen.setColor(brush_color)
         pen.setWidth(self.parent().get_brush_width())
         painter.setPen(pen)
         painter.drawPoint(e.x(), e.y())
