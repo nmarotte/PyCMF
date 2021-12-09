@@ -25,10 +25,10 @@ class Earth(Grid):
                     if abs(key - qimage.pixelColor(x, y).rgba()) < min_diff:
                         closest_value = value
                 ratios = closest_value
-                chunk = GridChunk(components=[ChunkComponent.init_default(component_type="Water", parent=res, index=x+y*qimage.size().width()),
-                                              ChunkComponent.init_default(component_type="Air", parent=res, index=x+y*qimage.size().width()),
-                                              ChunkComponent.init_default(component_type="Land", parent=res, index=x+y*qimage.size().width())],
-                                  ratios=ratios, volume=Volume(meters3=1))
+                chunk = GridChunk(components=[ChunkComponent.init_default(component_type="Water"),
+                                              ChunkComponent.init_default(component_type="Air"),
+                                              ChunkComponent.init_default(component_type="Land")],
+                                  ratios=ratios, volume=Volume(meters3=1), parent=res, index=x+y*qimage.size().width())
                 res.set_component_at(chunk, x, y)
 
         return res

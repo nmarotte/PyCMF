@@ -8,7 +8,7 @@ from units import Volume, Temperature, Energy, Mass, Unit, Area
 class GridChunk(list[ChunkComponent]):
     specific_heat_capacity: float
     heat_transfer_coefficient: float
-    __energy: Energy
+    __energy: Energy = None
     __mass: Mass
     __volume: Volume
     surface: Area
@@ -99,11 +99,13 @@ class GridChunk(list[ChunkComponent]):
 
     @temperature.setter
     def temperature(self, value: Temperature):
-        self.energy = Energy(joules=self.specific_heat_capacity * self.mass * value)
+        self.__energy = Energy(joules=self.specific_heat_capacity * self.mass * value)
 
     @property
     def energy(self) -> Energy:
-        return self.__energy  # sum(c.energy for c in self)
+        if self.__energy is None:
+            self.__energy = sum(c.energy for c in self)
+        return self.__energy
 
     @energy.setter
     def energy(self, value: Union[float, Energy]):

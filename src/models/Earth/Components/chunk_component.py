@@ -4,6 +4,7 @@ from typing import Optional, Union
 from units import *
 import constants
 
+
 class ChunkComponent(ABC):
     """
         A class to represent a component of a chunk.
@@ -36,9 +37,8 @@ class ChunkComponent(ABC):
     specific_heat_capacity: float
     heat_transfer_coefficient: float
     __energy: Energy = 0
-    __neighbours: Optional[list["ChunkComponent"]]
 
-    def __init__(self, mass: Mass, temperature: Temperature, *, component_type: str, parent=None, index: int = None):
+    def __init__(self, mass: Mass, temperature: Temperature, *, component_type: str):
         # Information on the component
         self.component_type = component_type
 
@@ -49,20 +49,15 @@ class ChunkComponent(ABC):
 
         self.temperature = temperature  # Requires specific heat capacity
 
-        self.parent = parent
-        # Finds yourself in the list
-        self.index = index if index is not None else self.parent and self.parent.index(self)
-        self.__neighbours = None
-
     @classmethod
-    def init_default(cls, *, component_type: str, parent=None, index: int = None):
+    def init_default(cls, *, component_type: str):
         return cls(mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
-                   component_type=component_type, parent=parent, index=index)
+                   component_type=component_type)
 
     def __str__(self):
         res = f"{self.component_type} Component \n" \
               f"Mass : {self.mass} \n " \
-              f"Temperature : {self.temperature} K ({self.__energy/self.mass} J/kg)"
+              f"Temperature : {self.temperature} K ({self.__energy / self.mass} J/kg)"
         return res
 
     @property
@@ -81,16 +76,6 @@ class ChunkComponent(ABC):
     @energy.setter
     def energy(self, value: Energy):
         self.__energy = value
-
-    @property
-    def neighbours(self):
-        if self.__neighbours is None:
-            self.__neighbours = self.parent.neighbours(self.index)
-        return self.__neighbours
-
-    @neighbours.setter
-    def neighbours(self, value: list["ChunkComponent"]):
-        self.__neighbours = value
 
     def get_diff(self, other: "ChunkComponent") -> Optional[dict[str, Unit]]:
         """
