@@ -14,4 +14,3 @@ class EarthInfoText(QtWidgets.QTextEdit):
         super().__init__()
         self.setReadOnly(True)
         self.setText(controller.model.__str__())
-

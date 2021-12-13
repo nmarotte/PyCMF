@@ -3,6 +3,7 @@ from typing import Optional
 
 import PyQt5.QtWidgets as QtWidgets
 import PyQt5.QtGui as QtGui
+from PyQt5 import QtCore
 
 import views.sub.earth.TopLayout.TopLayout as TopLayout
 import views.sub.earth.BotLayout.BotLayout as BotLayout
@@ -22,6 +23,7 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.bot_layout.set_canvas_enabled(False)
         self.__rebuild_simulation()
         self.__start_simulation()
+        self.__update_loop_earth_info()
 
     def pause_pressed(self):
         self.bot_layout.set_canvas_enabled(True)
@@ -91,6 +93,11 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
     def __stop_simulation(self):
         self.model.stop_updating()
         self.simulation_thread = None
+
+    def __update_loop_earth_info(self):
+        self.update_earth_info_thread = QtCore.QTimer()
+        self.update_earth_info_thread.timeout.connect(self.bot_layout.update_earth_info)
+        self.update_earth_info_thread.start(1000)
 
 
 if __name__ == '__main__':

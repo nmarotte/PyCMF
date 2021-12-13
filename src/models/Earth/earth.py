@@ -59,7 +59,7 @@ class Earth(Grid):
         res = f"""Earth : 
 - Mass {self.total_mass}
 - Average temperature: {self.average_temperature}
-- Composition: {' '.join(str(round(value * 100, 2)) + "% " + key for key, value in self.composition.items())}"""
+- Composition: \n\t{f'{chr(10) + chr(9)} '.join(str(round(value * 100, 2)) + "% " + key for key, value in self.composition.items())}"""
         return res
 
     def add_energy(self, input_energy: Energy):
