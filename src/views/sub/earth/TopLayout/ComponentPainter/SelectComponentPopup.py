@@ -18,7 +18,7 @@ class SelectComponentPopup(QtWidgets.QDialog):
             self.index = index
             self.controller = controller
             self.setLayout(QtWidgets.QVBoxLayout())
-            self.layout().addWidget(QtWidgets.QLabel(label))
+            self.layout().addWidget(QtWidgets.QLabel(label.capitalize()))
 
             self.sub_layout = QtWidgets.QHBoxLayout()
             self.build()

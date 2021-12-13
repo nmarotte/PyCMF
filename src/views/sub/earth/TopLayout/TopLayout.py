@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 
 class TopLayout(QtWidgets.QWidget):
-    COMPONENTS = "Water", "Air", "Land"
+    COMPONENTS = "WATER", "AIR", "LAND"
 
     def __init__(self, controller: "EarthView"):
         self.controller = controller

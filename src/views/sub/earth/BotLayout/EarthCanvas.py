@@ -4,9 +4,10 @@ import PyQt5.QtWidgets as QtWidgets
 from PyQt5 import QtGui
 
 import views.earth_view as EarthView
+from constants import CANVAS_SIZE
+
 
 class EarthCanvas(QtWidgets.QWidget):
-    CANVAS_SIZE = EarthView.EarthView.MODEL_SHAPE
     CLEAR_COLOR = QtGui.QColor("black")
 
     def __init__(self, controller: "EarthView" = None):
@@ -14,7 +15,7 @@ class EarthCanvas(QtWidgets.QWidget):
         super().__init__()
         self.setLayout(QtWidgets.QGridLayout())
         self.label = QtWidgets.QLabel()
-        canvas = QtGui.QPixmap(*EarthCanvas.CANVAS_SIZE)
+        canvas = QtGui.QPixmap(*CANVAS_SIZE)
         self.label.setPixmap(canvas)
         self.layout().addWidget(self.label)
 

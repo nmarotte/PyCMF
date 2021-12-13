@@ -20,9 +20,6 @@ class BotLayout(QtWidgets.QWidget):
         self.layout().addWidget(self.canvas)
         self.layout().addWidget(self.earth_info)
 
-    def update_earth_info(self):
-        self.earth_info.setText(self.controller.model.__str__())
-
     def clear_canvas(self):
         self.canvas.clear()
 

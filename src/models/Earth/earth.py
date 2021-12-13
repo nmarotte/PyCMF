@@ -1,36 +1,54 @@
-import math
+import random
 
+import PyQt5.QtGui as QtGui
+
+from constants import CANVAS_SIZE
 from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
 from models.Earth.grid import Grid
+from other.utils import index_to_2D, color_from_ratio, ComponentColor
 from units import Energy, Mass, Volume, Temperature
-import PyQt5.QtGui as QtGui
 
 
 class Earth(Grid):
+    __average_temperature: Temperature = Temperature(kelvin=0)
     def __init__(self, shape: tuple, *, parent=None):
         super().__init__(shape, parent=parent)
 
     @classmethod
-    def from_qimage(cls, qimage: QtGui.QImage, color_dict_ratio: dict[int, list[float]]):
+    def from_qimage(cls, qimage: QtGui.QImage):
         res = cls(shape=(qimage.size().width(), qimage.size().height()))
         for y in range(qimage.size().height()):
             for x in range(qimage.size().width()):
-                if qimage.pixelColor(x,y) == QtGui.QColor("black"):
+                if qimage.pixelColor(x, y) == QtGui.QColor("black"):
                     continue
                 color = qimage.pixelColor(x, y)
-                ratio = color_dict_ratio[color.rgb()]
+                ratio = ComponentColor.DICT[color.rgb()]
                 components = []
-                if ratio[0]:
-                    components.append(ChunkComponent(component_type="Water", mass=Mass(kilograms=1000), temperature=Temperature(celsius=21)))
-                if ratio[1]:
-                    components.append(ChunkComponent(component_type="Air", mass=Mass(kilograms=1.29), temperature=Temperature(celsius=21)))
-                if ratio[2]:
-                    components.append(ChunkComponent(component_type="Land", mass=Mass(kilograms=1700), temperature=Temperature(celsius=21)))
+                if ratio["WATER"]:
+                    components.append(ChunkComponent(component_type="WATER", mass=Mass(kilograms=1000),
+                                                     temperature=Temperature(celsius=21)))
+                if ratio["AIR"]:
+                    components.append(ChunkComponent(component_type="AIR", mass=Mass(kilograms=1.29),
+                                                     temperature=Temperature(celsius=21)))
+                if ratio["LAND"]:
+                    components.append(ChunkComponent(component_type="LAND", mass=Mass(kilograms=1700),
+                                                     temperature=Temperature(celsius=21)))
                 chunk = GridChunk(components=components,
-                                  ratios=[x for x in ratio if x], volume=Volume(meters3=1), parent=res, index=x+y*qimage.size().width())
+                                  ratios=ratio, volume=Volume(meters3=1), parent=res,
+                                  index=x + y * qimage.size().width())
                 res.set_component_at(chunk, x, y)
         return res
+
+    def to_qimage(self):
+        image = QtGui.QImage(*CANVAS_SIZE, QtGui.QImage.Format_RGB32)
+        for i, elem in enumerate(self):
+            if elem is None:
+                color = QtGui.QColor("black")
+            else:
+                color = color_from_ratio(elem.compute_component_ratio_dict())
+            image.setPixel(*index_to_2D(i, CANVAS_SIZE), color.rgb())
+        return image
 
     @property
     def total_mass(self) -> Mass:
@@ -43,7 +61,7 @@ class Earth(Grid):
         for x in self.not_nones():
             count += 1
             temperature += x.temperature
-        return Temperature(kelvin=(temperature/count) if count else 0)
+        return Temperature(kelvin=(temperature / count) if count else 0)
 
     @property
     def composition(self):
@@ -51,7 +69,7 @@ class Earth(Grid):
         total_mass = self.total_mass
         for chunk in self.not_nones():
             for component_type, mass in chunk.get_masses().items():
-                composition_mass_dict[component_type] = composition_mass_dict.get(component_type, 0) + mass/total_mass
+                composition_mass_dict[component_type] = composition_mass_dict.get(component_type, 0) + mass / total_mass
 
         return composition_mass_dict
 
@@ -87,3 +105,22 @@ class Earth(Grid):
             elem.mass = mass_each.copy()
             elem.volume = volume_each.copy()
             elem.temperature = temperature.copy()
+
+
+if __name__ == '__main__':
+    earth = Earth(shape=(400, 400))
+    water_component = ChunkComponent(mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
+                                     component_type="WATER")
+    air_component = ChunkComponent(mass=Mass(kilograms=1.29), temperature=Temperature(celsius=21), component_type="AIR")
+    land_component = ChunkComponent(mass=Mass(kilograms=1700), temperature=Temperature(celsius=21),
+                                    component_type="LAND")
+    components = [water_component, air_component, land_component]
+    empty_chance = 3
+    for _ in range(16000):  # 10%
+        earth[random.randint(0, 400 * 400 - 1)] = GridChunk(
+            components=components,
+            ratios=[bool(random.randint(0, empty_chance)) * random.random() for __ in range(len(components))],
+            volume=Volume(meters3=1000))
+    image = earth.to_qimage()
+    image.save("test.png", "PNG", -1)
+    print(ComponentColor.DICT.__sizeof__())

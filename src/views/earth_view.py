@@ -7,14 +7,14 @@ from PyQt5 import QtCore
 
 import views.sub.earth.TopLayout.TopLayout as TopLayout
 import views.sub.earth.BotLayout.BotLayout as BotLayout
+from constants import CANVAS_SIZE
 from controller.controllers import *
 from models.Earth.earth import Earth
-from universe import Universe
+from other.utils import color_from_ratio
 
 
 class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
                 ResumeButtonController, ClearButtonController):
-    MODEL_SHAPE = (400, 400)
 
     def clear_pressed(self):
         self.bot_layout.clear_canvas()
@@ -23,7 +23,6 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.bot_layout.set_canvas_enabled(False)
         self.__rebuild_simulation()
         self.__start_simulation()
-        self.__update_loop_earth_info()
 
     def pause_pressed(self):
         self.bot_layout.set_canvas_enabled(True)
@@ -42,7 +41,6 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
 
     def __init__(self, model: Earth = None):
         super().__init__()
-        self.color_to_ratios = {}
         self.setLayout(QtWidgets.QVBoxLayout())
 
         # Creates the connection to the model, and its thread for smooth parallel execution
@@ -62,22 +60,12 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
 
     def get_brush_color(self):
         value = self.top_layout.paint_component_selector.get_value()
-        if value is None:
-            return
-        res = QtGui.QColor(
-            (int(QtGui.QColor("blue").red() * value[0]) + int(QtGui.QColor("white").red() * value[1]) + int(
-                QtGui.QColor("brown").red() * value[2])),
-            (int(QtGui.QColor("blue").green() * value[0]) + int(QtGui.QColor("white").green() * value[1]) + int(
-                QtGui.QColor("brown").green() * value[2])),
-            (int(QtGui.QColor("blue").blue() * value[0]) + int(QtGui.QColor("white").blue() * value[1]) + int(
-                QtGui.QColor("brown").blue() * value[2]))
-        )
-        if res.rgb() not in self.color_to_ratios:
-            self.color_to_ratios[res.rgb()] = value
-        return res
+        if value is not None:
+            return color_from_ratio(value)
+        return None
 
     def __rebuild_simulation(self):
-        self.model = Earth.from_qimage(self.bot_layout.get_canvas_as_qimage(), color_dict_ratio=self.color_to_ratios)
+        self.model = Earth.from_qimage(self.bot_layout.get_canvas_as_qimage())
 
     def __start_simulation(self):
         self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
@@ -94,15 +82,10 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.model.stop_updating()
         self.simulation_thread = None
 
-    def __update_loop_earth_info(self):
-        self.update_earth_info_thread = QtCore.QTimer()
-        self.update_earth_info_thread.timeout.connect(self.bot_layout.update_earth_info)
-        self.update_earth_info_thread.start(1000)
-
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    uni = Earth(shape=EarthView.MODEL_SHAPE)
+    uni = Earth(shape=CANVAS_SIZE)
     earth_view = EarthView(model=uni)
     earth_view.show()
     app.exec()

@@ -40,7 +40,7 @@ class ChunkComponent(ABC):
 
     def __init__(self, mass: Mass, temperature: Temperature, *, component_type: str):
         # Information on the component
-        self.component_type = component_type
+        self.component_type = component_type.upper()
 
         # Physical properties
         self.mass = mass

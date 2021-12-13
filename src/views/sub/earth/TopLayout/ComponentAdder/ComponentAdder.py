@@ -4,7 +4,7 @@ import PyQt5.QtWidgets as QtWidgets
 class ComponentAdder(QtWidgets.QWidget):
     class Button(QtWidgets.QPushButton):
         def __init__(self, component_type: str, *, parent: "ComponentAdder" = None):
-            super().__init__(f"Add {component_type}", parent=parent)
+            super().__init__(f"Add {component_type.capitalize()}", parent=parent)
             # self.clicked.connect(lambda: parent.set_value(component_type))
 
     def __init__(self, components: tuple[str, str, str]):
