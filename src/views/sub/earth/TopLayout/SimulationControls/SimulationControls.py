@@ -1,10 +1,11 @@
-from typing import Union
+from typing import Union, TYPE_CHECKING
 
 import PyQt5.QtWidgets as QtWidgets
 
 from controller.controllers import StartButtonController, PauseButtonController, StopButtonController, \
     ResumeButtonController
-import views.earth_view as earth_view
+if TYPE_CHECKING:
+    import views.earth_view as earth_view
 from .StartButton import StartButton
 from .PauseButton import PauseButton
 from .StopButton import StopButton

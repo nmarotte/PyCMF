@@ -1,13 +1,11 @@
 import threading
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 import PyQt5.QtWidgets as QtWidgets
 import PyQt5.QtGui as QtGui
-from PIL.ImageQt import ImageQt
-from PyQt5.QtCore import Qt
 
-import views.sub.earth.Canvas.EarthCanvas as EarthCanvas
 import views.sub.earth.TopLayout.TopLayout as TopLayout
+import views.sub.earth.BotLayout.BotLayout as BotLayout
 from controller.controllers import *
 from models.Earth.earth import Earth
 from universe import Universe
@@ -15,40 +13,32 @@ from universe import Universe
 
 class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
                 ResumeButtonController, ClearButtonController):
+    MODEL_SHAPE = (400, 400)
+
     def clear_pressed(self):
-        self.canvas.clear()
+        self.bot_layout.clear_canvas()
 
     def start_pressed(self):
-        # Locks the canvas
-        self.canvas.setEnabled(False)
-        # Starts the simulation
-        self.model.running = True
-        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage(),
-                                             color_dict_ratio=self.color_to_ratios)
-        self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
-        self.simulation_thread.start()
+        self.bot_layout.set_canvas_enabled(False)
+        self.__rebuild_simulation()
+        self.__start_simulation()
 
     def pause_pressed(self):
-        # Unlocks the canvas
-        self.canvas.setEnabled(True)
-        self.model.running = False
+        self.bot_layout.set_canvas_enabled(True)
+        self.__pause_simulation()
 
     def resume_pressed(self):
-        self.canvas.setEnabled(False)
-        self.model.running = True
-        self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
-        self.simulation_thread.start()
+        self.bot_layout.set_canvas_enabled(False)
+        self.__resume_simulation()
 
     def stop_pressed(self):
-        # Unlocks the canvas
-        self.canvas.setEnabled(True)
-        self.model.running = False
-        self.simulation_thread = None
+        self.bot_layout.set_canvas_enabled(True)
+        self.__stop_simulation()
 
     def is_simulation_running(self):
         return self.model.running
 
-    def __init__(self, model: Universe = None):
+    def __init__(self, model: Earth = None):
         super().__init__()
         self.color_to_ratios = {}
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -62,8 +52,8 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.layout().addWidget(self.top_layout)
 
         # Create the bottom drawing canvas/simulation view
-        self.canvas = EarthCanvas.EarthCanvas(parent=self)
-        self.layout().addWidget(self.canvas)
+        self.bot_layout = BotLayout.BotLayout(controller=self)
+        self.layout().addWidget(self.bot_layout)
 
     def get_brush_width(self):
         return self.top_layout.get_brush_width()
@@ -84,11 +74,28 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
             self.color_to_ratios[res.rgb()] = value
         return res
 
+    def __rebuild_simulation(self):
+        self.model = Earth.from_qimage(self.bot_layout.get_canvas_as_qimage(), color_dict_ratio=self.color_to_ratios)
+
+    def __start_simulation(self):
+        self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
+        self.simulation_thread.start()
+
+    def __pause_simulation(self):
+        self.model.pause_updating()
+
+    def __resume_simulation(self):
+        self.simulation_thread = threading.Thread(target=self.model.resume_updating, args=())
+        self.simulation_thread.start()
+
+    def __stop_simulation(self):
+        self.model.stop_updating()
+        self.simulation_thread = None
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    uni = Universe()
-    uni.setup()
+    uni = Earth(shape=EarthView.MODEL_SHAPE)
     earth_view = EarthView(model=uni)
     earth_view.show()
     app.exec()

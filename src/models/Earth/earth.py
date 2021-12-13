@@ -32,10 +32,6 @@ class Earth(Grid):
                 res.set_component_at(chunk, x, y)
         return res
 
-    @classmethod
-    def from_pixmap(cls):
-        pass
-
     @property
     def total_mass(self) -> Mass:
         return Mass(kilograms=sum(x.mass for x in self if x is not None))

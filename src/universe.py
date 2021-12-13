@@ -4,14 +4,13 @@ from tqdm import tqdm
 
 from models.Earth.earth import Earth
 from constants import TIME_DELTA
+from models.model import Model
 from sun import Sun
 
 
-class Universe:
+class Universe(Model):
     earth: Optional[Earth] = None
     sun: Optional[Sun] = None
-    running: bool = False
-    t = 0
 
     def __str__(self):
         res = ""

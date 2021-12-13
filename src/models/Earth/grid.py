@@ -4,9 +4,10 @@ from typing import Optional, Iterator
 import numpy
 
 from models.Earth.Components.grid_chunk import GridChunk
+from models.model import Model
 
 
-class Grid(list[Optional[GridChunk]]):
+class Grid(list[Optional[GridChunk]], Model):
     def __init__(self, shape: tuple, *, parent=None):
         super().__init__()
         self.shape = shape
@@ -101,6 +102,7 @@ class Grid(list[Optional[GridChunk]]):
         for elem in self:
             if elem is not None:
                 elem.update()
+        self.t += 1
 
 
 if __name__ == '__main__':
