@@ -40,6 +40,8 @@ class SelectComponentPopup(QtWidgets.QDialog):
 
         def __build_spinbox(self):
             self.spinbox = QtWidgets.QSpinBox()
+            self.spinbox.setMinimum(0)
+            self.spinbox.setMaximum(100)
             self.spinbox.valueChanged.connect(self.update_slider)
             self.sub_layout.addWidget(self.spinbox)
 
@@ -160,5 +162,4 @@ class SelectComponentPopup(QtWidgets.QDialog):
         self.accept()
 
     def cancelled(self):
-        self.value = [None] * len(self.sliders)
         self.reject()

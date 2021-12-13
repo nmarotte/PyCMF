@@ -13,11 +13,8 @@ from models.Earth.earth import Earth
 from universe import Universe
 
 
-class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController, ResumeButtonController, ClearButtonController):
-    AIR_COLOR = QtGui.QColor("white")
-    WATER_COLOR = QtGui.QColor("blue")
-    LAND_COLOR = QtGui.QColor("brown")
-
+class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
+                ResumeButtonController, ClearButtonController):
     def clear_pressed(self):
         self.canvas.clear()
 
@@ -26,7 +23,8 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         self.canvas.setEnabled(False)
         # Starts the simulation
         self.model.running = True
-        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage(), color_dict_ratio=self.color_to_ratios)
+        self.model.earth = Earth.from_qimage(self.canvas.label.pixmap().toImage(),
+                                             color_dict_ratio=self.color_to_ratios)
         self.simulation_thread = threading.Thread(target=self.model.start_updating, args=())
         self.simulation_thread.start()
 
@@ -50,8 +48,6 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
     def is_simulation_running(self):
         return self.model.running
 
-    button_labels = ("Add Water", "Add Air", "Add Land")
-
     def __init__(self, model: Universe = None):
         super().__init__()
         self.color_to_ratios = {}
@@ -73,16 +69,21 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
         return self.top_layout.get_brush_width()
 
     def get_brush_color(self):
-        value = [x/100 for x in self.top_layout.paint_component_selector.get_value()]
+        value = self.top_layout.paint_component_selector.get_value()
+        if value is None:
+            return
         res = QtGui.QColor(
-            (int(QtGui.QColor("blue").red() * value[0]) + int(QtGui.QColor("white").red() * value[1]) + int(QtGui.QColor("brown").red() * value[2])),
-            (int(QtGui.QColor("blue").green() * value[0]) + int(QtGui.QColor("white").green() * value[1]) + int(QtGui.QColor("brown").green() * value[2])),
-            (int(QtGui.QColor("blue").blue() * value[0]) + int(QtGui.QColor("white").blue() * value[1]) + int(QtGui.QColor("brown").blue() * value[2])),
-            (int(QtGui.QColor("blue").alpha() * value[0]) + int(QtGui.QColor("white").alpha() * value[1]) + int(QtGui.QColor("brown").alpha() * value[2])),
+            (int(QtGui.QColor("blue").red() * value[0]) + int(QtGui.QColor("white").red() * value[1]) + int(
+                QtGui.QColor("brown").red() * value[2])),
+            (int(QtGui.QColor("blue").green() * value[0]) + int(QtGui.QColor("white").green() * value[1]) + int(
+                QtGui.QColor("brown").green() * value[2])),
+            (int(QtGui.QColor("blue").blue() * value[0]) + int(QtGui.QColor("white").blue() * value[1]) + int(
+                QtGui.QColor("brown").blue() * value[2]))
         )
         if res.rgb() not in self.color_to_ratios:
             self.color_to_ratios[res.rgb()] = value
         return res
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

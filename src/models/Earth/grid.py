@@ -17,7 +17,7 @@ class Grid(list[Optional[GridChunk]]):
     def __len__(self):
         return numpy.product(self.shape)
 
-    def not_nones(self):
+    def not_nones(self) -> Iterator:
         return (elem for elem in self if elem is not None)
 
     def by_row(self):

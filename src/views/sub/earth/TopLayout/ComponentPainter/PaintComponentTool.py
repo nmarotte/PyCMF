@@ -48,9 +48,10 @@ class PaintComponentTool(QtWidgets.QWidget):
         if popup.value:
             if self.__value is None:
                 self.__value = [0] * len(popup.value)
+            summed = sum(popup.value)
             for i, elem in enumerate(popup.value):
                 if elem is not None:
-                    self.__value[i] = popup.value[i]
+                    self.__value[i] = popup.value[i]/summed
 
     def get_value(self) -> list[float]:
         if self.__value is None:

@@ -3,7 +3,6 @@ import math
 from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
 from models.Earth.grid import Grid
-from constants import water_earth_volume, water_earth_mass
 from units import Energy, Mass, Volume, Temperature
 import PyQt5.QtGui as QtGui
 
@@ -19,19 +18,23 @@ class Earth(Grid):
             for x in range(qimage.size().width()):
                 if qimage.pixelColor(x,y) == QtGui.QColor("black"):
                     continue
-                min_diff = math.inf
-                closest_value = None
-                for key, value in color_dict_ratio.items():
-                    if abs(key - qimage.pixelColor(x, y).rgba()) < min_diff:
-                        closest_value = value
-                ratios = closest_value
-                chunk = GridChunk(components=[ChunkComponent.init_default(component_type="Water"),
-                                              ChunkComponent.init_default(component_type="Air"),
-                                              ChunkComponent.init_default(component_type="Land")],
-                                  ratios=ratios, volume=Volume(meters3=1), parent=res, index=x+y*qimage.size().width())
+                color = qimage.pixelColor(x, y)
+                ratio = color_dict_ratio[color.rgb()]
+                components = []
+                if ratio[0]:
+                    components.append(ChunkComponent(component_type="Water", mass=Mass(kilograms=1000), temperature=Temperature(celsius=21)))
+                if ratio[1]:
+                    components.append(ChunkComponent(component_type="Air", mass=Mass(kilograms=1.29), temperature=Temperature(celsius=21)))
+                if ratio[2]:
+                    components.append(ChunkComponent(component_type="Land", mass=Mass(kilograms=1700), temperature=Temperature(celsius=21)))
+                chunk = GridChunk(components=components,
+                                  ratios=[x for x in ratio if x], volume=Volume(meters3=1), parent=res, index=x+y*qimage.size().width())
                 res.set_component_at(chunk, x, y)
-
         return res
+
+    @classmethod
+    def from_pixmap(cls):
+        pass
 
     @property
     def total_mass(self) -> Mass:
@@ -41,36 +44,26 @@ class Earth(Grid):
     def average_temperature(self) -> Temperature:
         count = 0
         temperature = 0
-        for x in self:
-            if x is not None:
-                count += 1
-                temperature += x.temperature
+        for x in self.not_nones():
+            count += 1
+            temperature += x.temperature
         return Temperature(kelvin=(temperature/count) if count else 0)
-        
+
     @property
     def composition(self):
-        water, air, land = 0, 0, 0
-        rest = 0
-        for elem in self:
-            if isinstance(elem, Water):
-                water += 1
-            elif isinstance(elem, Air):
-                air += 1
-            elif isinstance(elem, Land):
-                land += 1
-            else:
-                rest += 1
-        return {"water": water/len(self),
-                "air": air / len(self),
-                "land": land / len(self),
-                "rest": rest/len(self)}
+        composition_mass_dict = dict()
+        total_mass = self.total_mass
+        for chunk in self.not_nones():
+            for component_type, mass in chunk.get_masses().items():
+                composition_mass_dict[component_type] = composition_mass_dict.get(component_type, 0) + mass/total_mass
+
+        return composition_mass_dict
 
     def __str__(self):
-        composition = self.composition
         res = f"""Earth : 
 - Mass {self.total_mass}
 - Average temperature: {self.average_temperature}
-- Composition: {composition['water'] * 100}% Water, {composition['air'] * 100}% Air, {composition['land'] * 100}% Land."""
+- Composition: {' '.join(str(round(value * 100, 2)) + "% " + key for key, value in self.composition.items())}"""
         return res
 
     def add_energy(self, input_energy: Energy):

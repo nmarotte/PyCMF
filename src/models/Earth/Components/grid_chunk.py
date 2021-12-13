@@ -46,11 +46,14 @@ class GridChunk(list[ChunkComponent]):
             component.temperature = temperature
         self.__ratios = value
 
+    def get_masses(self):
+        return {component.component_type: component.mass for component in self}
+
     def __str__(self):
         res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n")
         res += f"- Composition: "
-        for i, component in enumerate(self):
-            res += f"{self.ratios[i] * 100}% {component.component_type}, "
+        for component in self:
+            res += f"{self.ratios[component.index] * 100}% {component.component_type}, "
         res = res[:-2] + "."
         return res
 
