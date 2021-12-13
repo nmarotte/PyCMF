@@ -15,7 +15,7 @@ class GridChunk(list[ChunkComponent]):
 
     __ratios: list[float] = None
 
-    def __init__(self, components: list[ChunkComponent], volume: Volume, *, ratios:list[float], index: int = None, parent=None):
+    def __init__(self, components: list[ChunkComponent], volume: Volume, *, ratios:list[float] = None, index: int = None, parent=None):
         super(GridChunk, self).__init__()
         self.__ratios = ratios
         self.extend(components)
@@ -44,6 +44,7 @@ class GridChunk(list[ChunkComponent]):
             temperature = component.temperature.copy()
             component.mass = (component.mass/self.ratios[i]) * value[i]
             component.temperature = temperature
+        self.__ratios = value
 
     def __str__(self):
         res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n")
@@ -138,10 +139,12 @@ class GridChunk(list[ChunkComponent]):
 
 
 if __name__ == '__main__':
+    water_mass = 1000
+    air_mass = 1.29
     components = [
-        ChunkComponent(mass=Mass(kilograms=1000), temperature=Temperature(celsius=21),
+        ChunkComponent(mass=Mass(kilograms=water_mass), temperature=Temperature(celsius=21),
                        component_type="Water"),
-        ChunkComponent(mass=Mass(kilograms=1.29),
+        ChunkComponent(mass=Mass(kilograms=air_mass),
                        temperature=Temperature(celsius=21),
                        component_type="Air")
         ]
@@ -151,6 +154,6 @@ if __name__ == '__main__':
     print(chunk[1])
 
     chunk.ratios = [0.5, 0.5]
-    print(chunk)
+    print("\n", chunk)
     print(chunk[0])
     print(chunk[1])
