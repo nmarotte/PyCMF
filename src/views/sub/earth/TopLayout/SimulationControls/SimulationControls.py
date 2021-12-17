@@ -5,7 +5,7 @@ import PyQt5.QtWidgets as QtWidgets
 from controller.controllers import StartButtonController, PauseButtonController, StopButtonController, \
     ResumeButtonController
 if TYPE_CHECKING:
-    import views.earth_view as earth_view
+    import a_views.earth_view as earth_view
 from .StartButton import StartButton
 from .PauseButton import PauseButton
 from .StopButton import StopButton
@@ -72,7 +72,8 @@ class SimulationControls(QtWidgets.QWidget, StartButtonController, PauseButtonCo
         self.pause_button.show()
         self.pause_button.setEnabled(False)
 
-    def __init__(self, controller: Union["earth_view.EarthView", StartButtonController, ResumeButtonController, PauseButtonController, StopButtonController]):
+    def __init__(self, controller: Union[
+        "earth_view.MainView", StartButtonController, ResumeButtonController, PauseButtonController, StopButtonController]):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())

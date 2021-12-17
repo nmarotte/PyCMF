@@ -1,9 +1,7 @@
-from typing import TYPE_CHECKING
-
 import PyQt5.QtWidgets as QtWidgets
 from PyQt5 import QtGui
 
-import views.earth_view as EarthView
+import a_views.earth_view as EarthView
 from constants import CANVAS_SIZE
 
 

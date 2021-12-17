@@ -1,20 +1,21 @@
+from PyQt5 import QtWidgets
+
 import threading
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-import PyQt5.QtWidgets as QtWidgets
-import PyQt5.QtGui as QtGui
-from PyQt5 import QtCore
-
-import views.sub.earth.TopLayout.TopLayout as TopLayout
 import views.sub.earth.BotLayout.BotLayout as BotLayout
+from a_views.toolbar_widget import ToolbarWidget
 from constants import CANVAS_SIZE
 from controller.controllers import *
 from models.Earth.earth import Earth
 from other.utils import color_from_ratio
+from universe import Universe
+from controller.main_controller import MainController
 
 
-class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
-                ResumeButtonController, ClearButtonController):
+class MainView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
+               ResumeButtonController, ClearButtonController):
+    model: Universe
 
     def clear_pressed(self):
         self.bot_layout.clear_canvas()
@@ -39,21 +40,21 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
     def is_simulation_running(self):
         return self.model.running
 
-    def __init__(self, model: Earth = None):
+    def __init__(self, controller: "MainController"):
+        self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
 
         # Creates the connection to the model, and its thread for smooth parallel execution
-        self.model = model
         self.simulation_thread: Optional[threading.Thread] = None
 
         # Creates the top tool bar
-        self.top_layout = TopLayout.TopLayout(controller=self)
+        self.top_layout = ToolbarWidget(self.controller.toolbar_controller)
         self.layout().addWidget(self.top_layout)
 
         # Create the bottom drawing canvas/simulation view
-        self.bot_layout = BotLayout.BotLayout(controller=self)
-        self.layout().addWidget(self.bot_layout)
+        # self.bot_layout = BotLayout.BotLayout(controller=self)
+        # self.layout().addWidget(self.bot_layout)
 
     def get_brush_width(self):
         return self.top_layout.get_brush_width()
@@ -85,7 +86,11 @@ class EarthView(QtWidgets.QWidget, StartButtonController, PauseButtonController,
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
-    uni = Earth(shape=CANVAS_SIZE)
-    earth_view = EarthView(model=uni)
-    earth_view.show()
-    app.exec()
+    controller = MainController()
+    view = MainView(controller)
+    uni = Universe()
+    uni.setup(shape=CANVAS_SIZE)
+    view.model = uni
+
+    view.show()
+    app.exec_()

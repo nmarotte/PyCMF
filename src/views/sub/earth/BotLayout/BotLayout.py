@@ -6,11 +6,11 @@ import views.sub.earth.BotLayout.EarthCanvas as EarthCanvas
 import views.sub.earth.BotLayout.EarthInfoText as EarthInfoText
 
 if TYPE_CHECKING:
-    from views.earth_view import EarthView
+    from a_views.earth_view import MainView
 
 
 class BotLayout(QtWidgets.QWidget):
-    def __init__(self, controller: "EarthView"):
+    def __init__(self, controller: "MainView"):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())

@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
 
 import PyQt5.QtWidgets as QtWidgets
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtCore
 
 if TYPE_CHECKING:
-    from views.earth_view import EarthView
+    from a_views.earth_view import MainView
 
 
 class EarthInfoText(QtWidgets.QWidget):
@@ -14,7 +14,7 @@ class EarthInfoText(QtWidgets.QWidget):
 
     auto_update_timer: QtCore.QTimer
 
-    def __init__(self, controller: "EarthView" = None):
+    def __init__(self, controller: "MainView" = None):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())

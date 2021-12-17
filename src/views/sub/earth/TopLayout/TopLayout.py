@@ -4,23 +4,22 @@ import PyQt5.QtWidgets as QtWidgets
 
 from views.sub.earth.TopLayout.ClearButton import ClearButton
 from views.sub.earth.TopLayout.ComponentAdder.ComponentAdder import ComponentAdder
-from views.sub.earth.TopLayout.ComponentPainter.PaintComponentTool import PaintComponentTool
+from views.sub.earth.TopLayout.ComponentPainter.PaintComponentToolView import PaintComponentToolView
 import views.sub.earth.TopLayout.SimulationControls.SimulationControls as SimulationControls
-from views.sub.earth.TopLayout.SimulationControls.StartButton import StartButton
 
 if TYPE_CHECKING:
-    from views.earth_view import EarthView
+    from a_views.earth_view import MainView
 
 
 class TopLayout(QtWidgets.QWidget):
     COMPONENTS = "WATER", "AIR", "LAND"
 
-    def __init__(self, controller: "EarthView"):
+    def __init__(self, controller: "MainView"):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())
         self.component_adder = ComponentAdder(TopLayout.COMPONENTS)
-        self.paint_component_selector = PaintComponentTool(TopLayout.COMPONENTS)
+        self.paint_component_selector = PaintComponentToolView(TopLayout.COMPONENTS)
         self.clear_button = ClearButton(controller=self.controller)
         self.simulation_controls = SimulationControls.SimulationControls(controller=self.controller)
 
