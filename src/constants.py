@@ -6,6 +6,7 @@ water_earth_mass = Mass(kilograms=1.4e21)
 water_earth_volume = Volume(meters3=1.4e21)
 
 CANVAS_SIZE = (400, 400)
+ICON_SIZE = (16, 16)
 
 COMPONENTS = ["WATER", "AIR", "LAND"]
 AIR_COMPONENTS = ["NITROGEN", "OXYGEN", "ARGON"]

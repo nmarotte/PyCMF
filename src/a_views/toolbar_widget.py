@@ -2,7 +2,6 @@ from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets
 
-from a_views.ToolbarArea.select_component_widget import SelectComponentWidget
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 

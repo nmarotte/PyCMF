@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets, QtGui
 
 from constants import CANVAS_SIZE
+from exceptions import ExceptionToProcess
+
 if TYPE_CHECKING:
     from controller.CanvasArea.subcontrollers.canvas_controller import CanvasController
 
@@ -18,8 +20,10 @@ class CanvasWidget(QtWidgets.QLabel):
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
         painter = QtGui.QPainter(self.pixmap())
         pen = QtGui.QPen()
-        brush_color = self.controller.get_brush_color()
-        if not brush_color:
+        try:
+            brush_color = self.controller.get_brush_color()
+        except ExceptionToProcess as e:
+            self.controller.main_controller.process_exception(type(e))
             return
         pen.setColor(brush_color)
         pen.setWidth(self.controller.get_brush_width())
