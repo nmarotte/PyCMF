@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 
 class CanvasController:
+    painting_enabled: bool = True
+
     def __init__(self, parent_controller: "CanvasAreaController", main_controller: "MainController"):
         self.main_controller = main_controller
         self.parent_controller = parent_controller
@@ -22,3 +24,9 @@ class CanvasController:
 
     def clear_canvas(self):
         self.view.clear()
+
+    def is_painting_enabled(self):
+        return self.painting_enabled
+
+    def set_painting_enabled(self, value: bool):
+        self.painting_enabled = value

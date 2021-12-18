@@ -11,9 +11,10 @@ if TYPE_CHECKING:
 
 
 class ExceptionController:
+    exception_stack: list[ExceptionToProcess] = []
+
     def __init__(self, parent_controller: "MainController"):
         self.parent_controller = parent_controller
-        self.exception_stack = []
         self.view = Title(controller=self)
 
     def set_text(self, value: str):
@@ -22,10 +23,9 @@ class ExceptionController:
     def set_icon(self, name: str, color: str):
         self.view.icon.setPixmap(qta.icon(name, color=color).pixmap(*ICON_SIZE))
 
-    def push_exception(self, exception: type[ExceptionToProcess]):
-        if len(self.exception_stack) and self.exception_stack[-1] == exception:
-            return
-        print(f"pushing {exception}")
+    def push_exception(self, exception: ExceptionToProcess):
+        if len(self.exception_stack) and isinstance(self.exception_stack[-1], type(exception)):
+            return  # Don't push already existing exception
         self.exception_stack.append(exception)
         self.set_text_for_top_exception()
 
@@ -39,8 +39,8 @@ class ExceptionController:
         if self.exception_stack[-1] == exception:
             self.exception_stack.pop()
         else:
-            for i in range(len(self.exception_stack)-1, 0, -1):  # Look from the top of the stack
-                if self.exception_stack[i] == exception:
+            for i in range(len(self.exception_stack)-1, -1, -1):  # Look from the top of the stack
+                if isinstance(self.exception_stack[i], exception):
                     self.exception_stack.pop(i)
         self.set_text_for_top_exception()
 
@@ -49,10 +49,14 @@ class ExceptionController:
             self.view.icon.setPixmap(QPixmap())
             self.set_text("")
             return
-        if self.exception_stack[-1] == NoComponentBrushSelected:
+        if isinstance(self.exception_stack[-1], NoComponentBrushSelected):
             self.set_icon("fa.warning", color="#eed202")
             self.set_text("You cannot paint without first selecting a component")
+        elif isinstance(self.exception_stack[-1], CannotPaintNow):
+            self.set_icon("fa.warning", color="#eed202")
+            self.set_text("You cannot paint right now.")
         else:
+            print(self.exception_stack)
             self.set_icon("ei.error", color="#ff0033")
             self.set_text("There is an unexpected error")
 

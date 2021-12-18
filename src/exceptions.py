@@ -4,3 +4,7 @@ class ExceptionToProcess(BaseException):
 
 class NoComponentBrushSelected(ExceptionToProcess):
     pass
+
+
+class CannotPaintNow(ExceptionToProcess):
+    pass

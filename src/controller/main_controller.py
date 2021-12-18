@@ -69,7 +69,7 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
     def finish_process_exception(self, exception: type[ExceptionToProcess]):
         self.exception_controller.pop_exception(exception)
 
-    def process_exception(self, exception: type[ExceptionToProcess]):
+    def process_exception(self, exception: ExceptionToProcess):
         self.exception_controller.push_exception(exception)
 
 
