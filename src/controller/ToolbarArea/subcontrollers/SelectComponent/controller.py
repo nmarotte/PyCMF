@@ -27,9 +27,7 @@ class SelectComponentController:
             for i, elem in enumerate(self.popup_controller.value):
                 if elem is not None:
                     self.__component_ratios[i] = self.popup_controller.value[i] / summed
-        print("done")
         if self.__component_ratios:
-            print("changed")
             self.main_controller.finish_process_exception(NoComponentBrushSelected)
 
     def get_component_ratios(self):

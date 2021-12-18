@@ -15,3 +15,12 @@ class CanvasAreaController:
         self.canvas_controller = CanvasController(parent_controller=self, main_controller=self.parent_controller)
         self.text_edit_controller = TextEditController(parent_controller=self)
         self.view = CanvasArea(controller=self, main_controller=self.parent_controller)
+
+    def clear_canvas(self):
+        self.canvas_controller.clear_canvas()
+
+    def set_canvas_enabled(self, value: bool):
+        self.canvas_controller.view.setEnabled(value)
+
+    def get_canvas_as_qimage(self):
+        return self.view.canvas.pixmap().toImage()

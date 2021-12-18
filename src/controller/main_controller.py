@@ -1,3 +1,5 @@
+import threading
+
 from PyQt5 import QtWidgets
 
 from a_views.main_view import MainView
@@ -8,6 +10,7 @@ from controller.controllers import StartButtonController, PauseButtonController,
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import ExceptionController
 from exceptions import ExceptionToProcess
+from models.Earth.earth import Earth
 from universe import Universe
 
 
@@ -20,24 +23,42 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         self.view = MainView(controller=self)
 
     def clear_pressed(self):
-        self.simulation_view_controller.clear_canvas()
+        self.canvas_controller.clear_canvas()
 
     def start_pressed(self):
-        self.simulation_view_controller.set_canvas_enabled(False)
+        self.canvas_controller.set_canvas_enabled(False)
         self.__rebuild_simulation()
         self.__start_simulation()
 
     def pause_pressed(self):
-        self.simulation_view_controller.set_canvas_enabled(True)
+        self.canvas_controller.set_canvas_enabled(True)
         self.__pause_simulation()
 
     def resume_pressed(self):
-        self.simulation_view_controller.set_canvas_enabled(False)
+        self.canvas_controller.set_canvas_enabled(False)
         self.__resume_simulation()
 
     def stop_pressed(self):
-        self.simulation_view_controller.set_canvas_enabled(True)
+        self.canvas_controller.set_canvas_enabled(True)
         self.__stop_simulation()
+
+    def __rebuild_simulation(self):
+        self.model = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage())
+
+    def __start_simulation(self):
+        self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
+        self.simulation_thread.start()
+
+    def __pause_simulation(self):
+        self.model.pause_updating()
+
+    def __resume_simulation(self):
+        self.simulation_thread = threading.Thread(target=self.model.resume_updating, args=())
+        self.simulation_thread.start()
+
+    def __stop_simulation(self):
+        self.model.stop_updating()
+        self.simulation_thread = None
 
     def get_brush_color(self):
         return self.toolbar_controller.get_brush_color()

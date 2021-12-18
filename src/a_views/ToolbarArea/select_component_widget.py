@@ -49,11 +49,12 @@ class SelectComponentWidget(QtWidgets.QWidget):
         # Label and spinbox to select size
         label = QtWidgets.QLabel("\uf1fc" + "Brush Size")
         label.setFont(qta.font('fa', 12))
+        label.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.layout().addWidget(label)
 
         self.spinbox = QtWidgets.QSpinBox()
         self.spinbox.setValue(10)
         self.spinbox.setSingleStep(5)
-        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.spinbox.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
         self.layout().addWidget(self.spinbox)

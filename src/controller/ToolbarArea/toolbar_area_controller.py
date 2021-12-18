@@ -14,7 +14,7 @@ class ToolbarController:
     def __init__(self, parent_controller: "MainController"):
         self.parent_controller = parent_controller
         self.select_component_controller = SelectComponentController(parent_controller=self, main_controller=parent_controller)
-        self.simulation_time_controller = SimulationTimeController()
+        self.simulation_time_controller = SimulationTimeController(parent_controller=self, main_controller=parent_controller)
         self.view = ToolbarArea(self)
 
     def get_brush_color(self):

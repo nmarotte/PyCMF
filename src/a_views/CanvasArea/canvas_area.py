@@ -31,6 +31,3 @@ class CanvasArea(QtWidgets.QWidget):
 
     def set_canvas_enabled(self, value: bool):
         self.canvas.setEnabled(value)
-
-    def get_canvas_as_qimage(self):
-        return self.canvas.label.pixmap().toImage()
