@@ -32,7 +32,7 @@ class TopLayout(QtWidgets.QWidget):
         return self.paint_component_selector.get_value()
 
     def get_brush_width(self):
-        return self.paint_component_selector.brush_size_selector.get_value()
+        return self.paint_component_selector.brush_size_selector.get_component_ratios()
 
     def clear_pressed(self):
         self.parent().clear_canvas()

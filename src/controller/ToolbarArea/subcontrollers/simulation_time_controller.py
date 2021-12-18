@@ -1,2 +1,2 @@
 class SimulationTimeController:
-    pass
+    view = None

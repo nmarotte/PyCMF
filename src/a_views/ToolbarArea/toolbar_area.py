@@ -3,15 +3,14 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets
 
 from a_views.ToolbarArea.select_component_widget import SelectComponentWidget
+
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 
 
-class ToolbarWidget(QtWidgets.QWidget):
+class ToolbarArea(QtWidgets.QWidget):
     def __init__(self, controller: "ToolbarController"):
+        self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())
-        self.select_component_widget = controller.select_component_controller.view
-        self.layout().addWidget(self.select_component_widget)
-        self.simulation_time_widget = controller.simulation_time_controller.view
-        self.select_time_widget = None
+        self.layout().addWidget(SelectComponentWidget(controller=controller.select_component_controller))

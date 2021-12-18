@@ -1,4 +1,4 @@
-from a_views.select_component_widget import SelectComponentWidget
+from a_views.ToolbarArea.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 
 
@@ -7,14 +7,20 @@ class SelectComponentController:
 
     def __init__(self):
         self.view = SelectComponentWidget(controller=self)
-        self.sub_controller = SelectComponentPopupController()
+        self.popup_controller = SelectComponentPopupController()
 
     def button_pressed(self):
-        self.sub_controller.view.exec_()
-        if self.sub_controller.value:
+        self.popup_controller.view.exec_()
+        if self.popup_controller.value:
             if self.__component_ratios is None:
-                self.__component_ratios = [0] * len(self.sub_controller.value)
-            summed = sum(self.sub_controller.value)
-            for i, elem in enumerate(self.sub_controller.value):
+                self.__component_ratios = [0] * len(self.popup_controller.value)
+            summed = sum(self.popup_controller.value)
+            for i, elem in enumerate(self.popup_controller.value):
                 if elem is not None:
-                    self.__component_ratios[i] = self.sub_controller.value[i] / summed
+                    self.__component_ratios[i] = self.popup_controller.value[i] / summed
+
+    def get_component_ratios(self):
+        return self.__component_ratios
+
+    def get_brush_width(self):
+        return self.view.spinbox.value()

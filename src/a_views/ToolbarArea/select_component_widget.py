@@ -1,7 +1,5 @@
 from typing import TYPE_CHECKING
-
-from a_views.select_component_slider import AtomicSelectComponentSlider
-from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
+import qtawesome as qta
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
@@ -9,7 +7,6 @@ if TYPE_CHECKING:
 
 
 import PyQt5.QtWidgets as QtWidgets
-from PyQt5.QtCore import Qt
 
 from constants import COMPONENTS
 
@@ -37,8 +34,26 @@ class SelectComponentPopupView(QtWidgets.QDialog):
         self.layout().addLayout(self.bottom_layout)
 
 
-class SelectComponentWidget(QtWidgets.QPushButton):
+class SelectComponentWidget(QtWidgets.QWidget):
     def __init__(self, controller: "SelectComponentController"):
         self.controller = controller
-        super().__init__(f"Select Component\n Brush")
-        self.clicked.connect(self.controller.button_pressed)
+        super().__init__()
+        self.setLayout(QtWidgets.QVBoxLayout())
+
+        # Button to select component
+        self.button = QtWidgets.QPushButton(f"Select Component\n Brush")
+        self.button.clicked.connect(self.controller.button_pressed)
+
+        self.layout().addWidget(self.button)
+
+        # Label and spinbox to select size
+        label = QtWidgets.QLabel("\uf1fc" + "Brush Size")
+        label.setFont(qta.font('fa', 12))
+        self.layout().addWidget(label)
+
+        self.spinbox = QtWidgets.QSpinBox()
+        self.spinbox.setValue(10)
+        self.spinbox.setSingleStep(5)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+
+        self.layout().addWidget(self.spinbox)

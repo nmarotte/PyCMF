@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.select_component_slider import AtomicSelectComponentSlider
+from a_views.ToolbarArea.select_component_slider import AtomicSelectComponentSlider
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 #todo talk about python typing and how it makes us not need the usual abstract interfacing inheritance as seen in AMI

@@ -2,10 +2,10 @@ import PyQt5.QtWidgets as QtWidgets
 import qtawesome as qta
 from typing import TYPE_CHECKING
 
-from a_views.select_component_widget import SelectComponentWidget
+from a_views.ToolbarArea.select_component_widget import SelectComponentWidget
 
 if TYPE_CHECKING:
-    from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
+    pass
 
 
 class PaintComponentToolView(QtWidgets.QWidget):
@@ -49,7 +49,7 @@ class PaintComponentToolView(QtWidgets.QWidget):
         self.layout().addWidget(PaintComponentToolView.BrushSizeSelector(controller=self.controller))
 
     def get_brush_size(self):
-        return self.brush_size_selector.get_value()
+        return self.brush_size_selector.get_component_ratios()
 
     def get_value(self) -> list[float]:
         if self.__value is None:

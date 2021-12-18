@@ -3,14 +3,14 @@ from PyQt5 import QtWidgets
 import threading
 from typing import Optional, TYPE_CHECKING
 
-import views.sub.earth.BotLayout.BotLayout as BotLayout
+from a_views.CanvasArea.canvas_area import CanvasArea
 from a_views.toolbar_widget import ToolbarWidget
-from constants import CANVAS_SIZE
 from controller.controllers import *
 from models.Earth.earth import Earth
 from other.utils import color_from_ratio
 from universe import Universe
-from controller.main_controller import MainController
+if TYPE_CHECKING:
+    from controller.main_controller import MainController
 
 
 class MainView(QtWidgets.QWidget, StartButtonController, PauseButtonController, StopButtonController,
@@ -49,18 +49,18 @@ class MainView(QtWidgets.QWidget, StartButtonController, PauseButtonController, 
         self.simulation_thread: Optional[threading.Thread] = None
 
         # Creates the top tool bar
-        self.top_layout = ToolbarWidget(self.controller.toolbar_controller)
+        self.top_layout = ToolbarWidget(controller=self.controller.toolbar_controller)
         self.layout().addWidget(self.top_layout)
 
         # Create the bottom drawing canvas/simulation view
-        # self.bot_layout = BotLayout.BotLayout(controller=self)
-        # self.layout().addWidget(self.bot_layout)
+        self.bot_layout = CanvasArea(controller=self.controller.canvas_controller)
+        self.layout().addWidget(self.bot_layout)
 
     def get_brush_width(self):
         return self.top_layout.get_brush_width()
 
     def get_brush_color(self):
-        value = self.top_layout.paint_component_selector.get_value()
+        value = self.top_layout.paint_component_selector.get_component_ratios()
         if value is not None:
             return color_from_ratio(value)
         return None
@@ -82,15 +82,3 @@ class MainView(QtWidgets.QWidget, StartButtonController, PauseButtonController, 
     def __stop_simulation(self):
         self.model.stop_updating()
         self.simulation_thread = None
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication([])
-    controller = MainController()
-    view = MainView(controller)
-    uni = Universe()
-    uni.setup(shape=CANVAS_SIZE)
-    view.model = uni
-
-    view.show()
-    app.exec_()

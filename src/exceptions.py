@@ -1,0 +1,2 @@
+class NoComponentBrushSelected(BaseException):
+    pass
