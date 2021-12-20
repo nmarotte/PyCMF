@@ -8,6 +8,8 @@ from models.model import Model
 
 
 class Grid(list[Optional[GridChunk]], Model):
+    nb_active_grid_chunks: int = 0
+
     def __init__(self, shape: tuple, *, parent=None):
         super().__init__()
         self.shape = shape
@@ -17,6 +19,13 @@ class Grid(list[Optional[GridChunk]], Model):
 
     def __len__(self):
         return numpy.product(self.shape)
+
+    def __setitem__(self, key, value):
+        if self[key] is None and value is not None:
+            self.nb_active_grid_chunks += 1
+        elif self[key] is not None and value is None:
+            self.nb_active_grid_chunks -= 1
+        super().__setitem__(key, value)
 
     def not_nones(self) -> Iterator:
         return (elem for elem in self if elem is not None)

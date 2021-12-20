@@ -1,3 +1,4 @@
+import math
 import random
 
 import PyQt5.QtGui as QtGui
@@ -11,9 +12,14 @@ from units import Energy, Mass, Volume, Temperature
 
 
 class Earth(Grid):
-    __average_temperature: Temperature = Temperature(kelvin=0)
+    total_temperature: Temperature = Temperature(kelvin=0)
+
     def __init__(self, shape: tuple, *, parent=None):
         super().__init__(shape, parent=parent)
+
+    def set_component_at(self, component: GridChunk, x, y, z=None):
+        self.total_temperature += component.temperature
+        super().set_component_at(component, x, y, z)
 
     @classmethod
     def from_qimage(cls, qimage: QtGui.QImage):
@@ -25,17 +31,16 @@ class Earth(Grid):
                 color = qimage.pixelColor(x, y)
                 ratio = ComponentColor.DICT[color.rgb()]
                 components = []
-                if ratio["WATER"]:
-                    components.append(ChunkComponent(component_type="WATER", mass=Mass(kilograms=1000),
+                if not math.isclose(ratio["WATER"], 0):
+                    components.append(ChunkComponent(component_type="WATER", mass=Mass(kilograms=1000) * ratio["WATER"],
                                                      temperature=Temperature(celsius=21)))
-                if ratio["AIR"]:
-                    components.append(ChunkComponent(component_type="AIR", mass=Mass(kilograms=1.29),
+                if not math.isclose(ratio["AIR"], 0):
+                    components.append(ChunkComponent(component_type="AIR", mass=Mass(kilograms=1.29) * ratio["AIR"],
                                                      temperature=Temperature(celsius=21)))
-                if ratio["LAND"]:
-                    components.append(ChunkComponent(component_type="LAND", mass=Mass(kilograms=1700),
+                if not math.isclose(ratio["LAND"], 0):
+                    components.append(ChunkComponent(component_type="LAND", mass=Mass(kilograms=1700) * ratio["LAND"],
                                                      temperature=Temperature(celsius=21)))
-                chunk = GridChunk(components=components,
-                                  ratios=ratio, volume=Volume(meters3=1), parent=res,
+                chunk = GridChunk(components=components, volume=Volume(meters3=1), parent=res,
                                   index=x + y * qimage.size().width())
                 res.set_component_at(chunk, x, y)
         return res
@@ -56,12 +61,7 @@ class Earth(Grid):
 
     @property
     def average_temperature(self) -> Temperature:
-        count = 0
-        temperature = 0
-        for x in self.not_nones():
-            count += 1
-            temperature += x.temperature
-        return Temperature(kelvin=(temperature / count) if count else 0)
+        return (self.total_temperature/self.nb_active_grid_chunks) if self.nb_active_grid_chunks else 0
 
     @property
     def composition(self):
