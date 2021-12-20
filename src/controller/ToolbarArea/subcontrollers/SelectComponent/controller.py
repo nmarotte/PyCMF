@@ -15,8 +15,8 @@ class SelectComponentController:
     def __init__(self, parent_controller: "ToolbarController", main_controller: "MainController"):
         self.parent_controller = parent_controller
         self.main_controller = main_controller
-        self.view = SelectComponentWidget(controller=self)
         self.popup_controller = SelectComponentPopupController()
+        self.view = SelectComponentWidget(controller=self)
 
     def button_pressed(self):
         self.popup_controller.view.exec_()

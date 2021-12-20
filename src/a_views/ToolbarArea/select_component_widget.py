@@ -45,16 +45,22 @@ class SelectComponentWidget(QtWidgets.QWidget):
         self.button.clicked.connect(self.controller.button_pressed)
 
         self.layout().addWidget(self.button)
+        sub_h_layout = QtWidgets.QHBoxLayout()
+        sub_sub_v_layout = QtWidgets.QVBoxLayout()
 
         # Label and spinbox to select size
         label = QtWidgets.QLabel("\uf1fc" + "Brush Size")
         label.setFont(qta.font('fa', 12))
         label.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.layout().addWidget(label)
+        sub_sub_v_layout.addWidget(label)
 
         self.spinbox = QtWidgets.QSpinBox()
         self.spinbox.setValue(10)
         self.spinbox.setSingleStep(5)
         self.spinbox.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
 
-        self.layout().addWidget(self.spinbox)
+        sub_sub_v_layout.addWidget(self.spinbox)
+        sub_h_layout.addLayout(sub_sub_v_layout)
+        sub_h_layout.addWidget(self.controller.parent_controller.clear_canvas_controller.view)
+
+        self.layout().addLayout(sub_h_layout)
