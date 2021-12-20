@@ -16,9 +16,6 @@ class CanvasController:
         self.parent_controller = parent_controller
         self.view = CanvasWidget(controller=self)
 
-    def get_brush_color(self):
-        return self.main_controller.get_brush_color()
-
     def get_brush_width(self):
         return self.main_controller.get_brush_width()
 

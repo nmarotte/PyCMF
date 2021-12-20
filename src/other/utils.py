@@ -42,4 +42,3 @@ class ComponentColor(QtGui.QColor):
                      int(ComponentColor.AIR.blue() * ratios.get("AIR", 0)) +
                      int(ComponentColor.LAND.blue() * ratios.get("LAND", 0)))
         ComponentColor.DICT[self.rgb()] = ratios
-

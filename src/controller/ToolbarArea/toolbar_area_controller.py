@@ -19,11 +19,11 @@ class ToolbarController:
         self.simulation_time_controller = SimulationTimeController(parent_controller=self, main_controller=parent_controller)
         self.view = ToolbarArea(self)
 
-    def get_brush_color(self):
+    def get_selected_component_dict(self) -> dict:
         value = self.select_component_controller.get_component_ratios()
         if value is None:
             raise NoComponentBrushSelected
-        return color_from_ratio(value)
+        return value
 
     def get_brush_width(self):
         return self.select_component_controller.get_brush_width()

@@ -1,5 +1,6 @@
 import math
 import random
+from typing import Union
 
 import PyQt5.QtGui as QtGui
 
@@ -22,7 +23,7 @@ class Earth(Grid):
         super().set_component_at(component, x, y, z)
 
     @classmethod
-    def from_qimage(cls, qimage: QtGui.QImage):
+    def from_qimage(cls, qimage: QtGui.QImage, masses: list[Union[Mass, float]]):
         res = cls(shape=(qimage.size().width(), qimage.size().height()))
         for y in range(qimage.size().height()):
             for x in range(qimage.size().width()):
@@ -30,15 +31,16 @@ class Earth(Grid):
                     continue
                 color = qimage.pixelColor(x, y)
                 ratio = ComponentColor.DICT[color.rgb()]
+                masses = [x if isinstance(x, Mass) else Mass(kilograms=x) for x in masses]
                 components = []
                 if not math.isclose(ratio["WATER"], 0):
-                    components.append(ChunkComponent(component_type="WATER", mass=Mass(kilograms=1000) * ratio["WATER"],
+                    components.append(ChunkComponent(component_type="WATER", mass=masses[0] * ratio["WATER"],
                                                      temperature=Temperature(celsius=21)))
                 if not math.isclose(ratio["AIR"], 0):
-                    components.append(ChunkComponent(component_type="AIR", mass=Mass(kilograms=1.29) * ratio["AIR"],
+                    components.append(ChunkComponent(component_type="AIR", mass=masses[1] * ratio["AIR"],
                                                      temperature=Temperature(celsius=21)))
                 if not math.isclose(ratio["LAND"], 0):
-                    components.append(ChunkComponent(component_type="LAND", mass=Mass(kilograms=1700) * ratio["LAND"],
+                    components.append(ChunkComponent(component_type="LAND", mass=masses[2] * ratio["LAND"],
                                                      temperature=Temperature(celsius=21)))
                 chunk = GridChunk(components=components, volume=Volume(meters3=1), parent=res,
                                   index=x + y * qimage.size().width())

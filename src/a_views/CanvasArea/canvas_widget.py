@@ -3,7 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets, QtGui
 
 from constants import CANVAS_SIZE
-from exceptions import ExceptionToProcess, CannotPaintNow
+from exceptions import ExceptionToProcess, CannotPaintNow, NoComponentBrushSelected
+from other.utils import color_from_ratio
 
 if TYPE_CHECKING:
     from controller.CanvasArea.subcontrollers.canvas_controller import CanvasController
@@ -23,11 +24,11 @@ class CanvasWidget(QtWidgets.QLabel):
             return
         with QtGui.QPainter(self.pixmap()) as painter:
             pen = QtGui.QPen()
-            try:
-                brush_color = self.controller.get_brush_color()
-            except ExceptionToProcess as e:
-                self.controller.main_controller.process_exception(e)
+            ratios = self.controller.main_controller.get_component_ratios()
+            if ratios is None:
+                self.controller.main_controller.process_exception(NoComponentBrushSelected())
                 return
+            brush_color = color_from_ratio(ratios)
             pen.setColor(brush_color)
             pen.setWidth(self.controller.get_brush_width())
             painter.setPen(pen)

@@ -44,7 +44,7 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         self.__stop_simulation()
 
     def __rebuild_simulation(self):
-        self.model = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage())
+        self.model = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage(), self.get_component_masses())
 
     def __start_simulation(self):
         self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
@@ -61,9 +61,6 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         self.model.stop_updating()
         self.simulation_thread = None
 
-    def get_brush_color(self):
-        return self.toolbar_controller.get_brush_color()
-
     def get_brush_width(self):
         return self.toolbar_controller.get_brush_width()
 
@@ -72,6 +69,12 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
 
     def process_exception(self, exception: ExceptionToProcess):
         self.exception_controller.push_exception(exception)
+
+    def get_component_ratios(self):
+        return self.toolbar_controller.select_component_controller.get_component_ratios()
+
+    def get_component_masses(self):
+        return self.toolbar_controller.select_component_controller.get_component_masses()
 
 
 if __name__ == '__main__':

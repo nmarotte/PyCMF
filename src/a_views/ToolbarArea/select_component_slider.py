@@ -13,7 +13,7 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
     lock_checkbox: QtWidgets.QCheckBox
     composition_button: QtWidgets.QPushButton
 
-    def __init__(self, label: str, index: int, controller: "SelectComponentSliderController"):
+    def __init__(self, label: str, index: int, default_mass: int, controller: "SelectComponentSliderController"):
         self.controller = controller
         super().__init__()
         self.index = index
@@ -43,12 +43,19 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
         self.lock_checkbox.stateChanged.connect(self.controller.lock_changed)
         self.sub_layout.addWidget(self.lock_checkbox)
 
+        self.mass_label = QtWidgets.QLabel("Mass (kg)")
+        self.sub_layout.addWidget(self.mass_label)
+        self.mass_spinbox = QtWidgets.QDoubleSpinBox()
+        self.mass_spinbox.setMaximum(10000)
+        self.mass_spinbox.setValue(default_mass)
+        self.mass_spinbox.setSingleStep(default_mass//10)
+        self.sub_layout.addWidget(self.mass_spinbox)
         # Add the 3 components from left to right to the layout
         self.layout().addLayout(self.sub_layout)
 
 
 class SelectComponentSlider(AtomicSelectComponentSlider):
-    def __init__(self, label: str, index: int, controller: "SelectComponentSliderController"):
-        super(SelectComponentSlider, self).__init__(label, index, controller)
+    def __init__(self, label: str, index: int, default_mass: int, controller: "SelectComponentSliderController"):
+        super(SelectComponentSlider, self).__init__(label, index, default_mass, controller)
         self.composition_button = QtWidgets.QPushButton("Composition")
         self.sub_layout.insertWidget(0, self.composition_button)

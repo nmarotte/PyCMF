@@ -7,10 +7,10 @@ if TYPE_CHECKING:
 
 
 class SelectComponentSliderController:
-    def __init__(self, label: str, index: int, parent_controller: "SelectComponentPopupController"):
+    def __init__(self, label: str, index: int, default_mass: int, parent_controller: "SelectComponentPopupController"):
         self.parent_controller = parent_controller
         self.index = index
-        self.view = AtomicSelectComponentSlider(label, index, self)
+        self.view = AtomicSelectComponentSlider(label, index, default_mass, self)
         self.maximum = 100
 
     def lock_changed(self):
@@ -32,12 +32,9 @@ class SelectComponentSliderController:
             self.view.spinbox.setValue(self.parent_controller.get_remaining_to_balance())
         else:
             self.view.slider.setValue(self.view.spinbox.value())
-            self.parent_controller.balance_sliders(self.index, self.get_value())
+            self.parent_controller.balance_sliders(self.index, self.get_ratio())
 
-    def get_value(self):
-        return self.view.slider.value()
-
-    def set_value(self, value: int):
+    def set_ratio(self, value: int):
         self.view.slider.setValue(value)
 
     def is_locked(self):
@@ -51,3 +48,8 @@ class SelectComponentSliderController:
     def is_locking_enabled(self):
         return self.view.lock_checkbox.isEnabled()
 
+    def get_ratio(self):
+        return self.view.slider.value()
+
+    def get_mass(self):
+        return self.view.mass_spinbox.value()
