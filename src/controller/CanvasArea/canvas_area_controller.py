@@ -13,7 +13,7 @@ class CanvasAreaController:
     def __init__(self, parent_controller: "MainController"):
         self.parent_controller = parent_controller
         self.canvas_controller = CanvasController(parent_controller=self, main_controller=self.parent_controller)
-        self.text_edit_controller = TextEditController(parent_controller=self)
+        self.text_edit_controller = TextEditController(parent_controller=self, main_controller=self.parent_controller)
         self.view = CanvasArea(controller=self, main_controller=self.parent_controller)
 
     def clear_canvas(self):

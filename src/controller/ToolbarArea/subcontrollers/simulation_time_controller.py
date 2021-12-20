@@ -14,13 +14,33 @@ class SimulationTimeController:
         self.view = SimulationTimeWidget(controller=self)
 
     def start_pressed(self):
+        self.view.start_button.hide()
+        self.view.layout().replaceWidget(self.view.start_button, self.view.stop_button)
+        self.view.stop_button.show()
+        self.view.pause_simulation.setEnabled(True)
         return self.main_controller.start_pressed()
 
     def pause_pressed(self):
+        self.view.layout().replaceWidget(self.view.pause_simulation, self.view.resume_simulation)
+        self.view.resume_simulation.show()
+        self.view.pause_simulation.hide()
         return self.main_controller.pause_pressed()
 
     def resume_pressed(self):
+        self.view.layout().replaceWidget(self.view.resume_simulation, self.view.pause_simulation)
+        self.view.resume_simulation.hide()
+        self.view.pause_simulation.show()
         return self.main_controller.resume_pressed()
 
     def stop_pressed(self):
+        self.view.stop_button.hide()
+        self.view.layout().replaceWidget(self.view.stop_button, self.view.start_button)
+        self.view.start_button.show()
+        self.view.pause_simulation.setEnabled(False)
+        # If resume is still in layout, replace it with pause
+        if self.view.pause_simulation.isHidden():
+            self.view.layout().replaceWidget(self.view.resume_simulation, self.view.pause_simulation)
+            self.view.resume_simulation.hide()
+            self.view.pause_simulation.show()
+
         return self.main_controller.stop_pressed()

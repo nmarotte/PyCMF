@@ -21,7 +21,6 @@ class SimulationTimeWidget(QtWidgets.QWidget):
         self.stop_button = QtWidgets.QPushButton(qta.icon("fa.hand-stop-o", color="#B22222"), "Stop Simulation")
         self.stop_button.clicked.connect(controller.stop_pressed)
         self.stop_button.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.stop_button.setHidden(True)
 
         self.pause_simulation = QtWidgets.QPushButton(qta.icon("fa5s.pause", color="#4169E1"), "Pause Simulation")
         self.pause_simulation.clicked.connect(controller.pause_pressed)
