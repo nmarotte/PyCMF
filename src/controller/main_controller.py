@@ -26,6 +26,9 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
 
+    def build_pressed(self):
+        self.__rebuild_simulation()
+
     def start_pressed(self):
         self.canvas_controller.set_canvas_enabled(False)
         self.__rebuild_simulation()

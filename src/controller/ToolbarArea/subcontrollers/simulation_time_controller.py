@@ -13,6 +13,11 @@ class SimulationTimeController:
         self.main_controller = main_controller
         self.view = SimulationTimeWidget(controller=self)
 
+    def build_pressed(self):
+        self.view.build_button.setText("Rebuild Simulation")
+        self.view.start_button.setEnabled(True)
+        return self.main_controller.build_pressed()
+
     def start_pressed(self):
         self.view.start_button.hide()
         self.view.layout().replaceWidget(self.view.start_button, self.view.stop_button)
@@ -42,5 +47,9 @@ class SimulationTimeController:
             self.view.layout().replaceWidget(self.view.resume_simulation, self.view.pause_simulation)
             self.view.resume_simulation.hide()
             self.view.pause_simulation.show()
+
+        # Change build button back to "Build" and disable Start
+        self.view.build_button.setText("Build Simulation")
+        self.view.start_button.setEnabled(False)
 
         return self.main_controller.stop_pressed()

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 from constants import CANVAS_SIZE
 from exceptions import ExceptionToProcess, CannotPaintNow, NoComponentBrushSelected
@@ -17,6 +17,7 @@ class CanvasWidget(QtWidgets.QLabel):
         self.controller = controller
         super().__init__()
         self.setPixmap(QtGui.QPixmap(*CANVAS_SIZE))
+        self.setFixedSize(*CANVAS_SIZE)
 
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
         if not self.controller.is_painting_enabled():

@@ -12,9 +12,15 @@ class SimulationTimeWidget(QtWidgets.QWidget):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
+        self.build_button = QtWidgets.QPushButton(qta.icon("fa5s.hammer"), "Build Simulation")
+        self.build_button.clicked.connect(self.controller.build_pressed)
+        self.build_button.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.layout().addWidget(self.build_button)
+
         self.start_button = QtWidgets.QPushButton(qta.icon("fa.check", color="#228B22"), "Start Simulation")
         self.start_button.clicked.connect(self.controller.start_pressed)
         self.start_button.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        self.start_button.setEnabled(False)
 
         self.layout().addWidget(self.start_button)
 
