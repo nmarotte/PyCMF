@@ -47,7 +47,6 @@ class Universe(Model):
         return self.earth.get_component_at(x, y, z)
 
 
-
 if __name__ == '__main__':
     """
     """

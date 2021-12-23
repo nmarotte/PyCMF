@@ -1,20 +1,19 @@
 from a_views.ToolbarArea.select_component_widget import SelectComponentPopupView
 from constants import COMPONENTS, DEFAULT_MASSES
 from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
+from other.utils import ChunkData
 
 
 class SelectComponentPopupController:
-    ratios: list[float] = None
 
     def __init__(self):
         self.balancing = False
-        self.sub_controllers = [SelectComponentSliderController(component, i, default_mass, parent_controller=self) for i, (component, default_mass) in enumerate(zip(COMPONENTS, DEFAULT_MASSES))]
+        self.sub_controllers = [SelectComponentSliderController(component, i, default_mass, parent_controller=self) for
+                                i, (component, default_mass) in enumerate(zip(COMPONENTS, DEFAULT_MASSES))]
         self.view = SelectComponentPopupView(controller=self)
 
     # Pressing confirm/cancel button
     def confirmed(self):
-        self.ratios = [x.get_ratio() for x in self.sub_controllers]
-        self.masses = [x.get_mass() for x in self.sub_controllers]
         self.view.accept()
 
     def cancelled(self):

@@ -14,7 +14,7 @@ class TextEdit(QtWidgets.QWidget):
 
         self.text_edit = QtWidgets.QTextEdit()
         self.text_edit.setReadOnly(True)
-        self.text_edit.setText(controller.main_controller.model.__str__())
+        self.text_edit.setText(controller.main_controller.model.earth.__str__())
         self.layout().addWidget(self.text_edit)
 
         sub_layout = QtWidgets.QHBoxLayout()

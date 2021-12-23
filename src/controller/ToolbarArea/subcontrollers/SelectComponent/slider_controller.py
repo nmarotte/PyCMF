@@ -1,16 +1,18 @@
 from typing import TYPE_CHECKING
 
 from a_views.ToolbarArea.select_component_slider import AtomicSelectComponentSlider
+
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 #todo talk about python typing and how it makes us not need the usual abstract interfacing inheritance as seen in AMI
 
 
 class SelectComponentSliderController:
-    def __init__(self, label: str, index: int, default_mass: int, parent_controller: "SelectComponentPopupController"):
+    def __init__(self, component_type: str, index: int, default_mass: int, parent_controller: "SelectComponentPopupController"):
+        self.component_type = component_type
         self.parent_controller = parent_controller
         self.index = index
-        self.view = AtomicSelectComponentSlider(label, index, default_mass, self)
+        self.view = AtomicSelectComponentSlider(component_type, index, default_mass, self)
         self.maximum = 100
 
     def lock_changed(self):
@@ -51,5 +53,8 @@ class SelectComponentSliderController:
     def get_ratio(self):
         return self.view.slider.value()
 
-    def get_mass(self):
+    def get_mass(self) -> float:
         return self.view.mass_spinbox.value()
+
+    def get_temperature(self) -> float:
+        return self.view.temperature_spinbox.value()

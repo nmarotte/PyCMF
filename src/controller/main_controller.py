@@ -1,4 +1,6 @@
+import math
 import threading
+from typing import Optional
 
 from PyQt5 import QtWidgets
 
@@ -10,19 +12,22 @@ from controller.controllers import StartButtonController, PauseButtonController,
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import ExceptionController
 from exceptions import ExceptionToProcess
-from models.Earth.earth import Earth
+from models.Earth.Components.chunk_component import ChunkComponent
+from models.Earth.Components.grid_chunk import GridChunk
 from universe import Universe
 
 
 class MainController(StartButtonController, PauseButtonController, StopButtonController,
                      ResumeButtonController, ClearButtonController):
-    model: Universe = None
+    model: Universe = Universe()
+    simulation_thread: Optional[threading.Thread] = None
 
     def __init__(self):
         self.exception_controller = ExceptionController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
         self.view = MainView(controller=self)
+        self.model.setup(shape=CANVAS_SIZE)
 
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
@@ -48,7 +53,8 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         self.__stop_simulation()
 
     def __rebuild_simulation(self):
-        self.model = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage(), self.get_component_masses())
+        # self.model.earth = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage(), self.get_components_data())
+        pass
 
     def __start_simulation(self):
         self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
@@ -74,11 +80,27 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
     def process_exception(self, exception: ExceptionToProcess):
         self.exception_controller.push_exception(exception)
 
-    def get_component_ratios(self):
-        return self.toolbar_controller.select_component_controller.get_component_ratios()
+    def is_exception_processing(self, exception: type[ExceptionToProcess]):
+        return any(isinstance(e, exception) for e in self.exception_controller.exception_stack)
 
-    def get_component_masses(self):
-        return self.toolbar_controller.select_component_controller.get_component_masses()
+    def components_painted(self, *positions: tuple[int, int]):
+        temperatures = self.toolbar_controller.select_component_controller.get_temperatures()
+        ratios = self.toolbar_controller.select_component_controller.get_ratios()
+        masses = self.toolbar_controller.select_component_controller.get_masses()
+        ratioed_masses = [m * r for m, r in zip(masses, ratios)]
+        for x, y in set(positions):
+            components = []
+            if not math.isclose(ratios[0], 0):
+                components.append(ChunkComponent(component_type="WATER", mass=ratioed_masses[0], temperature=temperatures[0]))
+            if not math.isclose(ratios[1], 0):
+                components.append(ChunkComponent(component_type="AIR", mass=ratioed_masses[1], temperature=temperatures[1]))
+            if not math.isclose(ratios[2], 0):
+                components.append(ChunkComponent(component_type="LAND", mass=ratioed_masses[2], temperature=temperatures[2]))
+            chunk = GridChunk(components=components, volume=1, parent=self.model.earth,  index=x + y * self.model.earth.shape[1])
+            self.model.earth.set_component_at(chunk, x, y)
+
+    def get_ratios(self):
+        return self.toolbar_controller.select_component_controller.get_ratios()
 
 
 if __name__ == '__main__':

@@ -10,6 +10,7 @@ if TYPE_CHECKING:
 
 class CanvasController:
     painting_enabled: bool = True
+    last_painted_positions: list[tuple[int, int]] = []
 
     def __init__(self, parent_controller: "CanvasAreaController", main_controller: "MainController"):
         self.main_controller = main_controller
@@ -34,3 +35,10 @@ class CanvasController:
             self.view.setToolTip(component.__str__() or f"Component at {x}, {y}")
         else:
             self.view.setToolTip("")
+
+    def mouse_engaged(self):
+        pass
+
+    def mouse_released(self):
+        self.main_controller.components_painted(*self.last_painted_positions)
+        self.last_painted_positions = []

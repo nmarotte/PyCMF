@@ -3,20 +3,19 @@ from typing import Union, Optional
 
 from constants import TIME_DELTA
 from models.Earth.Components.chunk_component import ChunkComponent
-from units import Volume, Temperature, Energy, Mass, Unit, Area
 
 
 class GridChunk(list[ChunkComponent]):
     specific_heat_capacity: float
     heat_transfer_coefficient: float
-    __energy: Energy = None
-    total_mass: Mass
-    __volume: Volume
-    surface: Area
+    __energy: float = None
+    total_mass: float
+    __volume: float
+    surface: float
 
     ratios: dict[str, float] = None
 
-    def __init__(self, components: list[ChunkComponent], volume: Volume, *, index: int = None, parent=None):
+    def __init__(self, components: list[ChunkComponent], volume: float, *, index: int = None, parent=None):
         super(GridChunk, self).__init__()
         self.parent = parent
         self.index = index if index is not None else self.parent and self.parent.index(self)
@@ -27,15 +26,13 @@ class GridChunk(list[ChunkComponent]):
             if not math.isclose(x.mass / self.total_mass, 0):
                 x.chunk = self
                 self.append(x)
-        self.ratios = {c.component_type: c.mass / self.mass for c in self}
+        self.ratios = {c.component_type: c.mass / self.total_mass for c in self}
         self.volume = volume
         self.__neighbours = None
 
         if len(self):
-            self.specific_heat_capacity = sum(
-                x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
-            self.heat_transfer_coefficient = sum(
-                x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+            self.specific_heat_capacity = sum(x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+            self.heat_transfer_coefficient = sum(x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
 
     def compute_component_ratio_dict(self):
         return {component.component_type: ratio for component, ratio in zip(self, self.ratios)}
@@ -45,7 +42,7 @@ class GridChunk(list[ChunkComponent]):
 
     def __str__(self):
         res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n") + \
-              f"Temperature {self.temperature.to_celsius()}°C\n" +\
+              f"Temperature {self.temperature}°C\n" +\
               f"Mass {self.total_mass}kg\n" +\
               f"Composition (mass ratio)\n"
         for component in self:
@@ -67,38 +64,29 @@ class GridChunk(list[ChunkComponent]):
         return self.__volume
 
     @volume.setter
-    def volume(self, value: Union[float, Volume]):
-        self.__volume = value if isinstance(value, Volume) else Volume(meters3=value)
-        self.surface = Area(meters2=(self.__volume ** (1 / 3)) ** 2)
+    def volume(self, value: float):
+        self.__volume = value
+        self.surface = (self.__volume ** (1 / 3)) ** 2
 
     @property
-    def mass(self):
-        return self.total_mass
-
-    @mass.setter
-    def mass(self, value: Union[float, Mass]):
-        for i, component in enumerate(self):
-            component.mass = value * self.ratios[component.component_type]
-
-    @property
-    def temperature(self) -> Temperature:
-        return Temperature(kelvin=sum(c.energy / (c.specific_heat_capacity * c.mass) for c in self) / len(self))
+    def temperature(self) -> float:
+        return sum(c.energy / (c.specific_heat_capacity * c.mass) for c in self) / len(self)
 
     @temperature.setter
-    def temperature(self, value: Temperature):
+    def temperature(self, value: float):
         for component in self:
-            component.energy = Energy(joules=component.specific_heat_capacity * component.mass * value)
+            component.energy = component.specific_heat_capacity * component.mass * value
 
     @property
-    def energy(self) -> Energy:
+    def energy(self) -> float:
         return sum(c.energy * self.ratios[c.component_type] for c in self)
 
     @energy.setter
-    def energy(self, value: Union[float, Energy]):
+    def energy(self, value: float):
         for component in self:
             component.energy = value * self.ratios[component.component_type]
 
-    def get_diff(self, other: "GridChunk") -> Optional[dict[str, Unit]]:
+    def get_diff(self, other: "GridChunk") -> Optional[dict[str, float]]:
         """
         Computes and returns the difference between the physical attributes of two GridComponent
         :param other: the other GridComponent to inspect
@@ -109,7 +97,7 @@ class GridChunk(list[ChunkComponent]):
         return {
             "temperature": (other.temperature - self.temperature),
             "volume": (other.volume - self.volume),
-            "mass": (other.mass - self.mass),
+            "mass": (other.total_mass - self.total_mass),
         }
 
     def update(self):
@@ -125,13 +113,13 @@ if __name__ == '__main__':
     water_mass = 1000
     air_mass = 1.29
     components = [
-        ChunkComponent(mass=Mass(kilograms=water_mass), temperature=Temperature(celsius=21),
+        ChunkComponent(mass=water_mass, temperature=300,
                        component_type="WATER"),
-        ChunkComponent(mass=Mass(kilograms=air_mass),
-                       temperature=Temperature(celsius=21),
+        ChunkComponent(mass=air_mass,
+                       temperature=300,
                        component_type="AIR")
     ]
-    chunk = GridChunk(components, volume=Volume(meters3=1))
+    chunk = GridChunk(components, volume=1)
     print(chunk)
     print(chunk[0])
     print(chunk[1])
@@ -150,5 +138,5 @@ if __name__ == '__main__':
 
     chunk[0].change_mass(chunk[0].mass + 500)
     print(chunk.temperature)
-    chunk.temperature = Temperature(kelvin=50)
+    chunk.temperature = 50
     print(chunk.temperature)

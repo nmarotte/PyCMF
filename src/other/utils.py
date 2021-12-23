@@ -1,4 +1,5 @@
-from typing import Union, Iterable, TypeVar
+from dataclasses import dataclass
+from typing import Union, Iterable, TypeVar, Iterator
 
 from PyQt5 import QtGui, QtWidgets
 
@@ -7,7 +8,8 @@ from constants import COMPONENTS
 
 def color_from_ratio(ratios: Union[list[float], dict[str, float]]):
     if isinstance(ratios, list):
-        ratios = {k: v for k, v in zip(COMPONENTS, ratios)}
+        total = sum(ratios)
+        ratios = {k: v for k, v in zip(COMPONENTS, [x/total for x in ratios])}
     return ComponentColor(ratios)
 
 
@@ -59,3 +61,28 @@ class LabelledWidget(QtWidgets.QWidget):
         :return:
         """
         return self.widget_object.__getattribute__(item)
+
+
+@dataclass
+class ComponentData:
+    component_type: str
+    ratio: float
+    mass: float
+    temperature: float
+
+
+@dataclass
+class ChunkData(Iterable):
+    def __iter__(self) -> Iterator[ComponentData]:
+        for i in range(len(self.component_types)):
+            yield ComponentData(self.component_types[i], self.ratios[i], self.masses[i], self.temperatures[i])
+
+    def __getitem__(self, item) -> ComponentData:
+        if isinstance(item, str):
+            index = self.component_types.index(item)
+            return ComponentData(self.component_types[index], self.ratios[index], self.masses[index], self.temperatures[index])
+
+    component_types: list[str]
+    ratios: list[float]
+    masses: list[float]
+    temperatures: list[float]

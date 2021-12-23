@@ -23,8 +23,15 @@ class CanvasWidget(QtWidgets.QLabel):
         self.setFixedSize(*CANVAS_SIZE)
         self.setMouseTracking(True)
 
+    def mousePressEvent(self, ev: QtGui.QMouseEvent) -> None:
+        self.controller.mouse_engaged()
+
+    def mouseReleaseEvent(self, ev: QtGui.QMouseEvent) -> None:
+        self.controller.mouse_released()
+
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
-        self.controller.mouse_moved(e.x(), e.y())
+        if self.rect().contains(e.pos()):
+            self.controller.mouse_moved(e.x(), e.y())
         # If we are not pressing (keyDown) the left mouse button, return
         if Qt.LeftButton != e.buttons():
             return
@@ -33,17 +40,22 @@ class CanvasWidget(QtWidgets.QLabel):
             self.controller.main_controller.process_exception(CannotPaintNow())
             return
         # If there is no component selected, return
-        ratios = self.controller.main_controller.get_component_ratios()
-        if ratios is None:
+        ratios = self.controller.main_controller.get_ratios()
+        if sum(ratios) == 0:
             self.controller.main_controller.process_exception(NoComponentBrushSelected())
             return
         with QtGui.QPainter(self.pixmap()) as painter:
             pen = QtGui.QPen()
             brush_color = color_from_ratio(ratios)
             pen.setColor(brush_color)
-            pen.setWidth(self.controller.get_brush_width())
+            width = self.controller.get_brush_width()
+            pen.setWidth(width)
             painter.setPen(pen)
+            x, y = e.x(), e.y()
             painter.drawPoint(e.x(), e.y())
+            for i in range(max(0, x - width // 2), min(CANVAS_SIZE[0], x + width // 2)):
+                for j in range(max(0, y - width // 2), min(CANVAS_SIZE[1], y + width // 2)):
+                    self.controller.last_painted_positions.append((i, j))
         self.update()
 
     def clear(self):
