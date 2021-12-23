@@ -22,26 +22,25 @@ class Earth(Grid):
         super().set_component_at(component, x, y, z)
 
     @classmethod
-    def from_qimage(cls, qimage: QtGui.QImage, chunk_data_stack: list[ChunkData]):
+    def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):
         res = cls(shape=(qimage.size().width(), qimage.size().height()))
         for y in range(qimage.size().height()):
             for x in range(qimage.size().width()):
                 if qimage.pixelColor(x, y) == QtGui.QColor("black"):
                     continue
-                ratio = ComponentColor.DICT[qimage.pixelColor(x, y).rgb()]
-                chunk_data = [x for x in chunk_data_stack if x.ratios == ratio][0]
+                ratios = ComponentColor.DICT[qimage.pixelColor(x, y).rgb()]
                 components = []
-                if not math.isclose(chunk_data["WATER"].ratio, 0):
-                    components.append(ChunkComponent(component_type="WATER", mass=chunk_data["WATER"].mass * chunk_data["WATER"].ratio,
-                                                     temperature=chunk_data["WATER"].temperature))
-                if not math.isclose(chunk_data["AIR"].ratio, 0):
-                    components.append(ChunkComponent(component_type="AIR", mass=chunk_data["AIR"].mass * chunk_data["AIR"].ratio,
-                                                     temperature=chunk_data["AIR"].temperature))
-                if not math.isclose(chunk_data["LAND"].ratio, 0):
-                    components.append(ChunkComponent(component_type="LAND", mass=chunk_data["LAND"].mass * chunk_data["LAND"].ratio,
-                                                     temperature=chunk_data["LAND"].temperature))
+                if not math.isclose(ratios[0], 0):
+                    components.append(
+                        ChunkComponent(component_type="WATER", mass=masses[0] * ratios[0], temperature=temperatures[0]))
+                if not math.isclose(ratios[1], 0):
+                    components.append(
+                        ChunkComponent(component_type="AIR", mass=masses[1] * ratios[1], temperature=temperatures[1]))
+                if not math.isclose(ratios[2], 0):
+                    components.append(
+                        ChunkComponent(component_type="LAND", mass=masses[1] * ratios[2], temperature=temperatures[2]))
                 chunk = GridChunk(components=components, volume=1, parent=res,
-                                  index=x + y * qimage.size().width())
+                                  index=x + y * res.shape[1])
                 res.set_component_at(chunk, x, y)
         return res
 
