@@ -1,6 +1,6 @@
-from typing import Union
+from typing import Union, Iterable, TypeVar
 
-from PyQt5 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 from constants import COMPONENTS
 
@@ -42,3 +42,20 @@ class ComponentColor(QtGui.QColor):
                      int(ComponentColor.AIR.blue() * ratios.get("AIR", 0)) +
                      int(ComponentColor.LAND.blue() * ratios.get("LAND", 0)))
         ComponentColor.DICT[self.rgb()] = ratios
+
+
+class LabelledWidget(QtWidgets.QWidget):
+    def __init__(self, widget_class: type[QtWidgets.QWidget], label: str, *, vertical: bool = True):
+        super().__init__()
+        self.widget_object = widget_class()
+        self.setLayout(QtWidgets.QVBoxLayout() if vertical else QtWidgets.QHBoxLayout())
+        self.layout().addWidget(QtWidgets.QLabel(label))
+        self.layout().addWidget(self.widget_object)
+
+    def __getattr__(self, item):
+        """
+        Redirects the attribute getting to the spinbox for abstraction
+        :param item: the attribute to get (example the size, the value, the maximum value, etc ...)
+        :return:
+        """
+        return self.widget_object.__getattribute__(item)

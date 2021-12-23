@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
+from other.utils import LabelledWidget
+
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
 
@@ -20,7 +22,7 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
         self.setLayout(QtWidgets.QVBoxLayout())
         self.layout().addWidget(QtWidgets.QLabel(label.capitalize()))
 
-        self.sub_layout = QtWidgets.QHBoxLayout()
+        self.horizontal_slider_spinbox_other_layout = QtWidgets.QHBoxLayout()
 
         # Construct the slider widget
         self.slider = QtWidgets.QSlider(Qt.Horizontal)
@@ -29,33 +31,42 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
         self.slider.setMinimum(0)
         self.slider.setMaximum(100)
         self.slider.valueChanged.connect(self.controller.slider_changed)
-        self.sub_layout.addWidget(self.slider)
+        self.horizontal_slider_spinbox_other_layout.addWidget(self.slider)
 
         # Construct the spinbox (number text with arrows)
         self.spinbox = QtWidgets.QSpinBox()
         self.spinbox.setMinimum(0)
         self.spinbox.setMaximum(100)
         self.spinbox.valueChanged.connect(self.controller.spinbox_changed)
-        self.sub_layout.addWidget(self.spinbox)
+        self.horizontal_slider_spinbox_other_layout.addWidget(self.spinbox)
 
         # Construct the lock check box
         self.lock_checkbox = QtWidgets.QCheckBox("Lock")
         self.lock_checkbox.stateChanged.connect(self.controller.lock_changed)
-        self.sub_layout.addWidget(self.lock_checkbox)
+        self.horizontal_slider_spinbox_other_layout.addWidget(self.lock_checkbox)
 
-        self.mass_label = QtWidgets.QLabel("Mass (kg)")
-        self.sub_layout.addWidget(self.mass_label)
-        self.mass_spinbox = QtWidgets.QDoubleSpinBox()
+        # Construct the physical properties layout
+        self.physical_properties_layout = QtWidgets.QVBoxLayout()
+
+        self.mass_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Mass (kg)", vertical=False)
         self.mass_spinbox.setMaximum(10000)
         self.mass_spinbox.setValue(default_mass)
         self.mass_spinbox.setSingleStep(default_mass//10)
-        self.sub_layout.addWidget(self.mass_spinbox)
+        self.physical_properties_layout.addWidget(self.mass_spinbox)
+
+        self.temperature_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Temperature (°C)", vertical=False)
+        self.temperature_spinbox.setMaximum(100)
+        self.temperature_spinbox.setValue(21)
+        self.temperature_spinbox.setSingleStep(0.5)
+        self.physical_properties_layout.addWidget(self.temperature_spinbox)
+
+        self.horizontal_slider_spinbox_other_layout.addLayout(self.physical_properties_layout)
         # Add the 3 components from left to right to the layout
-        self.layout().addLayout(self.sub_layout)
+        self.layout().addLayout(self.horizontal_slider_spinbox_other_layout)
 
 
 class SelectComponentSlider(AtomicSelectComponentSlider):
     def __init__(self, label: str, index: int, default_mass: int, controller: "SelectComponentSliderController"):
         super(SelectComponentSlider, self).__init__(label, index, default_mass, controller)
         self.composition_button = QtWidgets.QPushButton("Composition")
-        self.sub_layout.insertWidget(0, self.composition_button)
+        self.horizontal_slider_spinbox_other_layout.insertWidget(0, self.composition_button)
