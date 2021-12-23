@@ -27,3 +27,10 @@ class CanvasController:
 
     def set_painting_enabled(self, value: bool):
         self.painting_enabled = value
+
+    def mouse_moved(self, x: int, y: int):
+        if self.main_controller.model:
+            component = self.main_controller.model.get_component_at(x, y)
+            self.view.setToolTip(component.__str__() or f"Component at {x}, {y}")
+        else:
+            self.view.setToolTip("")

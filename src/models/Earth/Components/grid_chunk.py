@@ -24,16 +24,18 @@ class GridChunk(list[ChunkComponent]):
         # If ratio contains some zeros, we remove them from the components, and remove from the ratio
         self.total_mass = sum(c.mass for c in components)
         for i, x in enumerate(components):
-            if not math.isclose(x.mass/self.total_mass, 0):
+            if not math.isclose(x.mass / self.total_mass, 0):
                 x.chunk = self
                 self.append(x)
-        self.ratios = {c.component_type: c.mass/self.mass for c in self}
+        self.ratios = {c.component_type: c.mass / self.mass for c in self}
         self.volume = volume
         self.__neighbours = None
 
         if len(self):
-            self.specific_heat_capacity = sum(x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self))/len(self)
-            self.heat_transfer_coefficient = sum(x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self))/len(self)
+            self.specific_heat_capacity = sum(
+                x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+            self.heat_transfer_coefficient = sum(
+                x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
 
     def compute_component_ratio_dict(self):
         return {component.component_type: ratio for component, ratio in zip(self, self.ratios)}
@@ -42,11 +44,12 @@ class GridChunk(list[ChunkComponent]):
         return {component.component_type: component.mass for component in self}
 
     def __str__(self):
-        res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n")
-        res += f"- Composition: "
+        res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n") + \
+              f"Temperature {self.temperature.to_celsius()}°C\n" +\
+              f"Mass {self.total_mass}kg\n" +\
+              f"Composition (mass ratio)\n"
         for component in self:
-            res += f"{self.ratios[component.component_type] * 100}% {component.component_type}, "
-        res = res[:-2] + "."
+            res += f"{round(self.ratios[component.component_type] * 100, 2)}% {component.component_type}\n"
         return res
 
     @property
@@ -79,7 +82,7 @@ class GridChunk(list[ChunkComponent]):
 
     @property
     def temperature(self) -> Temperature:
-        return sum(Temperature(kelvin=c.energy / (c.specific_heat_capacity * c.mass)) for c in self)/len(self)
+        return Temperature(kelvin=sum(c.energy / (c.specific_heat_capacity * c.mass) for c in self) / len(self))
 
     @temperature.setter
     def temperature(self, value: Temperature):
@@ -127,7 +130,7 @@ if __name__ == '__main__':
         ChunkComponent(mass=Mass(kilograms=air_mass),
                        temperature=Temperature(celsius=21),
                        component_type="AIR")
-        ]
+    ]
     chunk = GridChunk(components, volume=Volume(meters3=1))
     print(chunk)
     print(chunk[0])

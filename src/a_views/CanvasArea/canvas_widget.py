@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtCore import QPoint
+from PyQt5.QtCore import Qt
 
 from constants import CANVAS_SIZE
 from exceptions import ExceptionToProcess, CannotPaintNow, NoComponentBrushSelected
@@ -16,19 +18,27 @@ class CanvasWidget(QtWidgets.QLabel):
     def __init__(self, controller: "CanvasController"):
         self.controller = controller
         super().__init__()
+        self.mouse_is_painting = False
         self.setPixmap(QtGui.QPixmap(*CANVAS_SIZE))
         self.setFixedSize(*CANVAS_SIZE)
+        self.setMouseTracking(True)
 
     def mouseMoveEvent(self, e: QtGui.QMouseEvent):
+        self.controller.mouse_moved(e.x(), e.y())
+        # If we are not pressing (keyDown) the left mouse button, return
+        if Qt.LeftButton != e.buttons():
+            return
+        # If we cannot paint right now, return
         if not self.controller.is_painting_enabled():
             self.controller.main_controller.process_exception(CannotPaintNow())
             return
+        # If there is no component selected, return
+        ratios = self.controller.main_controller.get_component_ratios()
+        if ratios is None:
+            self.controller.main_controller.process_exception(NoComponentBrushSelected())
+            return
         with QtGui.QPainter(self.pixmap()) as painter:
             pen = QtGui.QPen()
-            ratios = self.controller.main_controller.get_component_ratios()
-            if ratios is None:
-                self.controller.main_controller.process_exception(NoComponentBrushSelected())
-                return
             brush_color = color_from_ratio(ratios)
             pen.setColor(brush_color)
             pen.setWidth(self.controller.get_brush_width())

@@ -43,6 +43,10 @@ class Universe(Model):
             self.update()
         print("done")
 
+    def get_component_at(self, x: int, y: int, z: int = None):
+        return self.earth.get_component_at(x, y, z)
+
+
 
 if __name__ == '__main__':
     """

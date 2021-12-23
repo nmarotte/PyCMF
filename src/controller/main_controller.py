@@ -16,8 +16,9 @@ from universe import Universe
 
 class MainController(StartButtonController, PauseButtonController, StopButtonController,
                      ResumeButtonController, ClearButtonController):
+    model: Universe = None
+
     def __init__(self):
-        self.model = Universe()
         self.exception_controller = ExceptionController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
