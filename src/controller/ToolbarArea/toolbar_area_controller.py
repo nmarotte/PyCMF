@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.ToolbarArea.toolbar_area import ToolbarArea
+from views.ToolbarArea.toolbar_area import ToolbarArea
 from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
 from controller.ToolbarArea.subcontrollers.clear_canvas_controller import ClearCanvasController
 from controller.ToolbarArea.subcontrollers.simulation_time_controller import SimulationTimeController

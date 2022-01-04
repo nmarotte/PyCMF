@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.ToolbarArea.select_component_widget import SelectComponentWidget
+from views.ToolbarArea.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 from exceptions import NoComponentBrushSelected
 from other.utils import ChunkData

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.ToolbarArea.simulation_time_widget import SimulationTimeWidget
+from views.ToolbarArea.simulation_time_widget import SimulationTimeWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

@@ -9,6 +9,9 @@ class Model:
     def update(self):
         return
 
+    def tick(self):
+        self.t += 1
+
     def start_simulation(self):
         self.running = True
         self.__update_loop()

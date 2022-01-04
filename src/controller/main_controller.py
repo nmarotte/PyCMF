@@ -4,7 +4,9 @@ from typing import Optional
 
 from PyQt5 import QtWidgets
 
-from a_views.main_view import MainView
+from models.Earth.earth import Earth
+from sun import Sun
+from views.main_view import MainView
 from constants import CANVAS_SIZE
 from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.controllers import StartButtonController, PauseButtonController, StopButtonController, \
@@ -19,15 +21,17 @@ from universe import Universe
 
 class MainController(StartButtonController, PauseButtonController, StopButtonController,
                      ResumeButtonController, ClearButtonController):
-    model: Universe = Universe()
+    model: Universe
     simulation_thread: Optional[threading.Thread] = None
 
     def __init__(self):
+        self.model = Universe()
+        self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
+        self.model.sun = Sun(parent=self.model)
         self.exception_controller = ExceptionController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
         self.view = MainView(controller=self)
-        self.model.setup(shape=CANVAS_SIZE)
 
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
@@ -53,7 +57,6 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         self.__stop_simulation()
 
     def __rebuild_simulation(self):
-        # self.model.earth = Earth.from_qimage(self.canvas_controller.get_canvas_as_qimage(), self.get_components_data())
         pass
 
     def __start_simulation(self):
@@ -106,9 +109,6 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     controller = MainController()
-    uni = Universe()
-    uni.setup(shape=CANVAS_SIZE)
-    controller.model = uni
 
     controller.view.show()
     app.exec_()

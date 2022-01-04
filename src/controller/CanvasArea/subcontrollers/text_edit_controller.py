@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.CanvasArea.text_edit_widget import TextEdit
+from views.CanvasArea.text_edit_widget import TextEdit
 
 if TYPE_CHECKING:
     from controller.CanvasArea.canvas_area_controller import CanvasAreaController

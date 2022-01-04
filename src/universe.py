@@ -3,7 +3,7 @@ from typing import Optional
 from tqdm import tqdm
 
 from models.Earth.earth import Earth
-from constants import TIME_DELTA
+from constants import TIME_DELTA, CANVAS_SIZE
 from models.model import Model
 from sun import Sun
 
@@ -21,19 +21,11 @@ class Universe(Model):
         return res
 
     def update(self, *, skip_earth=False, skip_sun=False):
-        radiation = None
         if not skip_sun and self.sun is not None:
-            radiation = self.sun.radiate()
+            self.sun.update()
         if not skip_earth and self.earth is not None:
             self.earth.update()
-            if radiation:
-                self.earth.add_energy(radiation)
-        self.t += 1
-
-    def setup(self, shape=(10, 10, 10)):
-        self.earth = Earth(shape, parent=self)
-        # self.earth.add_water(Mass(kilograms=1.4e21), Volume(meters3=1.4e21), Temperature(celsius=21))
-        self.sun = Sun(parent=self)
+        self.tick()
 
     def start_updating(self):
         while True:
@@ -41,17 +33,21 @@ class Universe(Model):
                 break
             print(f"Simulating t={self.t}")
             self.update()
-        print("done")
+        print("Simulation stopped")
 
     def get_component_at(self, x: int, y: int, z: int = None):
         return self.earth.get_component_at(x, y, z)
+
+    def radiate_inside(self, energy_per_time_delta: float):
+        self.earth.add_energy(energy_per_time_delta * 00000002.87e-7 * (1-self.earth.albedo))
 
 
 if __name__ == '__main__':
     """
     """
     uni = Universe()
-    uni.setup()
+    uni.earth = Earth(shape=CANVAS_SIZE, parent=uni)
+    uni.sun = Sun(parent=uni)
     print(uni.earth.average_temperature)
     for i in tqdm(range(int(600*1//TIME_DELTA))):  # Computes for one second of physical time
         uni.update()

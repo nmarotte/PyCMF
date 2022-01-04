@@ -14,13 +14,22 @@ class Grid(list[Optional[GridChunk]], Model):
         super().__init__()
         self.shape = shape
         self.parent = parent
-        for _ in range(numpy.product(self.shape)):
-            self.append(None)
+        self.extend(None for _ in range(numpy.product(self.shape)))
 
     def __len__(self):
+        """
+        The size of the Grid is always the static size, not the number of elements inside of it
+        :return:
+        """
         return numpy.product(self.shape)
 
     def __setitem__(self, key, value):
+        """
+        Makes sure that we match the number of active grind chunks when changing the Grid
+        :param key:
+        :param value:
+        :return:
+        """
         if self[key] is None and value is not None:
             self.nb_active_grid_chunks += 1
         elif self[key] is not None and value is None:
@@ -28,26 +37,10 @@ class Grid(list[Optional[GridChunk]], Model):
         super().__setitem__(key, value)
 
     def not_nones(self) -> Iterator:
+        """
+        :return: Iterator containing all the items that are not none
+        """
         return (elem for elem in self if elem is not None)
-
-    def by_row(self):
-        if len(self.shape) == 1:
-            for i in range(self.shape[0]):
-                yield self[i]
-        elif len(self.shape) == 2:
-            for j in range(self.shape[1]):  # Over all the columns, yield the row
-                for i in range(self.shape[0]):  # Over all the row, yield one element
-                    yield self[i + j * self.shape[0]]
-        elif len(self.shape) == 3:
-            for k in range(self.shape[2]):
-                for j in range(self.shape[1]):
-                    for i in range(self.shape[0]):
-                        yield self[i + j * self.shape[0] + k * self.shape[1]]
-
-    def by_column(self):
-        for i in range(self.shape[0]):  # Over all the rows, yield the column
-            for j in range(self.shape[1]):  # Over all the columns, yield one element
-                yield self[i + j * self.shape[0]]
 
     def get_component_at(self, x, y, z=None):
         if z is None:
@@ -61,7 +54,7 @@ class Grid(list[Optional[GridChunk]], Model):
         else:
             self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])] = component
 
-    def neighbours(self, index: int) -> list[GridChunk]:
+    def neighbours(self, index: int) -> GridChunk:
         """
         Yields the neighbouring element of the index, from front top left to back bottom right
         1D : [0,1,2,3,4,5]
@@ -72,46 +65,45 @@ class Grid(list[Optional[GridChunk]], Model):
         """
         # 1D
         if len(self.shape) == 1:
-            if index >= 1:  # Left
+            if index >= 1 and self[index-1] is not None:  # Left
                 yield self[index - 1]
-            if index < len(self) - 1:  # Right
+            if index < len(self) - 1 and self[index+1] is not None:  # Right
                 yield self[index + 1]
         # 2D
         elif len(self.shape) == 2:
-            if index >= self.shape[0]:  # Top
+            if index >= self.shape[0] and self[index - self.shape[0]] is not None:  # Top
                 yield self[index - self.shape[0]]
-            if index % self.shape[0] != 0:  # Left
+            if index % self.shape[0] != 0 and self[index - 1] is not None:  # Left
                 yield self[index - 1]
-            if (index + 1) % self.shape[0] != 0:  # Right
+            if (index + 1) % self.shape[0] != 0 and self[index + 1] is not None:  # Right
                 yield self[index + 1]
-            if index < self.shape[0] * self.shape[1] - self.shape[0]:  # Bot
+            if index < self.shape[0] * self.shape[1] - self.shape[0] and self[index + self.shape[0]] is not None:  # Bot
                 yield self[index + self.shape[0]]
         # 3D
         elif len(self.shape) == 3:
             # Front
-            if 0 <= index - self.shape[0] * self.shape[1]:
+            if 0 <= index - self.shape[0] * self.shape[1] and self[index - self.shape[0] * self.shape[1]] is not None:
                 yield self[index - self.shape[0] * self.shape[1]]
             # Top
-            if self.shape[0] <= index % (self.shape[0] * self.shape[1]):
+            if self.shape[0] <= index % (self.shape[0] * self.shape[1]) and self[index - self.shape[0]] is not None:
                 yield self[index - self.shape[0]]
             # Left
-            if 0 < index % self.shape[0]:
+            if 0 < index % self.shape[0] and self[index - 1] is not None:
                 yield self[index - 1]
             # Right
-            if 0 < (index + 1) % self.shape[0]:
+            if 0 < (index + 1) % self.shape[0] and self[index + 1] is not None:
                 yield self[index + 1]
             # Bottom
-            if index % (self.shape[0] * self.shape[1]) < self.shape[0] * self.shape[1] - self.shape[0]:
+            if index % (self.shape[0] * self.shape[1]) < self.shape[0] * self.shape[1] - self.shape[0] and self[index + self.shape[0]] is not None:
                 yield self[index + self.shape[0]]
             # Back
-            if index + self.shape[0] * self.shape[1] < numpy.product(self.shape):
+            if index + self.shape[0] * self.shape[1] < numpy.product(self.shape) and self[index + self.shape[0] * self.shape[1]] is not None:
                 yield self[index + self.shape[0] * self.shape[1]]
 
     def update(self):
-        for elem in self:
-            if elem is not None:
-                elem.update()
-        self.t += 1
+        for elem in self.not_nones():
+            elem.update()
+        self.tick()
 
 
 if __name__ == '__main__':

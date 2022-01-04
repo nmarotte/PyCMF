@@ -3,17 +3,16 @@ from typing import Union, Optional
 
 from constants import TIME_DELTA
 from models.Earth.Components.chunk_component import ChunkComponent
+from models.model import Model
 
 
-class GridChunk(list[ChunkComponent]):
+class GridChunk(list[ChunkComponent], Model):
     specific_heat_capacity: float
     heat_transfer_coefficient: float
-    __energy: float = None
     total_mass: float
-    __volume: float
-    surface: float
+    volume: float
 
-    ratios: dict[str, float] = None
+    neighbours: list["GridChunk"]
 
     def __init__(self, components: list[ChunkComponent], volume: float, *, index: int = None, parent=None):
         super(GridChunk, self).__init__()
@@ -26,47 +25,37 @@ class GridChunk(list[ChunkComponent]):
             if not math.isclose(x.mass / self.total_mass, 0):
                 x.chunk = self
                 self.append(x)
-        self.ratios = {c.component_type: c.mass / self.total_mass for c in self}
         self.volume = volume
-        self.__neighbours = None
+        self.neighbours = self.parent.neighbours(self.index) if self.parent else None
 
         if len(self):
-            self.specific_heat_capacity = sum(x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
-            self.heat_transfer_coefficient = sum(x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+            self.specific_heat_capacity = sum(
+                x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+            self.heat_transfer_coefficient = sum(
+                x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
 
     def compute_component_ratio_dict(self):
         return {component.component_type: ratio for component, ratio in zip(self, self.ratios)}
 
-    def get_masses(self):
-        return {component.component_type: component.mass for component in self}
-
     def __str__(self):
         res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n") + \
-              f"Temperature {self.temperature}°C\n" +\
-              f"Mass {self.total_mass}kg\n" +\
+              f"Temperature {self.temperature}°C\n" + \
+              f"Mass {self.total_mass}kg\n" + \
               f"Composition (mass ratio)\n"
         for component in self:
             res += f"{round(self.ratios[component.component_type] * 100, 2)}% {component.component_type}\n"
         return res
 
     @property
-    def neighbours(self):
-        if self.__neighbours is None:
-            self.__neighbours = self.parent.neighbours(self.index)
-        return self.__neighbours
-
-    @neighbours.setter
-    def neighbours(self, value: list["GridChunk"]):
-        self.__neighbours = value
+    def ratios(self) -> dict[str, float]:
+        return {c.component_type: c.mass / self.total_mass for c in self}
 
     @property
-    def volume(self):
-        return self.__volume
-
-    @volume.setter
-    def volume(self, value: float):
-        self.__volume = value
-        self.surface = (self.__volume ** (1 / 3)) ** 2
+    def surface(self) -> float:
+        # Assuming the chunk is cubic
+        # TODO link proof that the limit of the difference between the surface of a cube compared to the surface of a sphere of equivalent radius goes to 0
+        # TODO write that the program becomes more and more accurate the smaller the grid chunks are in volume
+        return (self.volume ** (1 / 3)) ** 2
 
     @property
     def temperature(self) -> float:
@@ -86,27 +75,13 @@ class GridChunk(list[ChunkComponent]):
         for component in self:
             component.energy = value * self.ratios[component.component_type]
 
-    def get_diff(self, other: "GridChunk") -> Optional[dict[str, float]]:
-        """
-        Computes and returns the difference between the physical attributes of two GridComponent
-        :param other: the other GridComponent to inspect
-        :return:
-        """
-        if other is None:
-            return None
-        return {
-            "temperature": (other.temperature - self.temperature),
-            "volume": (other.volume - self.volume),
-            "mass": (other.total_mass - self.total_mass),
-        }
-
     def update(self):
         joule_per_time_scale = self.heat_transfer_coefficient * self.surface * TIME_DELTA
         for n in self.neighbours:
-            diff = self.get_diff(n)
-            if diff:
-                self.energy += joule_per_time_scale * diff["temperature"] * TIME_DELTA
-                n.energy -= joule_per_time_scale * diff["temperature"] * TIME_DELTA
+            diff = n.temperature - self.temperature
+            self.energy += joule_per_time_scale * diff * TIME_DELTA
+            n.energy -= joule_per_time_scale * diff * TIME_DELTA
+        self.tick()
 
 
 if __name__ == '__main__':

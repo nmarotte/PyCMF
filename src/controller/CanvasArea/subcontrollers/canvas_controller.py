@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.CanvasArea.canvas_widget import CanvasWidget
+from views.CanvasArea.canvas_widget import CanvasWidget
 from exceptions import ExceptionToProcess
 
 if TYPE_CHECKING:

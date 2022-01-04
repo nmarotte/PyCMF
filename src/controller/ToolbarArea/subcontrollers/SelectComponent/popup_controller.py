@@ -1,4 +1,4 @@
-from a_views.ToolbarArea.select_component_widget import SelectComponentPopupView
+from views.ToolbarArea.select_component_widget import SelectComponentPopupView
 from constants import COMPONENTS, DEFAULT_MASSES
 from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
 from other.utils import ChunkData

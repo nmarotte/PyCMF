@@ -12,14 +12,24 @@ from other.utils import index_to_2D, color_from_ratio, ComponentColor, ChunkData
 
 
 class Earth(Grid):
+    albedo: float = 0
     total_temperature: float = 0
+    total_mass: float = 0
 
-    def __init__(self, shape: tuple, *, parent=None):
-        super().__init__(shape, parent=parent)
-
-    def set_component_at(self, component: GridChunk, x, y, z=None):
-        self.total_temperature += component.temperature
-        super().set_component_at(component, x, y, z)
+    def __setitem__(self, index, component: GridChunk):
+        """
+        Makes sure that we match the total temperature when changing
+        :param key:
+        :param value:
+        :return:
+        """
+        if self[index] is None and component is not None:  # Setting a component where there was no component
+            self.total_temperature += component.temperature
+            self.total_mass += component.total_mass
+        elif self[index] is not None and component is None:  # Remove a component/replace it by None
+            self.total_temperature -= self[index].temperature
+            self.total_mass -= self[index].total_mass
+        super().__setitem__(index, component)
 
     @classmethod
     def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):
@@ -55,10 +65,6 @@ class Earth(Grid):
         return image
 
     @property
-    def total_mass(self) -> float:
-        return sum(x.total_mass for x in self if x is not None)
-
-    @property
     def average_temperature(self) -> float:
         return (self.total_temperature/self.nb_active_grid_chunks) if self.nb_active_grid_chunks else 0
 
@@ -66,17 +72,18 @@ class Earth(Grid):
     def composition(self):
         composition_mass_dict = dict()
         total_mass = self.total_mass
+        chunk: GridChunk
         for chunk in self.not_nones():
-            for component_type, mass in chunk.get_masses().items():
-                composition_mass_dict[component_type] = composition_mass_dict.get(component_type, 0) + mass / total_mass
+            for component in chunk:
+                composition_mass_dict[component.component_type] = composition_mass_dict.get(component.component_type, 0) + component.mass / total_mass
 
         return composition_mass_dict
 
     def __str__(self):
-        res = f"""Earth : 
-- Mass {self.total_mass}
-- Average temperature: {self.average_temperature}
-- Composition: \n\t{f'{chr(10) + chr(9)} '.join(str(round(value * 100, 2)) + "% " + key for key, value in self.composition.items())}"""
+        res = f"Earth : \n" \
+              f"- Mass {self.total_mass}\n" \
+              f"- Average temperature: {self.average_temperature}\n" \
+              f"- Composition: \n\t{f'{chr(10) + chr(9)} '.join(str(round(value * 100, 2)) + '% ' + key for key, value in self.composition.items())}"
         return res
 
     def add_energy(self, input_energy: float):
@@ -86,37 +93,5 @@ class Earth(Grid):
         :return:
         """
         energy_each = input_energy / len(self)
-        for elem in self:
-            if elem is not None:
-                elem.energy += energy_each
-
-    def add_water(self, total_mass: float, total_volume: float, temperature: float):
-        """
-        Adds a certain mass and volume of water to the component with the given temperature
-        :param total_mass:
-        :param total_volume:
-        :param temperature:
-        :return:
-        """
-        mass_each = total_mass / len(self)
-        volume_each = total_volume / len(self)
-        for elem in self:
-            elem.mass = mass_each.copy()
-            elem.volume = volume_each.copy()
-            elem.temperature = temperature.copy()
-
-
-if __name__ == '__main__':
-    earth = Earth(shape=(400, 400))
-    water_component = ChunkComponent(mass=1000, temperature=300,component_type="WATER")
-    air_component = ChunkComponent(mass=1.29, temperature=300, component_type="AIR")
-    land_component = ChunkComponent(mass=1700, temperature=300,component_type="LAND")
-    components = [water_component, air_component, land_component]
-    empty_chance = 3
-    for _ in range(16000):  # 10%
-        earth[random.randint(0, 400 * 400 - 1)] = GridChunk(
-            components=components,
-            volume=1000)
-    image = earth.to_qimage()
-    image.save("test.png", "PNG", -1)
-    print(ComponentColor.DICT.__sizeof__())
+        for elem in self.not_nones():
+            elem.energy += energy_each

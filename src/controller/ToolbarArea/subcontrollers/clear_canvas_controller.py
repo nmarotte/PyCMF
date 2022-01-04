@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from a_views.ToolbarArea.clear_canvas_widget import ClearCanvas
+from views.ToolbarArea.clear_canvas_widget import ClearCanvas
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController
