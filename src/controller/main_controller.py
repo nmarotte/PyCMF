@@ -9,8 +9,6 @@ from sun import Sun
 from views.main_view import MainView
 from constants import CANVAS_SIZE
 from controller.CanvasArea.canvas_area_controller import CanvasAreaController
-from controller.controllers import StartButtonController, PauseButtonController, StopButtonController, \
-    ResumeButtonController, ClearButtonController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import ExceptionController
 from exceptions import ExceptionToProcess
@@ -19,8 +17,7 @@ from models.Earth.Components.grid_chunk import GridChunk
 from universe import Universe
 
 
-class MainController(StartButtonController, PauseButtonController, StopButtonController,
-                     ResumeButtonController, ClearButtonController):
+class MainController:
     model: Universe
     simulation_thread: Optional[threading.Thread] = None
 
@@ -87,23 +84,18 @@ class MainController(StartButtonController, PauseButtonController, StopButtonCon
         return any(isinstance(e, exception) for e in self.exception_controller.exception_stack)
 
     def components_painted(self, *positions: tuple[int, int]):
-        temperatures = self.toolbar_controller.select_component_controller.get_temperatures()
-        ratios = self.toolbar_controller.select_component_controller.get_ratios()
-        masses = self.toolbar_controller.select_component_controller.get_masses()
-        ratioed_masses = [m * r for m, r in zip(masses, ratios)]
         for x, y in set(positions):
-            components = []
-            if not math.isclose(ratios[0], 0):
-                components.append(ChunkComponent(component_type="WATER", mass=ratioed_masses[0], temperature=temperatures[0]))
-            if not math.isclose(ratios[1], 0):
-                components.append(ChunkComponent(component_type="AIR", mass=ratioed_masses[1], temperature=temperatures[1]))
-            if not math.isclose(ratios[2], 0):
-                components.append(ChunkComponent(component_type="LAND", mass=ratioed_masses[2], temperature=temperatures[2]))
-            chunk = GridChunk(components=components, volume=1, parent=self.model.earth,  index=x + y * self.model.earth.shape[1])
+            chunk = self.toolbar_controller.select_component_controller.get_grid_chunk()
+            chunk.index = x + y * self.model.earth.shape[1]
+            chunk.parent = self.model.earth
+            chunk.neighbours = chunk.parent.neighbours(chunk.index)
             self.model.earth.set_component_at(chunk, x, y)
 
     def get_ratios(self):
         return self.toolbar_controller.select_component_controller.get_ratios()
+
+    def get_grid_chunk(self):
+        return self.toolbar_controller.select_component_controller.get_grid_chunk()
 
 
 if __name__ == '__main__':

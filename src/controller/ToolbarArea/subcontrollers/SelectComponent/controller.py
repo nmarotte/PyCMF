@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING
 
-from views.ToolbarArea.select_component_widget import SelectComponentWidget
+from models.Earth.Components.chunk_component import ChunkComponent
+from models.Earth.Components.grid_chunk import GridChunk
+from views.Widgets.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 from exceptions import NoComponentBrushSelected
-from other.utils import ChunkData
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController
@@ -11,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class SelectComponentController:
-    data: ChunkData = None
+    __grid_chunk: GridChunk = None
 
     def __init__(self, parent_controller: "ToolbarController", main_controller: "MainController"):
         self.parent_controller = parent_controller
@@ -35,3 +36,15 @@ class SelectComponentController:
 
     def get_brush_width(self):
         return self.view.spinbox.value()
+
+    def get_grid_chunk(self) -> GridChunk:
+        if self.__grid_chunk is None:
+            components = []
+            for controller in self.popup_controller.sub_controllers:
+                print(controller.get_temperature())
+                components.append(ChunkComponent(controller.get_mass(), controller.get_temperature(), component_type=controller.component_type))
+            self.__grid_chunk = GridChunk(components, volume=self.get_volume_each())
+        return self.__grid_chunk
+
+    def get_volume_each(self) -> float:
+        return 1000

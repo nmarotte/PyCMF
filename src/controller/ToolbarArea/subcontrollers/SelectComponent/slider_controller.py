@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.ToolbarArea.select_component_slider import AtomicSelectComponentSlider
+from views.Widgets.select_component_slider import AtomicSelectComponentSlider
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController

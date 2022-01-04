@@ -17,7 +17,7 @@ class GridChunk(list[ChunkComponent], Model):
     def __init__(self, components: list[ChunkComponent], volume: float, *, index: int = None, parent=None):
         super(GridChunk, self).__init__()
         self.parent = parent
-        self.index = index if index is not None else self.parent and self.parent.index(self)
+        self.index = index if index is not None else self.parent.index(self) if self.parent is not None else None
 
         # If ratio contains some zeros, we remove them from the components, and remove from the ratio
         self.total_mass = sum(c.mass for c in components)
@@ -59,7 +59,7 @@ class GridChunk(list[ChunkComponent], Model):
 
     @property
     def temperature(self) -> float:
-        return sum(c.energy / (c.specific_heat_capacity * c.mass) for c in self) / len(self)
+        return sum(c.energy / (c.specific_heat_capacity * c.mass) for c in self) / max(1, len(self))
 
     @temperature.setter
     def temperature(self, value: float):
@@ -82,6 +82,9 @@ class GridChunk(list[ChunkComponent], Model):
             self.energy += joule_per_time_scale * diff * TIME_DELTA
             n.energy -= joule_per_time_scale * diff * TIME_DELTA
         self.tick()
+
+    def deep_copy(self) -> "GridChunk":
+        return GridChunk([x.deep_copy() for x in self], self.volume, index=self.index, parent=self.parent)
 
 
 if __name__ == '__main__':

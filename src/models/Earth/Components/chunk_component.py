@@ -71,3 +71,6 @@ class ChunkComponent:
               f"Mass : {self.mass} \n " \
               f"Temperature : {self.__get_temperature()} K ({self.energy} J)"
         return res
+
+    def deep_copy(self):
+        return ChunkComponent(self.mass, self.__get_temperature(), component_type=self.component_type)

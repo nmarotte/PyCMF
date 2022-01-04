@@ -3,7 +3,6 @@ from PyQt5 import QtWidgets
 import threading
 from typing import Optional, TYPE_CHECKING
 
-from controller.controllers import *
 from models.Earth.earth import Earth
 from universe import Universe
 if TYPE_CHECKING:

@@ -1,11 +1,10 @@
 from typing import TYPE_CHECKING
 
-from views.ToolbarArea.toolbar_area import ToolbarArea
+from views.toolbar_area import ToolbarArea
 from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
 from controller.ToolbarArea.subcontrollers.clear_canvas_controller import ClearCanvasController
 from controller.ToolbarArea.subcontrollers.simulation_time_controller import SimulationTimeController
 from exceptions import NoComponentBrushSelected
-from other.utils import color_from_ratio
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

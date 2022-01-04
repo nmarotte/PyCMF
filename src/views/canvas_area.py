@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets
 
-from views.CanvasArea.canvas_widget import CanvasWidget
-
 if TYPE_CHECKING:
     from controller.CanvasArea.canvas_area_controller import CanvasAreaController
     from controller.main_controller import MainController

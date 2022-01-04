@@ -1,16 +1,23 @@
 from dataclasses import dataclass
-from typing import Union, Iterable, TypeVar, Iterator
+from typing import Union, Iterable, TypeVar, Iterator, TYPE_CHECKING
 
 from PyQt5 import QtGui, QtWidgets
 
 from constants import COMPONENTS
 
+if TYPE_CHECKING:
+    from models.Earth.Components.grid_chunk import GridChunk
+
 
 def color_from_ratio(ratios: Union[list[float], dict[str, float]]):
     if isinstance(ratios, list):
         total = sum(ratios)
-        ratios = {k: v for k, v in zip(COMPONENTS, [x/total for x in ratios])}
+        ratios = {k: v for k, v in zip(COMPONENTS, [x / total for x in ratios])}
     return ComponentColor(ratios)
+
+
+def color_from_chunk(chunk: "GridChunk"):
+    return ComponentColor.from_chunk(chunk)
 
 
 def index_to_2D(index: int, shape: tuple[int, int]) -> tuple[int, int]:
@@ -44,6 +51,13 @@ class ComponentColor(QtGui.QColor):
                      int(ComponentColor.AIR.blue() * ratios.get("AIR", 0)) +
                      int(ComponentColor.LAND.blue() * ratios.get("LAND", 0)))
         ComponentColor.DICT[self.rgb()] = ratios
+
+    @classmethod
+    def from_chunk(cls, chunk: "GridChunk"):
+        ratios = {
+            component.component_type: chunk.ratios[component.component_type] for component in chunk
+        }
+        return cls(ratios)
 
 
 class LabelledWidget(QtWidgets.QWidget):
@@ -80,7 +94,8 @@ class ChunkData(Iterable):
     def __getitem__(self, item) -> ComponentData:
         if isinstance(item, str):
             index = self.component_types.index(item)
-            return ComponentData(self.component_types[index], self.ratios[index], self.masses[index], self.temperatures[index])
+            return ComponentData(self.component_types[index], self.ratios[index], self.masses[index],
+                                 self.temperatures[index])
 
     component_types: list[str]
     ratios: list[float]

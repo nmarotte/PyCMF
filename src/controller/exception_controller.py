@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 import qtawesome as qta
 from PyQt5.QtGui import QPixmap
 
-from views.CanvasArea.title_widget import Title
+from views.Widgets.title_widget import Title
 from constants import ICON_SIZE
 from exceptions import *
 
