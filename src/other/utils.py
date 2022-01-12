@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Union, Iterable, TypeVar, Iterator, TYPE_CHECKING
 
 from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtGui import QValidator
 
 from constants import COMPONENTS
 
@@ -101,3 +102,26 @@ class ChunkData(Iterable):
     ratios: list[float]
     masses: list[float]
     temperatures: list[float]
+
+
+class FloatValidator(QValidator):
+    def validate(self, string: str, pos: int) -> tuple['QValidator.State', str, int]:
+        if not len(string):  # If the size is 0, it is a correct state
+            return QValidator.Acceptable, string, pos
+        if string[0] == ".":
+            # If starts with a dot, verify that the rest is not invalid
+            if self.validate(string[1:], pos)[0] == QValidator.Acceptable:
+                return QValidator.Acceptable, string, pos
+        if string.count("e") == 1:  # If there is one "e", check if before and after are valid
+            if all(self.validate(x, 0)[0] == QValidator.Acceptable for x in string.split("e")):
+                return QValidator.Acceptable, string, pos
+        if string.count("-") == 1:  # If there is one "-", check if before and after are valid
+            if all(self.validate(x, 0)[0] == QValidator.Acceptable for x in string.split("-")):
+                return QValidator.Acceptable, string, pos
+        try:
+            float(string)
+        except ValueError:
+            return QValidator.Invalid, string, pos
+        else:
+            return QValidator.Acceptable, string, pos
+
