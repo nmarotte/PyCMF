@@ -1,6 +1,8 @@
 from typing import TYPE_CHECKING
 import qtawesome as qta
 
+from other.utils import LabelledWidget
+
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
     from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
@@ -31,6 +33,17 @@ class SelectComponentPopupView(QtWidgets.QDialog):
         self.cancel.clicked.connect(self.controller.cancelled)
         self.bottom_layout.addWidget(self.cancel)
 
+        physical_properties_layout = QtWidgets.QHBoxLayout()
+        self.mass_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Total Mass", vertical=False)
+        self.mass_spinbox.setMaximum(100000)
+        self.mass_spinbox.setSingleStep(20)
+        self.mass_spinbox.setValue(1000)
+        self.temperature_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Temperature", vertical=False)
+        self.temperature_spinbox.setMaximum(250)
+        self.temperature_spinbox.setValue(21.0)
+        physical_properties_layout.addWidget(self.mass_spinbox)
+        physical_properties_layout.addWidget(self.temperature_spinbox)
+        self.layout().addLayout(physical_properties_layout)
         self.layout().addLayout(self.bottom_layout)
 
 

@@ -41,7 +41,7 @@ class CanvasWidget(QtWidgets.QLabel):
             return
         # If there is no component selected, return
         chunk = self.controller.main_controller.get_grid_chunk()
-        if sum(c.mass for c in chunk) == 0:
+        if chunk is None:
             self.controller.main_controller.process_exception(NoComponentBrushSelected())
             return
         with QtGui.QPainter(self.pixmap()) as painter:

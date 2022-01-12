@@ -48,3 +48,9 @@ class SelectComponentPopupController:
 
     def get_remaining_to_balance(self):
         return 100 - sum(x.get_ratio() for x in self.sub_controllers if x.is_locked())
+
+    def get_temperature(self):
+        return self.view.temperature_spinbox.value()
+
+    def get_mass(self):
+        return self.view.mass_spinbox.value()

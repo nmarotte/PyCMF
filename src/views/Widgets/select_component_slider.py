@@ -45,22 +45,6 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
         self.lock_checkbox.stateChanged.connect(self.controller.lock_changed)
         self.horizontal_slider_spinbox_other_layout.addWidget(self.lock_checkbox)
 
-        # Construct the physical properties layout
-        self.physical_properties_layout = QtWidgets.QVBoxLayout()
-
-        self.mass_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Mass (kg)", vertical=False)
-        self.mass_spinbox.setMaximum(10000)
-        self.mass_spinbox.setValue(default_mass)
-        self.mass_spinbox.setSingleStep(default_mass//10)
-        self.physical_properties_layout.addWidget(self.mass_spinbox)
-
-        self.temperature_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Temperature (°C)", vertical=False)
-        self.temperature_spinbox.setMaximum(100)
-        self.temperature_spinbox.setValue(21)
-        self.temperature_spinbox.setSingleStep(0.5)
-        self.physical_properties_layout.addWidget(self.temperature_spinbox)
-
-        self.horizontal_slider_spinbox_other_layout.addLayout(self.physical_properties_layout)
         # Add the 3 components from left to right to the layout
         self.layout().addLayout(self.horizontal_slider_spinbox_other_layout)
 

@@ -52,9 +52,3 @@ class SelectComponentSliderController:
 
     def get_ratio(self):
         return self.view.slider.value()
-
-    def get_mass(self) -> float:
-        return self.view.mass_spinbox.value()
-
-    def get_temperature(self) -> float:
-        return self.view.temperature_spinbox.value()

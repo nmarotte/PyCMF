@@ -24,26 +24,27 @@ class SelectComponentController:
         self.popup_controller.view.exec_()
         if self.popup_controller.view.accepted:
             self.main_controller.finish_process_exception(NoComponentBrushSelected)
+            components = []
+            ratios = self.get_ratios()
+            ratios = [x/sum(ratios) for x in ratios]  # Normalize
+            for i, controller in enumerate(self.popup_controller.sub_controllers):
+                components.append(ChunkComponent(self.get_mass() * ratios[i], self.get_temperature(),
+                                                 component_type=controller.component_type))
+            self.__grid_chunk = GridChunk(components, volume=self.get_volume_each())
 
     def get_ratios(self) -> list[float]:
         return [x.get_ratio() for x in self.popup_controller.sub_controllers]
 
-    def get_masses(self) -> list[float]:
-        return [x.get_mass() for x in self.popup_controller.sub_controllers]
+    def get_mass(self) -> float:
+        return self.popup_controller.get_mass()
 
-    def get_temperatures(self) -> list[float]:
-        return [x.get_temperature() for x in self.popup_controller.sub_controllers]
+    def get_temperature(self) -> float:
+        return self.popup_controller.get_temperature()
 
     def get_brush_width(self):
         return self.view.spinbox.value()
 
     def get_grid_chunk(self) -> GridChunk:
-        if self.__grid_chunk is None:
-            components = []
-            for controller in self.popup_controller.sub_controllers:
-                print(controller.get_temperature())
-                components.append(ChunkComponent(controller.get_mass(), controller.get_temperature(), component_type=controller.component_type))
-            self.__grid_chunk = GridChunk(components, volume=self.get_volume_each())
         return self.__grid_chunk
 
     def get_volume_each(self) -> float:
