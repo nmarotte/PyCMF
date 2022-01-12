@@ -12,7 +12,7 @@ class UniversePopupController:
         self.view = UniversePopupWidget(self)
 
     def confirmed(self):
-        pass
+        self.view.accept()
 
     def cancelled(self):
-        pass
+        self.view.reject()

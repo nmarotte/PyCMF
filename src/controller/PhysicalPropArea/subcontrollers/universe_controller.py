@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 
 
 class UniverseController:
+    time_delta: float = None
+
     def __init__(self, parent_controller: "PhysicalPropAreaController", main_controller: "MainController"):
         self.parent_controller = parent_controller
         self.main_controller = main_controller
@@ -17,3 +19,5 @@ class UniverseController:
 
     def button_pressed(self):
         self.popup_controller.view.exec_()
+        if self.popup_controller.view.accepted:
+            self.time_delta = self.popup_controller.view.time_delta_spinbox.value()
