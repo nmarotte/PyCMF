@@ -13,7 +13,7 @@ class CanvasArea(QtWidgets.QWidget):
         self.main_controller = main_controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
-        self.title = self.main_controller.exception_controller.view
+        self.title = self.main_controller.message_controller.view
 
         sub_layout = QtWidgets.QHBoxLayout()
         self.canvas = self.controller.canvas_controller.view

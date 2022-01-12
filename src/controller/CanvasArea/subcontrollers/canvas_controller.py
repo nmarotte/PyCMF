@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from messages import Loading
 from views.Widgets.canvas_widget import CanvasWidget
 
 if TYPE_CHECKING:
@@ -39,5 +40,8 @@ class CanvasController:
         pass
 
     def mouse_released(self):
+        self.main_controller.process_message(Loading())
+        self.main_controller.view.update()
         self.main_controller.components_painted(*self.last_painted_positions)
         self.last_painted_positions = []
+        self.main_controller.finish_process_message(Loading)

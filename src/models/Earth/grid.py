@@ -36,7 +36,7 @@ class Grid(list[Optional[GridChunk]], Model):
             self.nb_active_grid_chunks -= 1
         super().__setitem__(key, value)
 
-    def not_nones(self) -> Iterator:
+    def not_nones(self) -> Iterator[GridChunk]:
         """
         :return: Iterator containing all the items that are not none
         """

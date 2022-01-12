@@ -3,15 +3,16 @@ import threading
 from typing import Optional
 
 from PyQt5 import QtWidgets
+import qtawesome as qta
 
 from models.Earth.earth import Earth
 from sun import Sun
 from views.main_view import MainView
-from constants import CANVAS_SIZE
+from constants import CANVAS_SIZE, ICON_SIZE
 from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
-from controller.exception_controller import ExceptionController
-from exceptions import ExceptionToProcess
+from controller.exception_controller import MessageController
+from messages import MessageToProcess
 from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
 from universe import Universe
@@ -25,21 +26,24 @@ class MainController:
         self.model = Universe()
         self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
         self.model.sun = Sun(parent=self.model)
-        self.exception_controller = ExceptionController(parent_controller=self)
+        self.message_controller = MessageController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
         self.view = MainView(controller=self)
 
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
-
-    def build_pressed(self):
-        self.__rebuild_simulation()
+        self.model = Universe()
+        self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
+        self.model.sun = Sun(parent=self.model)
 
     def start_pressed(self):
         self.canvas_controller.set_canvas_enabled(False)
-        self.__rebuild_simulation()
         self.__start_simulation()
+
+    def update_pressed(self):
+        self.simulation_thread = threading.Thread(target=self.model.update, args=())
+        self.simulation_thread.start()
 
     def pause_pressed(self):
         self.canvas_controller.set_canvas_enabled(True)
@@ -52,9 +56,6 @@ class MainController:
     def stop_pressed(self):
         self.canvas_controller.set_canvas_enabled(True)
         self.__stop_simulation()
-
-    def __rebuild_simulation(self):
-        pass
 
     def __start_simulation(self):
         self.simulation_thread = threading.Thread(target=self.model.start_simulation, args=())
@@ -74,14 +75,14 @@ class MainController:
     def get_brush_width(self):
         return self.toolbar_controller.get_brush_width()
 
-    def finish_process_exception(self, exception: type[ExceptionToProcess]):
-        self.exception_controller.pop_exception(exception)
+    def finish_process_message(self, message: type[MessageToProcess]):
+        self.message_controller.pop_message(message)
 
-    def process_exception(self, exception: ExceptionToProcess):
-        self.exception_controller.push_exception(exception)
+    def process_message(self, message: MessageToProcess):
+        self.message_controller.push_message(message)
 
-    def is_exception_processing(self, exception: type[ExceptionToProcess]):
-        return any(isinstance(e, exception) for e in self.exception_controller.exception_stack)
+    def is_message_processing(self, exception: type[MessageToProcess]):
+        return any(isinstance(e, exception) for e in self.message_controller.message_stack)
 
     def components_painted(self, *positions: tuple[int, int]):
         for x, y in set(positions):

@@ -17,9 +17,6 @@ class MainView(QtWidgets.QWidget):
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
 
-        # Creates the connection to the model, and its thread for smooth parallel execution
-        self.simulation_thread: Optional[threading.Thread] = None
-
         self.toolbar_area_view = self.controller.toolbar_controller.view
         self.layout().addWidget(self.toolbar_area_view)
 

@@ -13,23 +13,6 @@ from other.utils import index_to_2D, color_from_ratio, ComponentColor, ChunkData
 
 class Earth(Grid):
     albedo: float = 0
-    total_temperature: float = 0
-    total_mass: float = 0
-
-    def __setitem__(self, index, component: GridChunk):
-        """
-        Makes sure that we match the total temperature when changing
-        :param key:
-        :param value:
-        :return:
-        """
-        if self[index] is None and component is not None:  # Setting a component where there was no component
-            self.total_temperature += component.temperature
-            self.total_mass += component.total_mass
-        elif self[index] is not None and component is None:  # Remove a component/replace it by None
-            self.total_temperature -= self[index].temperature
-            self.total_mass -= self[index].total_mass
-        super().__setitem__(index, component)
 
     @classmethod
     def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):
@@ -66,7 +49,11 @@ class Earth(Grid):
 
     @property
     def average_temperature(self) -> float:
-        return (self.total_temperature/self.nb_active_grid_chunks) if self.nb_active_grid_chunks else 0
+        return sum(x.temperature for x in self.not_nones())/max(1,self.nb_active_grid_chunks)
+
+    @property
+    def total_mass(self):
+        return sum(x.total_mass for x in self.not_nones())
 
     @property
     def composition(self):

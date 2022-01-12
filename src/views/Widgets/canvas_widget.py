@@ -5,7 +5,7 @@ from PyQt5.QtCore import QPoint
 from PyQt5.QtCore import Qt
 
 from constants import CANVAS_SIZE
-from exceptions import ExceptionToProcess, CannotPaintNow, NoComponentBrushSelected
+from messages import MessageToProcess, CannotPaintNow, NoComponentBrushSelected
 from other.utils import color_from_ratio, color_from_chunk
 
 if TYPE_CHECKING:
@@ -37,12 +37,12 @@ class CanvasWidget(QtWidgets.QLabel):
             return
         # If we cannot paint right now, return
         if not self.controller.is_painting_enabled():
-            self.controller.main_controller.process_exception(CannotPaintNow())
+            self.controller.main_controller.process_message(CannotPaintNow())
             return
         # If there is no component selected, return
         chunk = self.controller.main_controller.get_grid_chunk()
         if chunk is None:
-            self.controller.main_controller.process_exception(NoComponentBrushSelected())
+            self.controller.main_controller.process_message(NoComponentBrushSelected())
             return
         with QtGui.QPainter(self.pixmap()) as painter:
             pen = QtGui.QPen()

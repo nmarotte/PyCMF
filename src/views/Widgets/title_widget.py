@@ -6,19 +6,18 @@ import qtawesome as qta
 from constants import ICON_SIZE
 
 if TYPE_CHECKING:
-    from controller.exception_controller import ExceptionController
+    from controller.exception_controller import MessageController
 
 
 class Title(QtWidgets.QWidget):
-    def __init__(self, controller: "ExceptionController"):
+    def __init__(self, controller: "MessageController"):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QHBoxLayout())
 
         self.icon = QtWidgets.QLabel()
-        self.icon.setPixmap(qta.icon("fa.check", color="#00FF00").pixmap(*ICON_SIZE))
         self.icon.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         self.layout().addWidget(self.icon)
 
-        self.label = QtWidgets.QLabel("Sample Text")
+        self.label = QtWidgets.QLabel()
         self.layout().addWidget(self.label)

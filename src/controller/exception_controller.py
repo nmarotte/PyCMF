@@ -4,18 +4,19 @@ from PyQt5.QtGui import QPixmap
 
 from views.Widgets.title_widget import Title
 from constants import ICON_SIZE
-from exceptions import *
+from messages import *
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController
 
 
-class ExceptionController:
-    exception_stack: list[ExceptionToProcess] = []
+class MessageController:
+    message_stack: list[MessageToProcess] = []
 
     def __init__(self, parent_controller: "MainController"):
         self.parent_controller = parent_controller
         self.view = Title(controller=self)
+        self.set_text_for_top_exception()
 
     def set_text(self, value: str):
         self.view.label.setText(value)
@@ -23,40 +24,24 @@ class ExceptionController:
     def set_icon(self, name: str, color: str):
         self.view.icon.setPixmap(qta.icon(name, color=color).pixmap(*ICON_SIZE))
 
-    def push_exception(self, exception: ExceptionToProcess):
-        if len(self.exception_stack) and isinstance(self.exception_stack[-1], type(exception)):
+    def push_message(self, message: MessageToProcess):
+        if len(self.message_stack) and isinstance(self.message_stack[-1], type(message)):
             return  # Don't push already existing exception
-        self.exception_stack.append(exception)
+        self.message_stack.append(message)
         self.set_text_for_top_exception()
 
-    def reset_exception_info(self):
-        self.view.icon.setPixmap(None)
-        self.set_text("")
-
-    def pop_exception(self, exception: type[ExceptionToProcess]):
-        if not len(self.exception_stack):
+    def pop_message(self, message: type[MessageToProcess]):
+        if not len(self.message_stack):
             return
-        if self.exception_stack[-1] == exception:
-            self.exception_stack.pop()
-        else:
-            for i in range(len(self.exception_stack)-1, -1, -1):  # Look from the top of the stack
-                if isinstance(self.exception_stack[i], exception):
-                    self.exception_stack.pop(i)
+        for i in range(len(self.message_stack) - 1, -1, -1):  # Look from the top of the stack
+            if isinstance(self.message_stack[i], message):
+                self.message_stack.pop(i)
         self.set_text_for_top_exception()
 
     def set_text_for_top_exception(self):
-        if not len(self.exception_stack):
-            self.view.icon.setPixmap(QPixmap())
-            self.set_text("")
-            return
-        if isinstance(self.exception_stack[-1], NoComponentBrushSelected):
-            self.set_icon("fa.warning", color="#eed202")
-            self.set_text("You cannot paint without first selecting a component")
-        elif isinstance(self.exception_stack[-1], CannotPaintNow):
-            self.set_icon("fa.warning", color="#eed202")
-            self.set_text("You cannot paint right now.")
-        else:
-            print(self.exception_stack)
-            self.set_icon("ei.error", color="#ff0033")
-            self.set_text("There is an unexpected error")
+        message = self.message_stack[-1] if len(self.message_stack) else MessageToProcess
+        self.set_icon(message.icon, message.icon_color)
+        self.set_text(message.text)
+        self.view.update()
+
 

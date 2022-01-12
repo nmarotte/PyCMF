@@ -4,7 +4,7 @@ from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
 from views.Widgets.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
-from exceptions import NoComponentBrushSelected
+from messages import NoComponentBrushSelected
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController
@@ -23,7 +23,7 @@ class SelectComponentController:
     def button_pressed(self):
         self.popup_controller.view.exec_()
         if self.popup_controller.view.accepted:
-            self.main_controller.finish_process_exception(NoComponentBrushSelected)
+            self.main_controller.finish_process_message(NoComponentBrushSelected)
             components = []
             ratios = self.get_ratios()
             ratios = [x/sum(ratios) for x in ratios]  # Normalize
