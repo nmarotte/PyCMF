@@ -1,7 +1,12 @@
 from abc import abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from universe import Universe
 
 
 class Model:
+    universe: "Universe" = None
     running: bool = False
     t: int = 0
 

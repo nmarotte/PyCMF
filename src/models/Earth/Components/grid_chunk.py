@@ -1,7 +1,4 @@
 import math
-from typing import Union, Optional
-
-from constants import TIME_DELTA
 from models.Earth.Components.chunk_component import ChunkComponent
 from models.model import Model
 
@@ -76,11 +73,11 @@ class GridChunk(list[ChunkComponent], Model):
             component.energy = value * self.ratios[component.component_type]
 
     def update(self):
-        joule_per_time_scale = self.heat_transfer_coefficient * self.surface * TIME_DELTA
+        joule_per_time_scale = self.heat_transfer_coefficient * self.surface * self.universe.TIME_DELTA
         for n in self.neighbours:
             diff = n.temperature - self.temperature
-            self.energy += joule_per_time_scale * diff * TIME_DELTA
-            n.energy -= joule_per_time_scale * diff * TIME_DELTA
+            self.energy += joule_per_time_scale * diff * self.universe.TIME_DELTA
+            n.energy -= joule_per_time_scale * diff * self.universe.TIME_DELTA
         self.tick()
 
     def deep_copy(self) -> "GridChunk":

@@ -1,6 +1,5 @@
 import math
 
-from constants import TIME_DELTA
 from models.model import Model
 
 
@@ -19,20 +18,18 @@ class Sun(Model):
             Radiate that energy outward
         :return:
         """
-        energy_per_time_delta = self.energy_radiated_per_second * TIME_DELTA
-        self.parent.radiate_inside(energy_per_time_delta)
+        energy_per_time_delta = self.energy_radiated_per_second * self.universe.TIME_DELTA
+        self.universe.radiate_inside(energy_per_time_delta)
         self.tick()
 
-    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26, *, parent=None):
+    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26):
         self.total_energy = total_energy
         self.energy_radiated_per_second = energy_radiated_per_second
-        self.parent = parent
 
     def __str__(self):
         res = f"Sun :\n"
         if self.total_energy != math.inf:
             res += f"- Total energy remaining {self.total_energy} J\n"
         res += f"- Radiating {self.energy_radiated_per_second} J/s towards the earth"
-        if self.parent is not None:
-            res += f"\n- Located in {self.parent.__class__}"
+        res += f"\n- Located in Universe"
         return res

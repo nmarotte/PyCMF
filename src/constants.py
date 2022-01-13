@@ -1,5 +1,3 @@
-TIME_DELTA = 0.01  # Can be adjusted to fit the time scale of the simulation
-# assert TIME_DELTA < 0.5  # Otherwise might break energy conservation
 water_earth_mass = 1.4e21
 water_earth_volume = 1.4e21
 earth_radiation_ratio = 00000002.87e-7  # The proportion of the sun's radiation the earth receives

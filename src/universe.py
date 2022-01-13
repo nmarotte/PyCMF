@@ -1,16 +1,24 @@
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from tqdm import tqdm
 
-from models.Earth.earth import Earth
-from constants import TIME_DELTA, CANVAS_SIZE
 from models.model import Model
-from sun import Sun
+if TYPE_CHECKING:
+    from models.Earth.earth import Earth
+    from sun import Sun
 
 
 class Universe(Model):
-    earth: Optional[Earth] = None
-    sun: Optional[Sun] = None
+    """
+    Singleton class that will contain all other models
+    """
+    earth: Optional["Earth"] = None
+    sun: Optional["Sun"] = None
+    TIME_DELTA: float = 0.01
+
+    def __new__(cls, *args, **kwargs):
+        if Model.universe is None:
+            Model.universe = super(Universe, cls).__new__(cls, *args, **kwargs)
+        return Model.universe
 
     def __str__(self):
         res = ""
@@ -40,15 +48,3 @@ class Universe(Model):
 
     def radiate_inside(self, energy_per_time_delta: float):
         self.earth.add_energy(energy_per_time_delta * 00000002.87e-7 * (1-self.earth.albedo))
-
-
-if __name__ == '__main__':
-    """
-    """
-    uni = Universe()
-    uni.earth = Earth(shape=CANVAS_SIZE, parent=uni)
-    uni.sun = Sun(parent=uni)
-    print(uni.earth.average_temperature)
-    for i in tqdm(range(int(600*1//TIME_DELTA))):  # Computes for one second of physical time
-        uni.update()
-    print(uni.earth.average_temperature)

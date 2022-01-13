@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets
 import qtawesome as qta
 
 from models.Earth.earth import Earth
+from models.model import Model
 from sun import Sun
 from views.main_view import MainView
 from constants import CANVAS_SIZE, ICON_SIZE
@@ -25,7 +26,7 @@ class MainController:
     def __init__(self):
         self.model = Universe()
         self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
-        self.model.sun = Sun(parent=self.model)
+        self.model.sun = Sun()
         self.message_controller = MessageController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
@@ -35,7 +36,7 @@ class MainController:
         self.canvas_controller.clear_canvas()
         self.model = Universe()
         self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
-        self.model.sun = Sun(parent=self.model)
+        self.model.sun = Sun()
 
     def start_pressed(self):
         self.canvas_controller.set_canvas_enabled(False)
