@@ -19,12 +19,13 @@ class Sun(Model):
         :return:
         """
         energy_per_time_delta = self.energy_radiated_per_second * self.universe.TIME_DELTA
-        self.universe.radiate_inside(energy_per_time_delta)
+        self.universe.radiate_towards_earth(energy_per_time_delta * self.earth_radiation_ratio)
         self.tick()
 
-    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26):
+    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26, earth_radiation_ratio: float = 00000002.87e-7):
         self.total_energy = total_energy
         self.energy_radiated_per_second = energy_radiated_per_second
+        self.earth_radiation_ratio = earth_radiation_ratio
 
     def __str__(self):
         res = f"Sun :\n"

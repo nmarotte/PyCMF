@@ -1,15 +1,15 @@
 from typing import TYPE_CHECKING
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 from other.utils import LabelledWidget
 
 if TYPE_CHECKING:
-    from controller.PhysicalPropArea.subcontrollers.universe_popup_controller import UniversePopupController
+    from controller.PhysicalPropArea.subcontrollers.universe_controller import UniverseController
 
 
 class UniversePopupWidget(QtWidgets.QDialog):
-    def __init__(self, controller: "UniversePopupController"):
+    def __init__(self, controller: "UniverseController"):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -27,7 +27,11 @@ class UniversePopupWidget(QtWidgets.QDialog):
         self.time_delta_spinbox.setMaximum(3600)
         self.time_delta_spinbox.setSingleStep(0.1)
         self.time_delta_spinbox.setMinimum(0.001)
-        self.time_delta_spinbox.setValue(0.01)
+        self.time_delta_spinbox.setValue(self.controller.main_controller.get_time_delta())
         self.layout().addWidget(self.time_delta_spinbox)
 
         self.layout().addLayout(self.bottom_layout)
+
+    def showEvent(self, a0: QtGui.QShowEvent):
+        self.time_delta_spinbox.setValue(self.controller.main_controller.get_time_delta())
+        super(UniversePopupWidget, self).showEvent(a0)

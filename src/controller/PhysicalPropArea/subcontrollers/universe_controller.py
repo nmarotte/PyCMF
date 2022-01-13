@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from controller.PhysicalPropArea.subcontrollers.universe_popup_controller import UniversePopupController
+from views.Widgets.universe_popup_widget import UniversePopupWidget
 from views.Widgets.universe_widget import UniverseWidget
 
 if TYPE_CHECKING:
@@ -14,10 +14,18 @@ class UniverseController:
     def __init__(self, parent_controller: "PhysicalPropAreaController", main_controller: "MainController"):
         self.parent_controller = parent_controller
         self.main_controller = main_controller
-        self.popup_controller = UniversePopupController(parent_controller=self)
         self.view = UniverseWidget(self)
+        self.popup = UniversePopupWidget(self)
+
+    def confirmed(self):
+        self.popup.accept()
+        self.popup.close()
+
+    def cancelled(self):
+        self.popup.reject()
+        self.popup.close()
 
     def button_pressed(self):
-        self.popup_controller.view.exec_()
-        if self.popup_controller.view.accepted:
-            self.time_delta = self.popup_controller.view.time_delta_spinbox.value()
+        result = self.popup.exec_()
+        if result:
+            self.time_delta = self.popup.time_delta_spinbox.value()

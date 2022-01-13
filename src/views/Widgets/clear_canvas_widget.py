@@ -9,5 +9,5 @@ if TYPE_CHECKING:
 class ClearCanvas(QtWidgets.QPushButton):
     def __init__(self, controller: "ClearCanvasController"):
         self.controller = controller
-        super().__init__("Clear Canvas")
+        super().__init__("Reset")
         self.clicked.connect(self.controller.button_pressed)

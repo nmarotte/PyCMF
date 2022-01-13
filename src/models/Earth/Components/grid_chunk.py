@@ -65,7 +65,7 @@ class GridChunk(list[ChunkComponent], Model):
 
     @property
     def energy(self) -> float:
-        return sum(c.energy * self.ratios[c.component_type] for c in self)
+        return sum(c.energy for c in self)
 
     @energy.setter
     def energy(self, value: float):

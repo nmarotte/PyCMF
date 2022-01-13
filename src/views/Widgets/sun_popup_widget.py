@@ -1,17 +1,17 @@
 from typing import TYPE_CHECKING
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtGui
 
 from other.utils import LabelledWidget, FloatValidator
 
 if TYPE_CHECKING:
-    from controller.PhysicalPropArea.subcontrollers.sun_popup_controller import SunPopupController
+    from controller.PhysicalPropArea.subcontrollers.sun_controller import SunController
 
 
 class SunPopupWidget(QtWidgets.QDialog):
     validator = FloatValidator()
 
-    def __init__(self, controller: "SunPopupController"):
+    def __init__(self, controller: "SunController"):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
@@ -26,17 +26,22 @@ class SunPopupWidget(QtWidgets.QDialog):
         self.bottom_layout.addWidget(self.cancel)
 
         self.output = LabelledWidget(QtWidgets.QLineEdit, "Energy(J) output per second", vertical=False)
-        self.output.setText("3.8e26")
+        self.output.setText(str(self.controller.main_controller.get_energy_per_second()))
         self.output.setValidator(self.validator)
         self.output.textChanged.connect(self.verify_output)
         self.layout().addWidget(self.output)
 
         self.ratio = LabelledWidget(QtWidgets.QLineEdit, "Earth ratio viewed from the sun", vertical=False)
-        self.ratio.setText("00000002.87e-7")
+        self.ratio.setText(str(self.controller.main_controller.get_earth_radiation_ratio()))
         self.ratio.textChanged.connect(self.verify_ratio)
         self.ratio.setValidator(self.validator)
         self.layout().addWidget(self.ratio)
         self.layout().addLayout(self.bottom_layout)
+
+    def showEvent(self, a0: QtGui.QShowEvent):
+        self.ratio.setText(str(self.controller.main_controller.get_earth_radiation_ratio()))
+        self.output.setText(str(self.controller.main_controller.get_energy_per_second()))
+        super(SunPopupWidget, self).showEvent(a0)
 
     def verify_output(self):
         """

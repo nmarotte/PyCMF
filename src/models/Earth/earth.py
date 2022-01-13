@@ -79,6 +79,9 @@ class Earth(Grid):
         :param input_energy:
         :return:
         """
-        energy_each = input_energy / len(self)
+        energy_each = input_energy / self.nb_active_grid_chunks
         for elem in self.not_nones():
             elem.energy += energy_each
+
+    def receive_radiation(self, energy: float):
+        self.add_energy(energy * (1-self.albedo))

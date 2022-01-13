@@ -99,6 +99,21 @@ class MainController:
     def get_grid_chunk(self):
         return self.toolbar_controller.select_component_controller.get_grid_chunk()
 
+    def set_sun_energy_per_second(self, energy_per_second: float):
+        self.model.sun.energy_radiated_per_second = energy_per_second
+
+    def set_earth_radiation_ratio(self, earth_radiation_ratio: float):
+        self.model.sun.earth_radiation_ratio = earth_radiation_ratio
+
+    def get_energy_per_second(self):
+        return self.model.sun.energy_radiated_per_second
+
+    def get_earth_radiation_ratio(self):
+        return self.model.sun.earth_radiation_ratio
+
+    def get_time_delta(self):
+        return self.model.universe.TIME_DELTA
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

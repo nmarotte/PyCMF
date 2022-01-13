@@ -46,5 +46,8 @@ class Universe(Model):
     def get_component_at(self, x: int, y: int, z: int = None):
         return self.earth.get_component_at(x, y, z)
 
-    def radiate_inside(self, energy_per_time_delta: float):
-        self.earth.add_energy(energy_per_time_delta * 00000002.87e-7 * (1-self.earth.albedo))
+    def radiate_inside(self, energy_per_time_delta: float, earth_radiation_ratio: float):
+        self.earth.add_energy(energy_per_time_delta * earth_radiation_ratio * (1-self.earth.albedo))
+
+    def radiate_towards_earth(self, energy: float):
+        self.earth.receive_radiation(energy)
