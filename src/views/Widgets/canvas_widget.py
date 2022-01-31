@@ -53,9 +53,12 @@ class CanvasWidget(QtWidgets.QLabel):
             painter.setPen(pen)
             x, y = e.x(), e.y()
             painter.drawPoint(e.x(), e.y())
-            for i in range(max(0, x - width // 2), min(CANVAS_SIZE[0], x + width // 2)):
-                for j in range(max(0, y - width // 2), min(CANVAS_SIZE[1], y + width // 2)):
-                    self.controller.last_painted_positions.append((i, j))
+            if width == 1:
+                self.controller.last_painted_positions.append((x, y))
+            else:
+                for i in range(max(0, x - width // 2), min(CANVAS_SIZE[0], x + width // 2)):
+                    for j in range(max(0, y - width // 2), min(CANVAS_SIZE[1], y + width // 2)):
+                        self.controller.last_painted_positions.append((i, j))
         self.update()
 
     def clear(self):

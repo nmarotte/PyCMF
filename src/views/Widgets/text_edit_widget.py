@@ -19,6 +19,7 @@ class TextEdit(QtWidgets.QWidget):
 
         sub_layout = QtWidgets.QHBoxLayout()
         self.checkbox = QtWidgets.QCheckBox("Auto-Refresh")
+        self.checkbox.setToolTip("Refresh the text automatically every 200ms")
         self.checkbox.stateChanged.connect(self.controller.checkbox_state_changed)
         sub_layout.addWidget(self.checkbox)
 

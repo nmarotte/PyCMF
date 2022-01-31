@@ -76,12 +76,17 @@ class GridChunk(list[ChunkComponent], Model):
         joule_per_time_scale = self.heat_transfer_coefficient * self.surface * self.universe.TIME_DELTA
         for n in self.neighbours:
             diff = n.temperature - self.temperature
-            self.energy += joule_per_time_scale * diff * self.universe.TIME_DELTA
-            n.energy -= joule_per_time_scale * diff * self.universe.TIME_DELTA
+            if diff:
+                self.add_energy(joule_per_time_scale * diff * self.universe.TIME_DELTA)
+                n.add_energy(-joule_per_time_scale * diff * self.universe.TIME_DELTA)
         self.tick()
 
     def deep_copy(self) -> "GridChunk":
         return GridChunk([x.deep_copy() for x in self], self.volume, index=self.index, parent=self.parent)
+
+    def add_energy(self, value: float):
+        for component in self:
+            component.energy += value * self.ratios[component.component_type]
 
 
 if __name__ == '__main__':

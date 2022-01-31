@@ -21,11 +21,13 @@ class SelectComponentController:
         self.view = SelectComponentWidget(controller=self)
 
     def button_pressed(self):
-        self.popup_controller.view.exec_()
-        if self.popup_controller.view.accepted:
+        result = self.popup_controller.view.exec_()
+        if result:
             self.main_controller.finish_process_message(NoComponentBrushSelected)
             components = []
             ratios = self.get_ratios()
+            if all(not r for r in ratios):  # If all ratios are 0
+                return
             ratios = [x/sum(ratios) for x in ratios]  # Normalize
             for i, controller in enumerate(self.popup_controller.sub_controllers):
                 components.append(ChunkComponent(self.get_mass() * ratios[i], self.get_temperature(),
