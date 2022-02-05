@@ -21,6 +21,9 @@ class TestGridChunkBase(unittest.TestCase):
     def test_equality(self):
         self.assertNotEqual(self.grid_chunk_one, self.grid_chunk_three)
 
+    def test_equality_other_type(self):
+        self.assertNotEqual(self.grid_chunk_one, 25)
+
     def test_difference(self):
         self.assertNotEqual(self.grid_chunk_one, self.grid_chunk_two)
 

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from modelsv2.base_model import BaseModel
-from modelsv2.earth import Earth
+from modelsv2.physical_class.earth import Earth
 from sun import Sun
 
 

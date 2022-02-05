@@ -5,7 +5,7 @@ from collections.abc import Collection, Iterator
 from models.Earth.Components.chunk_component import ChunkComponent
 
 
-class GridChunkBase:
+class GridChunkBase(list[ChunkComponent]):
     """
     The implementation aspect of the GridChunk
     """
@@ -22,6 +22,7 @@ class GridChunkBase:
         self.index = self.parent.index(self)
 
     def __init__(self, components: Collection[ChunkComponent], *, index: int = None, parent=None):
+        super().__init__()
         self.parent = parent
         self.index = index
         if self.index is None and self.parent is not None and self in self.parent:
@@ -61,5 +62,8 @@ class GridChunkBase:
             raise NotImplementedError(f"Component {item} is not a valid component type")
         return self.__getattribute__(f"{item.lower()}_component")
 
-    def __eq__(self, other: "GridChunkBase"):
-        return all(self[x] == other[x] for x in GridChunkBase.COMPONENTS)
+    def __eq__(self, other: object):
+        return isinstance(other, GridChunkBase) and all(self[x] == other[x] for x in GridChunkBase.COMPONENTS)
+
+    def __ne__(self, other: "GridChunkBase"):
+        return not self.__eq__(other)

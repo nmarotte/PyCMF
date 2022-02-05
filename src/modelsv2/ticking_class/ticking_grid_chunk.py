@@ -17,4 +17,4 @@ class TickingGridChunk(GridChunk):
         if self.air_component is None:
             self.air_component = ChunkComponent(evaporated_mass, self.temperature, "AIR")
         else:
-            self.air_component += evaporated_mass
+            self.air_component.mass += evaporated_mass
