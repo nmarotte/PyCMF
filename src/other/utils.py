@@ -56,7 +56,7 @@ class ComponentColor(QtGui.QColor):
     @classmethod
     def from_chunk(cls, chunk: "GridChunk"):
         ratios = {
-            component.component_type: chunk.ratios[component.component_type] for component in chunk
+            component.type: chunk.ratios[component.type] for component in chunk
         }
         return cls(ratios)
 

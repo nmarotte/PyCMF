@@ -40,10 +40,14 @@ class BaseModel(metaclass=BaseModelMeta):
     universe: "Universe" = None
 
     @final
-    def update(self):
+    def update(self, *, update_globally=False):
         """
         The update function that is called when the model wants to move forward in time
+        :param update_globally: if True, will use the update method on all the models at once, globally ticking the simulation
+        Else, it will only tick the on_tick method of the model updating
         :return:
         """
+        print(self.on_tick_methods)
         for method in self.on_tick_methods:
-            method(self)
+            if update_globally or method.__module__ == self.__module__:
+                method(self)

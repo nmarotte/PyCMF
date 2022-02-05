@@ -1,3 +1,4 @@
+import math
 from typing import Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
@@ -31,20 +32,25 @@ class ChunkComponent:
         """
     chunk: "GridChunk" = None
     mass: float
+    energy: float = 0
     specific_heat_capacity: float
     heat_transfer_coefficient: float
-    energy: float = 0
 
-    def __init__(self, mass: float, temperature: float, *, component_type: str):
+    def __init__(self, mass: float, temperature: float, component_type: str):
         # Information on the component
-        self.component_type = component_type.upper()
+        self.type = component_type.upper()
 
         # Physical properties
         self.mass = mass
 
-        self.specific_heat_capacity = constants.SPECIFIC_HEAT_CAPACITY[self.component_type]
-        self.heat_transfer_coefficient = constants.SPECIFIC_HEAT_CAPACITY[self.component_type]
+        self.specific_heat_capacity = constants.SPECIFIC_HEAT_CAPACITY[self.type]
+        self.heat_transfer_coefficient = constants.SPECIFIC_HEAT_CAPACITY[self.type]
         self.__set_temperature(temperature)
+
+    def __eq__(self, other: Optional["ChunkComponent"]):
+        if other is None:
+            return False
+        return math.isclose(self.mass, other.mass) and math.isclose(self.energy, other.energy)
 
     @classmethod
     def init_default(cls, *, component_type: str):
@@ -67,10 +73,13 @@ class ChunkComponent:
         self.energy = self.specific_heat_capacity * self.mass * temperature
 
     def __str__(self):
-        res = f"{self.component_type} Component \n" \
+        res = f"{self.type} Component \n" \
               f"Mass : {self.mass} \n " \
               f"Temperature : {self.__get_temperature()} K ({self.energy} J)"
         return res
 
     def deep_copy(self):
-        return ChunkComponent(self.mass, self.__get_temperature(), component_type=self.component_type)
+        return ChunkComponent(self.mass, self.__get_temperature(), component_type=self.type)
+
+    def is_empty(self):
+        return math.isclose(self.mass, 0)

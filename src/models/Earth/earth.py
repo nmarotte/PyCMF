@@ -43,7 +43,7 @@ class Earth(Grid):
             if elem is None:
                 color = QtGui.QColor("black")
             else:
-                color = color_from_ratio(elem.compute_component_ratio_dict())
+                color = color_from_ratio(elem.get_mass_ratio())
             image.setPixel(*index_to_2D(i, CANVAS_SIZE), color.rgb())
         return image
 
@@ -62,7 +62,7 @@ class Earth(Grid):
         chunk: GridChunk
         for chunk in self.not_nones():
             for component in chunk:
-                composition_mass_dict[component.component_type] = composition_mass_dict.get(component.component_type, 0) + component.mass / total_mass
+                composition_mass_dict[component.type] = composition_mass_dict.get(component.type, 0) + component.mass / total_mass
 
         return composition_mass_dict
 

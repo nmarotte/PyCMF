@@ -31,7 +31,7 @@ class SelectComponentController:
             ratios = [x/sum(ratios) for x in ratios]  # Normalize
             for i, controller in enumerate(self.popup_controller.sub_controllers):
                 components.append(ChunkComponent(self.get_mass() * ratios[i], self.get_temperature(),
-                                                 component_type=controller.component_type))
+                                                 component_type=controller.type))
             self.__grid_chunk = GridChunk(components, volume=self.get_volume_each())
 
     def get_ratios(self) -> list[float]:
