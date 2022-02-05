@@ -39,11 +39,15 @@ class Universe(UniverseBase, TickableModel):
             self.update()
         print("Simulation stopped")
 
-    # def radiate_inside(self, energy_per_time_delta: float, earth_radiation_ratio: float):
-    #     self.earth.add_energy(energy_per_time_delta * earth_radiation_ratio * (1-self.earth.albedo))
-    #
-    # def radiate_towards_earth(self, energy: float):
-    #     self.earth.receive_radiation(energy)
+
+    def get_component_at(self, x: int, y=0, z=0):
+        return self.earth.get_component_at(x, y, z)
+
+    def radiate_inside(self, energy_per_time_delta: float, earth_radiation_ratio: float):
+        self.earth.add_energy(energy_per_time_delta * earth_radiation_ratio * (1-self.earth.albedo))
+
+    def radiate_towards_earth(self, energy: float):
+        self.earth.receive_radiation(energy)
 
 if __name__ == '__main__':
     uni = Universe()

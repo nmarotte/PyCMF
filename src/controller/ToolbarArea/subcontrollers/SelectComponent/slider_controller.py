@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 class SelectComponentSliderController:
     def __init__(self, component_type: str, index: int, default_mass: int, parent_controller: "SelectComponentPopupController"):
-        self.component_type = component_type
+        self.type = component_type
         self.parent_controller = parent_controller
         self.index = index
         self.view = AtomicSelectComponentSlider(component_type, index, default_mass, self)

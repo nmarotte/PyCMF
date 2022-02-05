@@ -1,22 +1,18 @@
-import math
 import threading
 from typing import Optional
 
 from PyQt5 import QtWidgets
-import qtawesome as qta
 
-from models.Earth.earth import Earth
-from models.model import Model
-from sun import Sun
-from views.main_view import MainView
-from constants import CANVAS_SIZE, ICON_SIZE
+from constants import CANVAS_SIZE
 from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import MessageController
 from messages import MessageToProcess
-from models.Earth.Components.chunk_component import ChunkComponent
-from models.Earth.Components.grid_chunk import GridChunk
-from universe import Universe
+from modelsv2.physical_class.earth import Earth
+from modelsv2.physical_class.universe import Universe
+from modelsv2.ticking_class.ticking_earth import TickingEarth
+from sun import Sun
+from views.main_view import MainView
 
 
 class MainController:
@@ -25,7 +21,7 @@ class MainController:
 
     def __init__(self):
         self.model = Universe()
-        self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
+        self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
         self.model.sun = Sun()
         self.message_controller = MessageController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)

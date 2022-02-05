@@ -27,12 +27,12 @@ class GridChunk(list[ChunkComponent], Model):
 
         if len(self):
             self.specific_heat_capacity = sum(
-                x.specific_heat_capacity * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+                x.specific_heat_capacity * self.ratios[x.type] for i, x in enumerate(self)) / len(self)
             self.heat_transfer_coefficient = sum(
-                x.heat_transfer_coefficient * self.ratios[x.component_type] for i, x in enumerate(self)) / len(self)
+                x.heat_transfer_coefficient * self.ratios[x.type] for i, x in enumerate(self)) / len(self)
 
     def compute_component_ratio_dict(self):
-        return {component.component_type: ratio for component, ratio in zip(self, self.ratios)}
+        return {component.type: ratio for component, ratio in zip(self, self.ratios)}
 
     def __str__(self):
         res = f"Chunk" + (f" {str(self.index)}\n" if self.index is not None else "\n") + \
@@ -45,7 +45,7 @@ class GridChunk(list[ChunkComponent], Model):
 
     @property
     def ratios(self) -> dict[str, float]:
-        return {c.component_type: c.mass / self.total_mass for c in self}
+        return {c.ty: c.mass / self.total_mass for c in self}
 
     @property
     def surface(self) -> float:

@@ -7,8 +7,7 @@ from PyQt5.QtGui import QValidator
 from constants import COMPONENTS
 
 if TYPE_CHECKING:
-    from models.Earth.Components.grid_chunk import GridChunk
-
+    from modelsv2.physical_class.grid_chunk import GridChunk
 
 def color_from_ratio(ratios: Union[list[float], dict[str, float]]):
     if isinstance(ratios, list):
@@ -55,9 +54,7 @@ class ComponentColor(QtGui.QColor):
 
     @classmethod
     def from_chunk(cls, chunk: "GridChunk"):
-        ratios = {
-            component.type: chunk.ratios[component.type] for component in chunk
-        }
+        ratios = {component.type: chunk.get_ratio_of_component(component) for component in chunk}
         return cls(ratios)
 
 
