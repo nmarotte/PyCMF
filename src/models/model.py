@@ -10,9 +10,9 @@ class Model:
     running: bool = False
     t: int = 0
 
-    @abstractmethod
-    def update(self):
-        return
+    # @abstractmethod
+    # def update(self):
+    #     return
 
     def tick(self):
         self.t += 1
