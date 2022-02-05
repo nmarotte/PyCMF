@@ -1,14 +1,16 @@
 from collections.abc import Collection
 
 from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.tickable_model import TickableModel
 from modelsv2.physical_class.grid_chunk import GridChunk
 
 
-class TickingGridChunk(GridChunk):
+class TickingGridChunk(TickableModel, GridChunk):
     def __init__(self, components: Collection[ChunkComponent], volume: float, *, index: int = None, parent=None):
-        super().__init__(components, volume, index=index, parent=parent)
+        GridChunk.__init__(self, components, volume, index=index, parent=parent)
+        TickableModel.__init__(self)
 
-    @GridChunk.on_tick
+    @TickableModel.on_tick
     def water_evaporation(self):
         if self.water_component is None:
             return

@@ -1,11 +1,11 @@
 from typing import Collection, Iterator, Optional, Union
 
 from models.Earth.Components.chunk_component import ChunkComponent
-from modelsv2.base_model import BaseModel
+from modelsv2.tickable_model import TickableModel
 from modelsv2.base_class.grid_chunk_base import GridChunkBase
 
 
-class GridChunk(BaseModel, GridChunkBase):
+class GridChunk(GridChunkBase):
     """
     The physical properties aspect of the GridChunk
     """
@@ -19,7 +19,6 @@ class GridChunk(BaseModel, GridChunkBase):
     def __init__(self, components: Collection[ChunkComponent], volume: float, *, index: int = None, parent=None):
         self.volume = volume
         GridChunkBase.__init__(self, components, index=index, parent=parent)
-        BaseModel.__init__(self)
 
         if not len(self):
             return  # Do not compute specific heat capacity of empty Grid Chunk

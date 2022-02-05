@@ -2,12 +2,15 @@ from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
 from models.Earth.grid import Grid
 from modelsv2.base_class.earth_base import EarthBase
-from modelsv2.base_model import BaseModel
+from modelsv2.tickable_model import TickableModel
 from src.universe import Universe
 
 
-class Earth(EarthBase, BaseModel):
+class Earth(EarthBase):
     albedo: float = 0
+
+    def __init__(self, shape: tuple, *, parent=None):
+        super().__init__(shape, parent=parent)
 
     # @classmethod
     # def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):
@@ -81,14 +84,3 @@ class Earth(EarthBase, BaseModel):
 
     def receive_radiation(self, energy: float):
         self.add_energy(energy * (1 - self.albedo))
-
-
-if __name__ == '__main__':
-    uni = Universe()
-    earth = Earth(shape=(10,10))
-    earth.universe = uni
-    earth[0] = GridChunk([ChunkComponent(1000, 300, component_type="WATER")], volume=1000, index=0, parent=earth)
-    earth[1] = GridChunk([ChunkComponent(1000, 250, component_type="WATER")], volume=1000, index=1, parent=earth)
-    earth.update()
-    print(earth[0])
-    print(earth[1])

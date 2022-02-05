@@ -1,8 +1,9 @@
+from modelsv2.tickable_model import TickableModel
 from modelsv2.physical_class.earth import Earth
 
 
-class TickingEarth(Earth):
-    @Earth.on_tick
+class TickingEarth(Earth, TickableModel):
+    @TickableModel.on_tick
     def average_temperature(self):
         temperature_gradiant = {}
         # First sweep of finding the temperature difference

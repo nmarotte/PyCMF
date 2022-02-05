@@ -2,10 +2,11 @@ from typing import Optional, Iterator
 
 import numpy
 
+from modelsv2.base_model import BaseModel
 from modelsv2.physical_class.grid_chunk import GridChunk
 
 
-class EarthBase(list[Optional[GridChunk]]):
+class EarthBase(list[Optional[GridChunk]], BaseModel):
     nb_active_grid_chunks: int = 0
 
     def __init__(self, shape: tuple, *, parent=None):
@@ -45,17 +46,11 @@ class EarthBase(list[Optional[GridChunk]]):
         """
         return (elem for elem in self if elem is not None)
 
-    def get_component_at(self, x, y, z=None):
-        if z is None:
-            return self[x + y * self.shape[0]]
-        else:
-            return self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])]
+    def get_component_at(self, x, y=0, z=0):
+        return self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])]
 
-    def set_component_at(self, component: GridChunk, x, y, z=None):
-        if z is None:
-            self[x + y * self.shape[0]] = component
-        else:
-            self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])] = component
+    def set_component_at(self, component: GridChunk, x, y=0, z=0):
+        self[x + y * self.shape[0] + z * (self.shape[0] + self.shape[1])] = component
 
     def neighbours(self, index: int) -> list[GridChunk]:
         """
@@ -106,8 +101,3 @@ class EarthBase(list[Optional[GridChunk]]):
                 index + self.shape[0] * self.shape[1]] is not None:
                 res.append(self[index + self.shape[0] * self.shape[1]])
         return res
-
-    # def update(self):
-    #     for elem in self.not_nones():
-    #         elem.update()
-    #     self.tick()

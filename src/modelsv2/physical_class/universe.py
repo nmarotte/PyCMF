@@ -1,12 +1,12 @@
 from typing import Optional
 
 from modelsv2.base_class.universe_base import UniverseBase
-from modelsv2.base_model import BaseModel
+from modelsv2.tickable_model import TickableModel
 from modelsv2.physical_class.earth import Earth
 from sun import Sun
 
 
-class Universe(UniverseBase):
+class Universe(UniverseBase, TickableModel):
     """
     Singleton class that will contain all other models
     """
@@ -14,6 +14,7 @@ class Universe(UniverseBase):
     sun: Optional[Sun] = None
     TIME_DELTA: float = 0.01
     EVAPORATION_RATE: float = 0.0001
+
 
     def __str__(self):
         res = ""
@@ -43,4 +44,8 @@ class Universe(UniverseBase):
     #
     # def radiate_towards_earth(self, energy: float):
     #     self.earth.receive_radiation(energy)
+
+if __name__ == '__main__':
+    uni = Universe()
+    uni.update()
 
