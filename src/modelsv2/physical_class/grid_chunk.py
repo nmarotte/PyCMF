@@ -1,7 +1,6 @@
-from typing import Collection, Iterator, Optional, Union
+from typing import Collection, Union
 
 from models.Earth.Components.chunk_component import ChunkComponent
-from modelsv2.tickable_model import TickableModel
 from modelsv2.base_class.grid_chunk_base import GridChunkBase
 
 

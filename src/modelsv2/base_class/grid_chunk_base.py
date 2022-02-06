@@ -3,10 +3,9 @@ from typing import Optional
 from collections.abc import Collection, Iterator
 
 from models.Earth.Components.chunk_component import ChunkComponent
-from modelsv2.base_model import BaseModel
 
 
-class GridChunkBase(list[ChunkComponent], BaseModel):
+class GridChunkBase(list[ChunkComponent]):
     """
     The implementation aspect of the GridChunk
     """

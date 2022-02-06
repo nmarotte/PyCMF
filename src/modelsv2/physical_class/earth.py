@@ -1,16 +1,16 @@
-from models.Earth.Components.chunk_component import ChunkComponent
 from models.Earth.Components.grid_chunk import GridChunk
-from models.Earth.grid import Grid
+from modelsv2.ABC.celestial_body import CelestialBody
 from modelsv2.base_class.earth_base import EarthBase
-from modelsv2.tickable_model import TickableModel
-from src.universe import Universe
 
 
-class Earth(EarthBase):
+class Earth(EarthBase, CelestialBody):
     albedo: float = 0
 
-    def __init__(self, shape: tuple, *, parent=None):
-        super().__init__(shape, parent=parent)
+    def __init__(self, shape: tuple, radius: float = 6.3781e6, *, parent=None):
+        # TODO earth radius source https://arxiv.org/abs/1510.07674
+        EarthBase.__init__(self, shape, parent=parent)
+        CelestialBody.__init__(self, radius)
+        self.get_universe().earth = self
 
     # @classmethod
     # def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):
@@ -84,3 +84,6 @@ class Earth(EarthBase):
 
     def receive_radiation(self, energy: float):
         self.add_energy(energy * (1 - self.albedo))
+
+if __name__ == '__main__':
+    earth = Earth(shape=(10,10))

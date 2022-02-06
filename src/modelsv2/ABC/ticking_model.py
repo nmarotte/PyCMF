@@ -4,7 +4,7 @@ if TYPE_CHECKING:
     from modelsv2.universe import Universe
 
 
-def on_tick_wrapper(cls: type["TickableModel"]):
+def on_tick_wrapper(cls: type["TickingModel"]):
     """
     Returns a function that takes a function in parameters (this is usually called a decorator)
     :param cls: the class that contains a list attribute called `on_tick_methods` to which
@@ -34,9 +34,15 @@ class TickableModelMeta(type):
         return x
 
 
-class TickableModel(metaclass=TickableModelMeta):
+class TickingModel(metaclass=TickableModelMeta):
+    __t: int = 0
     on_tick_methods: list[Callable] = []
     on_tick: Callable[[callable], callable]
+
+    def __init__(self):
+        self.__running = False
+        self.pause_updating = self.stop_updating
+        self.resume_updating = self.start_simulation
 
     @final
     def update(self, *, update_globally=False):
@@ -49,3 +55,34 @@ class TickableModel(metaclass=TickableModelMeta):
         for method in self.on_tick_methods:
             if update_globally or method.__module__ == self.__module__:
                 method(self)
+        TickingModel.__t += 1
+
+    @final
+    def __update_loop(self):
+        while True:
+            if not self.__running:
+                break
+            print(f"Simulating t={self.__t}")
+            self.update()
+        print("done")
+
+    @staticmethod
+    @final
+    def get_time():
+        return TickingModel.__t
+
+    @final
+    def is_running(self):
+        return self.__running
+
+    @final
+    def start_simulation(self):
+        self.__running = True
+        self.__update_loop()
+
+    @final
+    def stop_updating(self):
+        self.__running = False
+
+
+

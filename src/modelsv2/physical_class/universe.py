@@ -1,20 +1,22 @@
-from typing import Optional
+import math
+from typing import Optional, TYPE_CHECKING
 
+from modelsv2.physical_class.sun import Sun
+
+if TYPE_CHECKING:
+    from modelsv2.ABC.base_model import CelestialBody
 from modelsv2.base_class.universe_base import UniverseBase
-from modelsv2.tickable_model import TickableModel
+from modelsv2.ABC.ticking_model import TickingModel
 from modelsv2.physical_class.earth import Earth
-from sun import Sun
+from modelsv2.utils import EnergyRadiation
 
 
-class Universe(UniverseBase, TickableModel):
+class Universe(UniverseBase, TickingModel):
     """
     Singleton class that will contain all other models
     """
-    earth: Optional[Earth] = None
-    sun: Optional[Sun] = None
     TIME_DELTA: float = 0.01
     EVAPORATION_RATE: float = 0.0001
-
 
     def __str__(self):
         res = ""
@@ -31,25 +33,28 @@ class Universe(UniverseBase, TickableModel):
     #         self.earth.update()
     #     self.tick()
 
-    def start_updating(self):
-        while True:
-            if not self.running:
-                break
-            print(f"Simulating t={self.t}")
-            self.update()
-        print("Simulation stopped")
-
+    def discover_everything(self):
+        """
+        Exchange 1 virtual photon with every celestial body contained in the universe so that we can know if they can
+        see each other in a direct line of sight or not
+        :return:
+        """
+        for obj1 in self:
+            for obj2 in self:
+                if obj1 is obj2:
+                    continue
+                obj1.discover(obj2)
 
     def get_component_at(self, x: int, y=0, z=0):
         return self.earth.get_component_at(x, y, z)
 
-    def radiate_inside(self, energy_per_time_delta: float, earth_radiation_ratio: float):
-        self.earth.add_energy(energy_per_time_delta * earth_radiation_ratio * (1-self.earth.albedo))
+    def radiate_inside(self, energy_radiation: EnergyRadiation):
+        solid_angle = energy_radiation.source.solid_angle(self.earth)
+        for celestial_bodies in energy_radiation.source.objects_in_line_of_sight:
+            celestial_bodies.receive_radiation(energy_radiation.amount_per_time_delta * solid_angle/(4*math.pi))
 
-    def radiate_towards_earth(self, energy: float):
-        self.earth.receive_radiation(energy)
-
-if __name__ == '__main__':
-    uni = Universe()
-    uni.update()
+    @staticmethod
+    def distance_between(object1: "CelestialBody", object2: "CelestialBody"):
+        if isinstance(object1, Sun) and isinstance(object2, Earth) or isinstance(object1, Earth) and isinstance(object2, Sun):
+            return 1.496e11
 

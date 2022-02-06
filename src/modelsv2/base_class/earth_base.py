@@ -2,11 +2,10 @@ from typing import Optional, Iterator
 
 import numpy
 
-from modelsv2.base_model import BaseModel
 from modelsv2.physical_class.grid_chunk import GridChunk
 
 
-class EarthBase(list[Optional[GridChunk]], BaseModel):
+class EarthBase(list[Optional[GridChunk]]):
     nb_active_grid_chunks: int = 0
 
     def __init__(self, shape: tuple, *, parent=None):

@@ -1,9 +1,12 @@
-from modelsv2.base_model import BaseModel
-from modelsv2.tickable_model import TickableModel
+from typing import Optional
+
+from modelsv2.physical_class.earth import Earth
+from modelsv2.physical_class.sun import Sun
 
 
-class UniverseBase(BaseModel):
-    def __new__(cls, *args, **kwargs):
-        if BaseModel.universe is None:
-            BaseModel.universe = super(UniverseBase, cls).__new__(cls, *args, **kwargs)
-        return BaseModel.universe
+class UniverseBase:
+    earth: Optional[Earth] = None
+    sun: Optional[Sun] = None
+
+    def __iter__(self):
+        return (x for x in (self.earth, self.sun))
