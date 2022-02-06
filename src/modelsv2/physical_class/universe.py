@@ -1,5 +1,5 @@
 import math
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from modelsv2.physical_class.sun import Sun
 
@@ -51,4 +51,3 @@ class Universe(UniverseBase, TickingModel):
     def distance_between(object1: "CelestialBody", object2: "CelestialBody"):
         if isinstance(object1, Sun) and isinstance(object2, Earth) or isinstance(object1, Earth) and isinstance(object2, Sun):
             return 1.496e11
-

@@ -1,4 +1,3 @@
-import math
 import unittest
 
 from modelsv2.ABC.celestial_body import CelestialBody

@@ -2,7 +2,6 @@ import unittest
 
 from modelsv2.ABC.celestial_body import CelestialBody
 from modelsv2.physical_class.earth import Earth
-from modelsv2.physical_class.sun import Sun
 from modelsv2.physical_class.universe import Universe
 
 

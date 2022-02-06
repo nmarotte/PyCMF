@@ -1,8 +1,8 @@
 import math
-from typing import Optional, TYPE_CHECKING, Union
+from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from models.Earth.Components.grid_chunk import GridChunk
+    from modelsv2.physical_class.grid_chunk import GridChunk
 import constants
 
 

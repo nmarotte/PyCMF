@@ -1,6 +1,6 @@
-from models.Earth.Components.grid_chunk import GridChunk
 from modelsv2.ABC.celestial_body import CelestialBody
 from modelsv2.base_class.earth_base import EarthBase
+from modelsv2.physical_class.grid_chunk import GridChunk
 
 
 class Earth(EarthBase, CelestialBody):
@@ -87,6 +87,3 @@ class Earth(EarthBase, CelestialBody):
 
     def receive_radiation(self, energy: float):
         self.add_energy(energy * (1 - self.albedo))
-
-if __name__ == '__main__':
-    earth = Earth(shape=(10,10))

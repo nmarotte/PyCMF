@@ -1,6 +1,6 @@
 from typing import Collection, Union
 
-from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.physical_class.chunk_component import ChunkComponent
 from modelsv2.base_class.grid_chunk_base import GridChunkBase
 
 

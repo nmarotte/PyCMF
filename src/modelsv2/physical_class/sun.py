@@ -6,7 +6,12 @@ from modelsv2.base_class.sun_base import SunBase
 
 class Sun(SunBase, CelestialBody):
     def receive_radiation(self, energy: float):
-        raise NotImplementedError("No behaviour set for the Sun receiving radiation")
+        """
+        No behaviour set for the Sun receiving radiation
+        :param energy:
+        :return:
+        """
+        return
 
     # def update(self):
     #     """
@@ -38,4 +43,3 @@ class Sun(SunBase, CelestialBody):
         res += f"- Radiating {self.energy_radiated_per_second} J/s outwards"
         res += f"- Of which {100*self.earth_radiation_ratio} % will reach the earth"
         return res
-

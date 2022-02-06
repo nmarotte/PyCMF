@@ -2,7 +2,7 @@ from typing import Optional
 
 from collections.abc import Collection, Iterator
 
-from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.physical_class.chunk_component import ChunkComponent
 
 
 class GridChunkBase(list[ChunkComponent]):

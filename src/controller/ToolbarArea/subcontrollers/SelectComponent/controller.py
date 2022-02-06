@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.physical_class.chunk_component import ChunkComponent
 from modelsv2.physical_class.grid_chunk import GridChunk
 from views.Widgets.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController

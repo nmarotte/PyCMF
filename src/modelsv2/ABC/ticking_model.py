@@ -1,4 +1,4 @@
-from typing import final, TYPE_CHECKING, Callable, Any
+from typing import final, Callable, Any
 
 
 def on_tick_wrapper(cls: type["TickingModel"]):
@@ -13,7 +13,7 @@ def on_tick_wrapper(cls: type["TickingModel"]):
     def _(clb: callable) -> callable:
         """
         Appends the method to a specific list that is a CLASS attribute (static) of the class given to the outside function
-        :param clb: the callable, a.k.a. the stuff that appears after the `def` in the class. Either function or classmethod
+        :param clb: the callable, a.k.a. the stuff that appears after the `def` in the class. Either function or class method
         :return: the callable given in parameter so the function can be properly called
         """
         cls.on_tick_methods.append(clb)
@@ -80,6 +80,3 @@ class TickingModel(metaclass=TickableModelMeta):
     @final
     def stop_updating(self):
         self.__running = False
-
-
-

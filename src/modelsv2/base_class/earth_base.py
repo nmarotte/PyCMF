@@ -92,11 +92,11 @@ class EarthBase(list[Optional[GridChunk]]):
             if 0 < (index + 1) % self.shape[0] and self[index + 1] is not None:
                 res.append(self[index + 1])
             # Bottom
-            if index % (self.shape[0] * self.shape[1]) < self.shape[0] * self.shape[1] - self.shape[0] and self[
-                index + self.shape[0]] is not None:
+            if index % (self.shape[0] * self.shape[1]) < self.shape[0] * self.shape[1] - self.shape[0] and \
+                    self[index + self.shape[0]] is not None:
                 res.append(self[index + self.shape[0]])
             # Back
-            if index + self.shape[0] * self.shape[1] < numpy.product(self.shape) and self[
-                index + self.shape[0] * self.shape[1]] is not None:
+            if index + self.shape[0] * self.shape[1] < numpy.product(self.shape) and \
+                    self[index + self.shape[0] * self.shape[1]] is not None:
                 res.append(self[index + self.shape[0] * self.shape[1]])
         return res

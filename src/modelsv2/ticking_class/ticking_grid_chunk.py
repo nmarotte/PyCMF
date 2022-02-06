@@ -1,6 +1,6 @@
 from collections.abc import Collection
 
-from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.physical_class.chunk_component import ChunkComponent
 from modelsv2.ABC.ticking_model import TickingModel
 from modelsv2.physical_class.grid_chunk import GridChunk
 import modelsv2.physical_class.universe as universe

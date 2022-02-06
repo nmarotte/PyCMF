@@ -1,6 +1,6 @@
 import unittest
 
-from models.Earth.Components.chunk_component import ChunkComponent
+from modelsv2.physical_class.chunk_component import ChunkComponent
 from modelsv2.physical_class.grid_chunk import GridChunk
 
 
@@ -35,9 +35,4 @@ class TestGridChunkBase(unittest.TestCase):
         self.assertIs(self.a_chunk.water_component, self.a_chunk["WATER"], "Variable access is equivalent to bracket access")
 
     def test_error_unknown_component(self):
-        with self.assertRaises(NotImplementedError):
-            variable = self.a_chunk["Chocolate"].mass
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertRaises(NotImplementedError, lambda:self.a_chunk["Chocolate"].mass)

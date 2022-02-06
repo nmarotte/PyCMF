@@ -108,10 +108,10 @@ class MainController:
         return self.model.sun.earth_radiation_ratio
 
     def set_time_delta(self, time_delta):
-        self.model.universe.TIME_DELTA = time_delta
+        self.model.TIME_DELTA = time_delta
 
     def get_time_delta(self):
-        return self.model.universe.TIME_DELTA
+        return self.model.TIME_DELTA
 
 
 if __name__ == '__main__':

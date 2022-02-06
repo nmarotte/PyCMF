@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union, Iterable, TypeVar, Iterator, TYPE_CHECKING
+from typing import Union, Iterable, Iterator, TYPE_CHECKING
 
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtGui import QValidator
@@ -8,6 +8,7 @@ from constants import COMPONENTS
 
 if TYPE_CHECKING:
     from modelsv2.physical_class.grid_chunk import GridChunk
+
 
 def color_from_ratio(ratios: Union[list[float], dict[str, float]]):
     if isinstance(ratios, list):
@@ -121,4 +122,3 @@ class FloatValidator(QValidator):
             return QValidator.Invalid, string, pos
         else:
             return QValidator.Acceptable, string, pos
-
