@@ -4,7 +4,7 @@ from typing import Optional, TYPE_CHECKING
 from modelsv2.physical_class.sun import Sun
 
 if TYPE_CHECKING:
-    from modelsv2.ABC.base_model import CelestialBody
+    from modelsv2.ABC.celestial_body import CelestialBody
 from modelsv2.base_class.universe_base import UniverseBase
 from modelsv2.ABC.ticking_model import TickingModel
 from modelsv2.physical_class.earth import Earth
@@ -26,13 +26,6 @@ class Universe(UniverseBase, TickingModel):
             res += f"{self.earth.__str__()}\n"
         return res
 
-    # def update(self, *, skip_earth=False, skip_sun=False):
-    #     if not skip_sun and self.sun is not None:
-    #         self.sun.update()
-    #     if not skip_earth and self.earth is not None:
-    #         self.earth.update()
-    #     self.tick()
-
     def discover_everything(self):
         """
         Exchange 1 virtual photon with every celestial body contained in the universe so that we can know if they can
@@ -48,10 +41,11 @@ class Universe(UniverseBase, TickingModel):
     def get_component_at(self, x: int, y=0, z=0):
         return self.earth.get_component_at(x, y, z)
 
-    def radiate_inside(self, energy_radiation: EnergyRadiation):
-        solid_angle = energy_radiation.source.solid_angle(self.earth)
-        for celestial_bodies in energy_radiation.source.objects_in_line_of_sight:
-            celestial_bodies.receive_radiation(energy_radiation.amount_per_time_delta * solid_angle/(4*math.pi))
+    @staticmethod
+    def radiate_inside(energy_radiation: EnergyRadiation):
+        for celestial_body in energy_radiation.source.objects_in_line_of_sight:
+            solid_angle = energy_radiation.source.solid_angle(celestial_body)
+            celestial_body.receive_radiation(energy_radiation.amount_per_time_delta * solid_angle/(4*math.pi))
 
     @staticmethod
     def distance_between(object1: "CelestialBody", object2: "CelestialBody"):

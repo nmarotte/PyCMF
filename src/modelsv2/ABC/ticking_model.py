@@ -1,8 +1,5 @@
 from typing import final, TYPE_CHECKING, Callable, Any
 
-if TYPE_CHECKING:
-    from modelsv2.universe import Universe
-
 
 def on_tick_wrapper(cls: type["TickingModel"]):
     """

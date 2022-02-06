@@ -5,6 +5,9 @@ from modelsv2.base_class.sun_base import SunBase
 
 
 class Sun(SunBase, CelestialBody):
+    def receive_radiation(self, energy: float):
+        raise NotImplementedError("No behaviour set for the Sun receiving radiation")
+
     # def update(self):
     #     """
     #     Update function for the Sun.

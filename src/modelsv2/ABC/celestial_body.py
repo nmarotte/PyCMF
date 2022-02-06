@@ -11,6 +11,7 @@ class CelestialBody:
     __universe: "Universe" = None
     radius: float
     objects_in_line_of_sight: list["CelestialBody"]
+    objects_out_of_line_of_sight: list["CelestialBody"]
 
     def __init__(self, radius: float):
         self.radius = radius
@@ -48,11 +49,15 @@ class CelestialBody:
         """
         if isinstance(self, ph_class.earth.Earth) and isinstance(other, ph_class.sun.Sun) or \
                 isinstance(self, ph_class.sun.Sun) and isinstance(other, ph_class.earth.Earth):
-            self.objects_in_line_of_sight.append(other)
-            other.objects_in_line_of_sight.append(self)
+            if other not in self.objects_in_line_of_sight:
+                self.objects_in_line_of_sight.append(other)
+            if self not in other.objects_in_line_of_sight:
+                other.objects_in_line_of_sight.append(self)
         else:
-            self.objects_out_of_line_of_sight.append(other)
-            other.objects_out_of_line_of_sight.append(self)
+            if other not in self.objects_out_of_line_of_sight:
+                self.objects_out_of_line_of_sight.append(other)
+            if self not in other.objects_out_of_line_of_sight:
+                other.objects_out_of_line_of_sight.append(self)
 
     def sees(self, other: "CelestialBody"):
         """

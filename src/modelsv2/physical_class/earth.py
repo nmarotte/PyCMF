@@ -82,6 +82,9 @@ class Earth(EarthBase, CelestialBody):
             for elem in self.not_nones():
                 elem.energy += energy_each
 
+    def compute_total_energy(self):
+        return sum(elem.energy for elem in self.not_nones())
+
     def receive_radiation(self, energy: float):
         self.add_energy(energy * (1 - self.albedo))
 

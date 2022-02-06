@@ -97,7 +97,7 @@ class GridChunk(GridChunkBase):
     def from_components_tuple(cls, *args: tuple[float, float, str], volume: float, index: int = None, parent=None):
         """
         A quick way of building a GridChunk without having to build the ChunkComponents manually
-        :param args: a tuple of the form (mass, temperature: float, component_type: str)
+        :param args: a tuple of the form (mass: float, temperature: float, component_type: str)
         :param volume: volume of the GridChunk
         :param index: its index
         :param parent: its parent
