@@ -70,11 +70,6 @@ class GridChunk(GridChunkBase):
     def energy(self) -> float:
         return sum(c.energy for c in self)
 
-    @energy.setter
-    def energy(self, value: float):
-        for component in self:
-            component.energy = value * self.get_ratio_of_component(component)
-
     #
     # def update(self):
     #     joule_per_time_scale = self.heat_transfer_coefficient * self.surface * self.universe.TIME_DELTA

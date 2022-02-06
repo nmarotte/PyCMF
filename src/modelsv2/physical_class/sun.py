@@ -40,6 +40,6 @@ class Sun(SunBase, CelestialBody):
             res += f"- Total energy remaining {self.total_energy} J\n"
         else:
             res += f"- Infinite amount of energy"
-        res += f"- Radiating {self.energy_radiated_per_second} J/s outwards"
+        res += f"- Radiating {self.energy_radiated_per_second} J/s outwards\n"
         res += f"- Of which {100*self.earth_radiation_ratio} % will reach the earth"
         return res

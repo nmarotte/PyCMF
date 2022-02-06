@@ -18,6 +18,9 @@ class Universe(UniverseBase, TickingModel):
     TIME_DELTA: float = 0.01
     EVAPORATION_RATE: float = 0.0001
 
+    def __init__(self):
+        super().__init__()
+
     def __str__(self):
         res = ""
         if self.sun is not None:
@@ -51,3 +54,30 @@ class Universe(UniverseBase, TickingModel):
     def distance_between(object1: "CelestialBody", object2: "CelestialBody"):
         if isinstance(object1, Sun) and isinstance(object2, Earth) or isinstance(object1, Earth) and isinstance(object2, Sun):
             return 1.496e11
+
+    def update_all(self):
+        for elem in self:
+            elem.update()
+        self.update()
+
+    def __update_loop(self):
+        while True:
+            if not self.__running:
+                break
+            print(f"Simulating t={self._t}")
+            self.update_all()
+        print("done")
+
+    def start_simulation(self):
+        self.__running = True
+        self.__update_loop()
+
+    def stop_updating(self):
+        self.__running = False
+
+    def resume_updating(self):
+        self.__running = True
+        self.__update_loop()
+
+    def pause_updating(self):
+        self.__running = False

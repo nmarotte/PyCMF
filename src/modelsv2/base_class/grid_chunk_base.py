@@ -45,7 +45,7 @@ class GridChunkBase(list[ChunkComponent]):
         return sum(self[x] is not None for x in GridChunkBase.COMPONENTS)
 
     def __iter__(self) -> Iterator[ChunkComponent]:
-        return (self[x] for x in GridChunkBase.COMPONENTS if self[x] is not None)
+        return (x for x in (self.water_component, self.air_component, self.land_component) if x is not None)
 
     def __contains__(self, __x: object) -> bool:
         if isinstance(__x, ChunkComponent):
@@ -58,8 +58,6 @@ class GridChunkBase(list[ChunkComponent]):
         self.__setattr__(f"{key.lower()}_component", value)
 
     def __getitem__(self, item: str):
-        if item.upper() not in GridChunkBase.COMPONENTS:
-            raise NotImplementedError(f"Component {item} is not a valid component type")
         return self.__getattribute__(f"{item.lower()}_component")
 
     def __eq__(self, other: object):

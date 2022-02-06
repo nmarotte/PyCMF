@@ -116,6 +116,9 @@ class FloatValidator(QValidator):
         if string.count("-") == 1:  # If there is one "-", check if before and after are valid
             if all(self.validate(x, 0)[0] == QValidator.Acceptable for x in string.split("-")):
                 return QValidator.Acceptable, string, pos
+        if string.count("+") == 1:  # If there is one "-", check if before and after are valid
+            if all(self.validate(x, 0)[0] == QValidator.Acceptable for x in string.split("+")):
+                return QValidator.Acceptable, string, pos
         try:
             float(string)
         except ValueError:

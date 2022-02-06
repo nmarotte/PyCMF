@@ -5,6 +5,8 @@ from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
 
 
 class TestTickingGridChunkBase(unittest.TestCase):
+
+    @unittest.skipIf(TickingGridChunk.water_evaporation not in Universe.on_tick_methods, "Not testing disabled on_tick method")
     def test_water_evaporation_no_air(self):
         water_chunk = TickingGridChunk.from_components_tuple((1000, 300, "Water"), volume=1)
         before_water_mass = water_chunk.water_component.mass
@@ -13,6 +15,7 @@ class TestTickingGridChunkBase(unittest.TestCase):
         self.assertEqual(water_chunk.water_component.mass, before_water_mass - evaporated_water)
         self.assertIsNotNone(water_chunk.air_component)
 
+    @unittest.skipIf(TickingGridChunk.water_evaporation not in Universe.on_tick_methods, "Not testing disabled on_tick method")
     def test_water_evaporation_with_air(self):
         water_air_chunk = TickingGridChunk.from_components_tuple((1000, 300, "Water"), (128, 300, "Air"), volume=1)
         before_water_mass = water_air_chunk.water_component.mass

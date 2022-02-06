@@ -4,6 +4,10 @@ from modelsv2.utils import EnergyRadiation
 
 
 class TickingSun(Sun, TickingModel):
+    def __init__(self):
+        Sun.__init__(self)
+        TickingModel.__init__(self)
+
     @TickingModel.on_tick
     def radiate_energy_outwards(self):
         """

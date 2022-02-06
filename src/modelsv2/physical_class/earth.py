@@ -67,7 +67,7 @@ class Earth(EarthBase, CelestialBody):
     def __str__(self):
         res = f"Earth : \n" \
               f"- Mass {self.total_mass}\n" \
-              f"- Average temperature: {self.average_temperature}\n" \
+              f"- Average temperature: {self.compute_average_temperature()}\n" \
               f"- Composition: \n\t{f'{chr(10) + chr(9)} '.join(str(round(value * 100, 2)) + '% ' + key for key, value in self.composition.items())}"
         return res
 
@@ -80,10 +80,13 @@ class Earth(EarthBase, CelestialBody):
         energy_each = input_energy / (self.nb_active_grid_chunks or 1)
         if energy_each:
             for elem in self.not_nones():
-                elem.energy += energy_each
+                elem.add_energy(energy_each)
 
     def compute_total_energy(self):
         return sum(elem.energy for elem in self.not_nones())
 
     def receive_radiation(self, energy: float):
         self.add_energy(energy * (1 - self.albedo))
+
+    def compute_average_temperature(self):
+        return sum(x.temperature for x in self.not_nones()) / max(1, self.nb_active_grid_chunks)

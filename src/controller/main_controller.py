@@ -8,10 +8,9 @@ from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import MessageController
 from messages import MessageToProcess
-from modelsv2.physical_class.earth import Earth
 from modelsv2.physical_class.universe import Universe
 from modelsv2.ticking_class.ticking_earth import TickingEarth
-from sun import Sun
+from modelsv2.ticking_class.ticking_sun import TickingSun
 from views.main_view import MainView
 
 
@@ -22,7 +21,7 @@ class MainController:
     def __init__(self):
         self.model = Universe()
         self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
-        self.model.sun = Sun()
+        self.model.sun = TickingSun()
         self.message_controller = MessageController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
@@ -31,15 +30,15 @@ class MainController:
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
         self.model = Universe()
-        self.model.earth = Earth(shape=CANVAS_SIZE, parent=self.model)
-        self.model.sun = Sun()
+        self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
+        self.model.sun = TickingSun()
 
     def start_pressed(self):
         self.canvas_controller.set_canvas_enabled(False)
         self.__start_simulation()
 
     def update_pressed(self):
-        self.simulation_thread = threading.Thread(target=self.model.update, args=())
+        self.simulation_thread = threading.Thread(target=self.model.update_all, args=())
         self.simulation_thread.start()
 
     def pause_pressed(self):

@@ -35,4 +35,4 @@ class TestGridChunkBase(unittest.TestCase):
         self.assertIs(self.a_chunk.water_component, self.a_chunk["WATER"], "Variable access is equivalent to bracket access")
 
     def test_error_unknown_component(self):
-        self.assertRaises(NotImplementedError, lambda:self.a_chunk["Chocolate"].mass)
+        self.assertRaises(NotImplementedError, lambda:self.a_chunk.__setitem__("Chocolate", self.an_air_component))
