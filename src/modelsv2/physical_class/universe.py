@@ -37,7 +37,7 @@ class Universe(UniverseBase, TickingModel):
         """
         for obj1 in self:
             for obj2 in self:
-                if obj1 is obj2:
+                if obj1 is obj2 or obj1 is None or obj2 is None:
                     continue
                 obj1.discover(obj2)
 

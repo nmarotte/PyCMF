@@ -33,6 +33,7 @@ class Sun(SunBase, CelestialBody):
         self.earth_radiation_ratio = earth_radiation_ratio  # https://socratic.org/questions/how-much-of-the-total-energy-that-leaves-the-sun-makes-it-to-earth-why
         CelestialBody.__init__(self, radius)
         self.get_universe().sun = self
+        self.get_universe().discover_everything()
 
     def __str__(self):
         res = f"Sun :\n"

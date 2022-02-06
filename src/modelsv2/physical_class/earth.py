@@ -11,6 +11,7 @@ class Earth(EarthBase, CelestialBody):
         EarthBase.__init__(self, shape, parent=parent)
         CelestialBody.__init__(self, radius)
         self.get_universe().earth = self
+        self.get_universe().discover_everything()
 
     # @classmethod
     # def from_qimage(cls, qimage: QtGui.QImage, temperatures: list[float], masses: list[float]):

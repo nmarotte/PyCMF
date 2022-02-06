@@ -22,6 +22,7 @@ class MainController:
         self.model = Universe()
         self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
         self.model.sun = TickingSun()
+        self.model.discover_everything()
         self.message_controller = MessageController(parent_controller=self)
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
