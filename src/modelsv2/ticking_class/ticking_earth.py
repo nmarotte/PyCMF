@@ -17,5 +17,6 @@ class TickingEarth(Earth, TickingModel):
             for neighbour in elem.neighbours:
                 if neighbour.index < elem.index:
                     continue  # Already computed the other way around
-                elem.temperature += temperature_gradiant[(elem.index, neighbour.index)] * self.get_universe().TIME_DELTA
-                neighbour.temperature -= temperature_gradiant[(elem.index, neighbour.index)] * self.get_universe().TIME_DELTA
+                energy_exchanged = temperature_gradiant[(elem.index, neighbour.index)] * elem.heat_transfer_coefficient * self.get_universe().TIME_DELTA / elem.surface
+                elem.energy += energy_exchanged * elem.specific_heat_capacity
+                neighbour.energy -= energy_exchanged * elem.specific_heat_capacity

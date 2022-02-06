@@ -10,8 +10,8 @@ class GridChunk(GridChunkBase):
     """
     specific_heat_capacity: float
     heat_transfer_coefficient: float
-    total_mass: float
-    volume: float
+    total_mass: float  # [kg]
+    volume: float  # [m3]
 
     neighbours: list["GridChunk"]
 

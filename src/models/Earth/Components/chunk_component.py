@@ -44,7 +44,7 @@ class ChunkComponent:
         self.mass = mass
 
         self.specific_heat_capacity = constants.SPECIFIC_HEAT_CAPACITY[self.type]
-        self.heat_transfer_coefficient = constants.SPECIFIC_HEAT_CAPACITY[self.type]
+        self.heat_transfer_coefficient = constants.HEAT_TRANSFER_COEFFICIENT[self.type]
         self.__set_temperature(temperature)
 
     def __eq__(self, other: Optional["ChunkComponent"]):
