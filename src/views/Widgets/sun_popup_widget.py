@@ -32,11 +32,12 @@ class SunPopupWidget(QtWidgets.QDialog):
         self.output.textChanged.connect(self.verify_output)
         self.layout().addWidget(self.output)
 
-        self.ratio = LabelledWidget(QtWidgets.QLineEdit, "Earth ratio viewed from the sun", vertical=False)
+        self.ratio = LabelledWidget(QtWidgets.QLineEdit, "[REMOVED] Earth ratio viewed from the sun", vertical=False)
         self.ratio.setToolTip("The proportion of the earth in the field of view from the sun.")
         self.ratio.setText(str(self.controller.main_controller.get_earth_radiation_ratio()))
         self.ratio.textChanged.connect(self.verify_ratio)
         self.ratio.setValidator(self.validator)
+        self.ratio.setDisabled(True)
         self.layout().addWidget(self.ratio)
         self.layout().addLayout(self.bottom_layout)
 

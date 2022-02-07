@@ -1,6 +1,6 @@
 water_earth_mass = 1.4e21
 water_earth_volume = 1.4e21
-earth_radiation_ratio = 00000002.87e-7  # The proportion of the sun's radiation the earth receives
+earth_radiation_ratio = 00000002.87e-7  # The proportion of the sun's radiation the earth receives DEPRECATED TODO
 # https://www.quora.com/What-percentage-of-the-suns-energy-actually-ends-up-on-Earth
 
 CANVAS_SIZE = (400, 400)

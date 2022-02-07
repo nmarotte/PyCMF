@@ -30,6 +30,7 @@ class Sun(SunBase, CelestialBody):
                  earth_radiation_ratio: float = 00000002.87e-7, radius: float = 6.957e8):
         self.total_energy = total_energy
         self.energy_radiated_per_second = energy_radiated_per_second
+        #TODO deprecated variable
         self.earth_radiation_ratio = earth_radiation_ratio  # https://socratic.org/questions/how-much-of-the-total-energy-that-leaves-the-sun-makes-it-to-earth-why
         CelestialBody.__init__(self, radius)
         self.get_universe().sun = self
