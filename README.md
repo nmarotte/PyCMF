@@ -1,8 +1,6 @@
 # UndCliMo
 UNDerstandable CLI MOdel (UCM for short)
 
-This module requires tqdm for showing the advancement of the computation, as well as matplotlib for plotting the simulation and imageio for creating a gif
-
 TODO structure of the models 3 types:
 
 - base_class (earth_base, grid_chunk_base, etc ...) and inheriting from BaseModel : Contains the basic structural/pythonic stuff for the class (correct inheritance, redefinition of dunder methods, etc ...)
