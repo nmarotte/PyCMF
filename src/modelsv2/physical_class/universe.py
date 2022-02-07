@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 from modelsv2.base_class.universe_base import UniverseBase
 from modelsv2.ABC.ticking_model import TickingModel
 from modelsv2.physical_class.earth import Earth
-from modelsv2.utils import EnergyRadiation
 
 
 class Universe(UniverseBase, TickingModel):
@@ -45,10 +44,10 @@ class Universe(UniverseBase, TickingModel):
         return self.earth.get_component_at(x, y, z)
 
     @staticmethod
-    def radiate_inside(energy_radiation: EnergyRadiation):
-        for celestial_body in energy_radiation.source.objects_in_line_of_sight:
-            solid_angle = energy_radiation.source.solid_angle(celestial_body)
-            celestial_body.receive_radiation(energy_radiation.amount_per_time_delta * solid_angle/(4*math.pi))
+    def radiate_inside(energy_radiation_per_time_delta: float, *, source: "CelestialBody"):
+        for celestial_body in source.objects_in_line_of_sight:
+            solid_angle = source.solid_angle(celestial_body)
+            celestial_body.receive_radiation(energy_radiation_per_time_delta * solid_angle / (4 * math.pi))
 
     @staticmethod
     def distance_between(object1: "CelestialBody", object2: "CelestialBody"):

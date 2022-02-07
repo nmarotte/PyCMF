@@ -1,6 +1,5 @@
 from modelsv2.physical_class.sun import Sun
 from modelsv2.ABC.ticking_model import TickingModel
-from modelsv2.utils import EnergyRadiation
 
 
 class TickingSun(Sun, TickingModel):
@@ -19,4 +18,4 @@ class TickingSun(Sun, TickingModel):
         :return:
         """
         energy_per_time_delta = self.energy_radiated_per_second * self.get_universe().TIME_DELTA
-        self.get_universe().radiate_inside(EnergyRadiation(self, energy_per_time_delta))
+        self.get_universe().radiate_inside(energy_per_time_delta, source=self)
