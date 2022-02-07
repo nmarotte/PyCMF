@@ -12,6 +12,6 @@ TODO structure of the models 3 types:
 
 
 Required Libraries : 
-unittest for testing
-PyQt5 for the graphical interface
-numpy for the models
+- unittest for testing
+- PyQt5 for the graphical interface
+- numpy for the models
