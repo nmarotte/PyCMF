@@ -8,18 +8,18 @@ from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import MessageController
 from messages import MessageToProcess
-from modelsv2.physical_class.universe import Universe
 from modelsv2.ticking_class.ticking_earth import TickingEarth
 from modelsv2.ticking_class.ticking_sun import TickingSun
+from modelsv2.ticking_class.ticking_universe import TickingUniverse
 from views.main_view import MainView
 
 
 class MainController:
-    model: Universe
+    model: TickingUniverse
     simulation_thread: Optional[threading.Thread] = None
 
     def __init__(self):
-        self.model = Universe()
+        self.model = TickingUniverse()
         self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
         self.model.sun = TickingSun()
         self.model.discover_everything()
@@ -30,7 +30,7 @@ class MainController:
 
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()
-        self.model = Universe()
+        self.model = TickingUniverse()
         self.model.earth = TickingEarth(shape=CANVAS_SIZE, parent=self.model)
         self.model.sun = TickingSun()
 
