@@ -2,6 +2,7 @@ import math
 
 from modelsv2.ABC.ticking_model import TickingModel
 from modelsv2.physical_class.earth import Earth
+from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
 
 
 class TickingEarth(Earth, TickingModel):
@@ -9,7 +10,13 @@ class TickingEarth(Earth, TickingModel):
         Earth.__init__(self, shape, radius, parent=parent)
         TickingModel.__init__(self)
 
-    @TickingModel.on_tick
+    def update(self):
+        super().update()
+        for elem in self.not_nones():
+            if isinstance(elem, TickingGridChunk):
+                elem.update()
+
+    @TickingModel.on_tick(enabled=True)
     def average_temperature(self):
         temperature_gradiant = {}
         # First sweep of finding the temperature difference

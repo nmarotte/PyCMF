@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from modelsv2.physical_class.chunk_component import ChunkComponent
-from modelsv2.physical_class.grid_chunk import GridChunk
+from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
 from views.Widgets.select_component_widget import SelectComponentWidget
 from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
 from messages import NoComponentBrushSelected
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 class SelectComponentController:
-    __grid_chunk: GridChunk = None
+    __grid_chunk: TickingGridChunk = None
 
     def __init__(self, parent_controller: "ToolbarController", main_controller: "MainController"):
         self.parent_controller = parent_controller
@@ -32,7 +32,7 @@ class SelectComponentController:
             for i, controller in enumerate(self.popup_controller.sub_controllers):
                 components.append(ChunkComponent(self.get_mass() * ratios[i], self.get_temperature(),
                                                  component_type=controller.type))
-            self.__grid_chunk = GridChunk(components, volume=self.get_volume_each())
+            self.__grid_chunk = TickingGridChunk(components, volume=self.get_volume_each())
 
     def get_ratios(self) -> list[float]:
         return [x.get_ratio() for x in self.popup_controller.sub_controllers]
@@ -46,7 +46,7 @@ class SelectComponentController:
     def get_brush_width(self):
         return self.view.spinbox.value()
 
-    def get_grid_chunk(self) -> GridChunk:
+    def get_grid_chunk(self) -> TickingGridChunk:
         return self.__grid_chunk
 
     def get_volume_each(self) -> float:

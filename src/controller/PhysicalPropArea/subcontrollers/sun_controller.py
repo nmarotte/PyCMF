@@ -25,3 +25,4 @@ class SunController:
         result = self.popup.exec_()
         if result:
             self.main_controller.set_sun_energy_per_second(float(self.popup.output.text()))
+            self.main_controller.set_sun_radius(float(self.popup.radius_value.text()))

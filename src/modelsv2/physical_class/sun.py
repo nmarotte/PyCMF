@@ -26,12 +26,10 @@ class Sun(SunBase, CelestialBody):
     #     self.universe.radiate_towards_earth(energy_per_time_delta * self.earth_radiation_ratio)
     #     self.tick()
 
-    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26,
-                 earth_radiation_ratio: float = 00000002.87e-7, radius: float = 6.957e8):
+    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26, radius: float = 6.957e8):
         self.total_energy = total_energy
         self.energy_radiated_per_second = energy_radiated_per_second
-        #TODO deprecated variable
-        self.earth_radiation_ratio = earth_radiation_ratio  # https://socratic.org/questions/how-much-of-the-total-energy-that-leaves-the-sun-makes-it-to-earth-why
+        #TODO deprecated variable https://socratic.org/questions/how-much-of-the-total-energy-that-leaves-the-sun-makes-it-to-earth-why
         CelestialBody.__init__(self, radius)
         self.get_universe().sun = self
         self.get_universe().discover_everything()
@@ -41,7 +39,8 @@ class Sun(SunBase, CelestialBody):
         if self.total_energy != math.inf:
             res += f"- Total energy remaining {self.total_energy} J\n"
         else:
-            res += f"- Infinite amount of energy"
-        res += f"- Radiating {self.energy_radiated_per_second} J/s outwards\n"
-        res += f"- Of which {100*self.earth_radiation_ratio} % will reach the earth"
+            res += f"- Infinite amount of energy\n"
+        res += f"- Radiating {self.energy_radiated_per_second} W outwards\n"
+        if self.get_universe().earth:
+            res += f"- Of which {100 * self.solid_angle(self.get_universe().earth) / (4 * math.pi)} % will reach the earth"
         return res

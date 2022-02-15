@@ -104,9 +104,6 @@ class MainController:
     def get_energy_per_second(self):
         return self.model.sun.energy_radiated_per_second
 
-    def get_earth_radiation_ratio(self):
-        return self.model.sun.earth_radiation_ratio
-
     def set_time_delta(self, time_delta):
         self.model.TIME_DELTA = time_delta
 
@@ -124,6 +121,12 @@ class MainController:
 
     def set_earth_albedo(self, albedo: float):
         self.model.earth.albedo = albedo
+
+    def get_sun_radius(self):
+        return self.model.sun.radius
+
+    def set_sun_radius(self, radius: float):
+        self.model.sun.radius = radius
 
 
 if __name__ == '__main__':

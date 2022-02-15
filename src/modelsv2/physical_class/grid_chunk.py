@@ -81,8 +81,7 @@ class GridChunk(GridChunkBase):
     #     self.tick()
 
     def deep_copy(self, new_index=None, new_parent=None) -> "GridChunk":
-        return GridChunk(tuple(component.deep_copy() for component in self),
-                         self.volume, index=new_index, parent=new_parent)
+        return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index, parent=new_parent)
 
     def add_energy(self, value: float):
         for component in self:

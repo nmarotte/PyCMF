@@ -7,7 +7,7 @@ class TickingSun(Sun, TickingModel):
         Sun.__init__(self)
         TickingModel.__init__(self)
 
-    @TickingModel.on_tick
+    @TickingModel.on_tick(enabled=True)
     def radiate_energy_outwards(self):
         """
         Update function for the Sun.

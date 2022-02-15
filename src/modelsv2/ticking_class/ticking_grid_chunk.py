@@ -11,7 +11,7 @@ class TickingGridChunk(TickingModel, GridChunk):
         GridChunk.__init__(self, components, volume, index=index, parent=parent)
         TickingModel.__init__(self)
 
-    @TickingModel.on_tick
+    @TickingModel.on_tick(enabled=True)
     def water_evaporation(self):
         if self.water_component is None:
             return
