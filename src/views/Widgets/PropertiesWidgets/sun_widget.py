@@ -2,10 +2,17 @@ from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets, QtGui
 
-from other.utils import LabelledWidget, FloatValidator
+from other.utils import FloatValidator, LabelledWidget
 
 if TYPE_CHECKING:
     from controller.PhysicalPropArea.subcontrollers.sun_controller import SunController
+
+
+class SunWidget(QtWidgets.QPushButton):
+    def __init__(self, controller: "SunController"):
+        self.controller = controller
+        super().__init__("Sun properties")
+        self.clicked.connect(self.controller.button_pressed)
 
 
 class SunPopupWidget(QtWidgets.QDialog):
@@ -32,17 +39,9 @@ class SunPopupWidget(QtWidgets.QDialog):
         self.output.textChanged.connect(self.verify_output)
         self.layout().addWidget(self.output)
 
-        self.ratio = LabelledWidget(QtWidgets.QLineEdit, "[REMOVED] Earth ratio viewed from the sun", vertical=False)
-        self.ratio.setToolTip("The proportion of the earth in the field of view from the sun.")
-        self.ratio.setText(str(self.controller.main_controller.get_earth_radiation_ratio()))
-        self.ratio.textChanged.connect(self.verify_ratio)
-        self.ratio.setValidator(self.validator)
-        self.ratio.setDisabled(True)
-        self.layout().addWidget(self.ratio)
         self.layout().addLayout(self.bottom_layout)
 
     def showEvent(self, a0: QtGui.QShowEvent):
-        self.ratio.setText(str(self.controller.main_controller.get_earth_radiation_ratio()))
         self.output.setText(str(self.controller.main_controller.get_energy_per_second()))
         super(SunPopupWidget, self).showEvent(a0)
 
@@ -53,18 +52,6 @@ class SunPopupWidget(QtWidgets.QDialog):
         """
         try:
             float(self.output.text())
-        except ValueError:
-            self.confirm.setDisabled(True)
-        else:
-            self.confirm.setEnabled(True)
-
-    def verify_ratio(self):
-        """
-        Verify that the lineEdit is a valid float, and disables the confirm button if not
-        :return:
-        """
-        try:
-            float(self.ratio.text())
         except ValueError:
             self.confirm.setDisabled(True)
         else:

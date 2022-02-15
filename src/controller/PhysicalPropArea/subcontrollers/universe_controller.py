@@ -1,7 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.universe_popup_widget import UniversePopupWidget
-from views.Widgets.universe_widget import UniverseWidget
+from views.Widgets.PropertiesWidgets.universe_widget import UniverseWidget, UniversePopupWidget
 
 if TYPE_CHECKING:
     from controller.PhysicalPropArea.physical_prop_area_controller import PhysicalPropAreaController
@@ -11,8 +10,7 @@ if TYPE_CHECKING:
 class UniverseController:
     time_delta: float = None
 
-    def __init__(self, parent_controller: "PhysicalPropAreaController", main_controller: "MainController"):
-        self.parent_controller = parent_controller
+    def __init__(self, main_controller: "MainController"):
         self.main_controller = main_controller
         self.view = UniverseWidget(self)
         self.popup = UniversePopupWidget(self)

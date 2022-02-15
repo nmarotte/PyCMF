@@ -11,5 +11,6 @@ class PhysicalPropArea(QtWidgets.QWidget):
         self.controller = controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
-        self.layout().addWidget(self.controller.universe_controller.view)
+        self.layout().addWidget(self.controller.earth_controller.view)
         self.layout().addWidget(self.controller.sun_controller.view)
+        self.layout().addWidget(self.controller.universe_controller.view)

@@ -113,6 +113,12 @@ class MainController:
     def get_time_delta(self):
         return self.model.TIME_DELTA
 
+    def get_earth_radius(self):
+        return self.model.earth.radius
+
+    def set_earth_radius(self, radius: float):
+        self.model.earth.radius = radius
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

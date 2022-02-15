@@ -1,17 +1,16 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.PropertiesWidgets.sun_widget import SunWidget, SunPopupWidget
+from views.Widgets.PropertiesWidgets.earth_widget import EarthWidget, EarthPopupWidget
 
 if TYPE_CHECKING:
-    from controller.PhysicalPropArea.physical_prop_area_controller import PhysicalPropAreaController
     from controller.main_controller import MainController
 
 
-class SunController:
+class EarthController:
     def __init__(self, main_controller: "MainController"):
         self.main_controller = main_controller
-        self.view = SunWidget(self)
-        self.popup = SunPopupWidget(self)
+        self.view = EarthWidget(self)
+        self.popup = EarthPopupWidget(self)
 
     def confirmed(self):
         self.popup.accept()
@@ -24,4 +23,4 @@ class SunController:
     def button_pressed(self):
         result = self.popup.exec_()
         if result:
-            self.main_controller.set_sun_energy_per_second(float(self.popup.output.text()))
+            self.main_controller.set_earth_radius(float(self.popup.radius_value.text()))
