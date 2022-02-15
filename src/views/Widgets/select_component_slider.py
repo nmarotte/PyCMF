@@ -9,16 +9,15 @@ if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
 
 
-class AtomicSelectComponentSlider(QtWidgets.QWidget):
+class LabelledDoubleSpinBoxSlider(QtWidgets.QWidget):
     slider: QtWidgets.QSlider
     spinbox: QtWidgets.QSpinBox
     lock_checkbox: QtWidgets.QCheckBox
     composition_button: QtWidgets.QPushButton
 
-    def __init__(self, label: str, index: int, default_mass: int, controller: "SelectComponentSliderController"):
+    def __init__(self, label: str, controller: "SelectComponentSliderController"):
         self.controller = controller
         super().__init__()
-        self.index = index
         self.setLayout(QtWidgets.QVBoxLayout())
         self.layout().addWidget(QtWidgets.QLabel(label.capitalize()))
 
@@ -49,8 +48,8 @@ class AtomicSelectComponentSlider(QtWidgets.QWidget):
         self.layout().addLayout(self.horizontal_slider_spinbox_other_layout)
 
 
-class SelectComponentSlider(AtomicSelectComponentSlider):
-    def __init__(self, label: str, index: int, default_mass: int, controller: "SelectComponentSliderController"):
-        super(SelectComponentSlider, self).__init__(label, index, default_mass, controller)
+class SelectComponentSlider(LabelledDoubleSpinBoxSlider):
+    def __init__(self, label: str, controller: "SelectComponentSliderController"):
+        super(SelectComponentSlider, self).__init__(label, controller)
         self.composition_button = QtWidgets.QPushButton("Composition")
         self.horizontal_slider_spinbox_other_layout.insertWidget(0, self.composition_button)

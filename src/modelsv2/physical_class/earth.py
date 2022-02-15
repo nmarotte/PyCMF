@@ -4,7 +4,7 @@ from modelsv2.physical_class.grid_chunk import GridChunk
 
 
 class Earth(EarthBase, CelestialBody):
-    albedo: float = 0
+    albedo: float = 0.3
 
     def __init__(self, shape: tuple, radius: float = 6.3781e6, *, parent=None):
         # TODO earth radius source https://arxiv.org/abs/1510.07674

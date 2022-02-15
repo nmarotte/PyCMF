@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.select_component_slider import AtomicSelectComponentSlider
+from views.Widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
@@ -8,11 +8,11 @@ if TYPE_CHECKING:
 
 
 class SelectComponentSliderController:
-    def __init__(self, component_type: str, index: int, default_mass: int, parent_controller: "SelectComponentPopupController"):
+    def __init__(self, component_type: str, index: int, parent_controller: "SelectComponentPopupController" = None):
         self.type = component_type
         self.parent_controller = parent_controller
         self.index = index
-        self.view = AtomicSelectComponentSlider(component_type, index, default_mass, self)
+        self.view = LabelledDoubleSpinBoxSlider(component_type, self)
         self.maximum = 100
 
     def lock_changed(self):

@@ -1,5 +1,5 @@
 from views.Widgets.select_component_widget import SelectComponentPopupView
-from constants import COMPONENTS, DEFAULT_MASSES
+from constants import COMPONENTS
 from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
 
 
@@ -7,8 +7,8 @@ class SelectComponentPopupController:
 
     def __init__(self):
         self.balancing = False
-        self.sub_controllers = [SelectComponentSliderController(component, i, default_mass, parent_controller=self) for
-                                i, (component, default_mass) in enumerate(zip(COMPONENTS, DEFAULT_MASSES))]
+        self.sub_controllers = [SelectComponentSliderController(component, i, parent_controller=self) for
+                                i, component in enumerate(COMPONENTS)]
         self.view = SelectComponentPopupView(controller=self)
 
     # Pressing confirm/cancel button

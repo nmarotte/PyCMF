@@ -119,6 +119,12 @@ class MainController:
     def set_earth_radius(self, radius: float):
         self.model.earth.radius = radius
 
+    def get_earth_albedo(self):
+        return self.model.earth.albedo
+
+    def set_earth_albedo(self, albedo: float):
+        self.model.earth.albedo = albedo
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])

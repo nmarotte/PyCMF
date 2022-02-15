@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets, QtGui
 
 from other.utils import FloatValidator, LabelledWidget
+from views.Widgets.SpinBoxSlider import SpinBoxSlider
+from views.Widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.PhysicalPropArea.subcontrollers.earth_controller import EarthController
@@ -38,10 +40,16 @@ class EarthPopupWidget(QtWidgets.QDialog):
         self.radius_value.textChanged.connect(self.verify_radius)
         self.radius_value.setValidator(self.validator)
         self.layout().addWidget(self.radius_value)
+
+        self.albedo = LabelledWidget(SpinBoxSlider, "Albedo", vertical=False)
+        self.albedo.setToolTip("The proportion of sun rays reflected")
+        self.layout().addWidget(self.albedo)
+
         self.layout().addLayout(self.bottom_layout)
 
     def showEvent(self, a0: QtGui.QShowEvent):
         self.radius_value.setText(str(self.controller.main_controller.get_earth_radius()))
+        self.albedo.set_value(self.controller.main_controller.get_earth_albedo() * 100)
         super().showEvent(a0)
 
     def verify_radius(self):
