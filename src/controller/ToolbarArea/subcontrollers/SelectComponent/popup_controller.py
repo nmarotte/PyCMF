@@ -19,7 +19,7 @@ class SelectComponentPopupController:
         self.view.reject()
 
     def balance_sliders(self, index: int, new_value: int):
-        if self.balancing:
+        if self.balancing or index is None:
             return
         self.balancing = True
         # Count the remaining value to balance

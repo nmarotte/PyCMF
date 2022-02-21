@@ -32,7 +32,7 @@ class SelectComponentController:
             for i, controller in enumerate(self.popup_controller.sub_controllers):
                 components.append(ChunkComponent(self.get_mass() * ratios[i], self.get_temperature(),
                                                  component_type=controller.type))
-            self.__grid_chunk = TickingGridChunk(components, volume=self.get_volume_each())
+            self.__grid_chunk = TickingGridChunk(components, volume=self.get_volume_each(), carbon_ppm=self.popup_controller.view.carbon_widget.value())
 
     def get_ratios(self) -> list[float]:
         return [x.get_ratio() for x in self.popup_controller.sub_controllers]

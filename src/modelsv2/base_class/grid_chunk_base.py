@@ -13,22 +13,23 @@ class GridChunkBase(list[ChunkComponent]):
     water_component: ChunkComponent = None
     air_component: ChunkComponent = None
     land_component: ChunkComponent = None
+    carbon_ppm: float = 0
 
     def reindex(self):
         """
         Search the parent class for this object in it and set the index variable accordingly
         :return:
         """
-        self.index = self.parent.index(self)
+        self.index = self.earth.index(self)
 
-    def __init__(self, components: Collection[ChunkComponent], *, index: int = None, parent=None):
+    def __init__(self, components: Collection[ChunkComponent], *, carbon_ppm: float = 0, index: int = None, earth=None):
         super().__init__()
-        self.parent = parent
+        self.earth = earth
         self.index = index
-        if self.index is None and self.parent is not None and self in self.parent:
+        if self.index is None and self.earth is not None and self in self.earth:
             # No index provided but parent provided ? Find the object in the parent
             self.reindex()
-        self.neighbours = self.parent.neighbours(self.index) if self.parent else None
+        self.neighbours = self.earth.neighbours(self.index) if self.earth else None
 
         # Add only the components that are not empty
         for i, component in enumerate(components):
@@ -37,6 +38,7 @@ class GridChunkBase(list[ChunkComponent]):
                 component.chunk = self
                 # Link the water/air/land _component object variable to the component of the corresponding type
                 self[component.type.upper()] = component
+        self.carbon_ppm = carbon_ppm
 
     def __len__(self) -> int:
         """

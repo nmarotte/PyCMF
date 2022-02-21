@@ -7,8 +7,8 @@ import modelsv2.physical_class.universe as universe
 
 
 class TickingGridChunk(TickingModel, GridChunk):
-    def __init__(self, components: Collection[ChunkComponent], volume: float, *, index: int = None, parent=None):
-        GridChunk.__init__(self, components, volume, index=index, parent=parent)
+    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None, earth=None):
+        GridChunk.__init__(self, components, volume, index=index, earth=earth, carbon_ppm=carbon_ppm)
         TickingModel.__init__(self)
 
     @TickingModel.on_tick(enabled=True)

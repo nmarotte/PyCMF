@@ -5,6 +5,7 @@ from modelsv2.physical_class.grid_chunk import GridChunk
 
 class Earth(EarthBase, CelestialBody):
     albedo: float = 0.3
+    CARBON_EMISSIONS_PER_TIME_DELTA: float = 1_000_000  # ppm
 
     def __init__(self, shape: tuple, radius: float = 6.3781e6, *, parent=None):
         # TODO earth radius source https://arxiv.org/abs/1510.07674
@@ -64,6 +65,30 @@ class Earth(EarthBase, CelestialBody):
                 composition_mass_dict[component.type] = composition_mass_dict.get(component.type, 0) + component.mass / total_mass
 
         return composition_mass_dict
+
+    @property
+    def carbon_flux_to_ocean(self):
+        """
+        The amount of carbon absorbed at every TIME_DELTA by all the ocean
+        :return:
+        """
+        return 100_000
+
+    @property
+    def land_carbon_decay(self):
+        """
+        The amount of carbon released at every TIME_DELTA due to all the biomass decaying
+        :return:
+        """
+        return 330_000
+
+    @property
+    def biosphere_carbon_absorption(self):
+        """
+        The amount of carbon absorbed at every TIME_DELTA due to all the biomass growing
+        :return:
+        """
+        return 300_000
 
     def __str__(self):
         res = f"Earth : \n" \

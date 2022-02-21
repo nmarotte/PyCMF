@@ -85,8 +85,8 @@ class MainController:
         for x, y in set(positions):
             chunk = self.toolbar_controller.select_component_controller.get_grid_chunk().deep_copy()
             chunk.index = x + y * self.model.earth.shape[1]
-            chunk.parent = self.model.earth
-            chunk.neighbours = chunk.parent.neighbours(chunk.index)
+            chunk.earth = self.model.earth
+            chunk.neighbours = chunk.earth.neighbours(chunk.index)
             self.model.earth.set_component_at(chunk, x, y)
 
     def get_ratios(self):

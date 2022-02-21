@@ -36,10 +36,13 @@ class UpdateMethodsPopupWidget(QtWidgets.QDialog):
             sub_layout = QtWidgets.QHBoxLayout()
             label = QtWidgets.QLabel(method.__name__)
             label.setToolTip(method.__doc__)
+            label.setToolTipDuration(0)
             sub_layout.addWidget(label)
 
             checkbox = QtWidgets.QCheckBox()
             checkbox.setChecked(method.enabled)
+            checkbox.setToolTip(method.__doc__)
+            checkbox.setToolTipDuration(0)
             self.checkboxes.append(checkbox)
             sub_layout.addWidget(checkbox)
             self.layout().addLayout(sub_layout)

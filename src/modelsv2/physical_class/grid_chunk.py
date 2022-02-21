@@ -15,9 +15,9 @@ class GridChunk(GridChunkBase):
 
     neighbours: list["GridChunk"]
 
-    def __init__(self, components: Collection[ChunkComponent], volume: float, *, index: int = None, parent=None):
+    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None, earth=None):
         self.volume = volume
-        GridChunkBase.__init__(self, components, index=index, parent=parent)
+        GridChunkBase.__init__(self, components, index=index, earth=earth, carbon_ppm=carbon_ppm)
 
         if not len(self):
             return  # Do not compute specific heat capacity of empty Grid Chunk
@@ -36,6 +36,8 @@ class GridChunk(GridChunkBase):
               f"Composition (mass ratio)\n"
         for component in self:
             res += f"{round(self.get_ratio_of_component(component) * 100, 2)}% {component.type}\n"
+        if self.carbon_ppm:
+            res += f"Carbon PPM {self.carbon_ppm}\n"
         return res
 
     def get_ratio_of_component(self, component_type: Union[ChunkComponent, str]):
@@ -81,7 +83,7 @@ class GridChunk(GridChunkBase):
     #     self.tick()
 
     def deep_copy(self, new_index=None, new_parent=None) -> "GridChunk":
-        return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index, parent=new_parent)
+        return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index, earth=new_parent, carbon_ppm=self.carbon_ppm)
 
     def add_energy(self, value: float):
         for component in self:
@@ -98,4 +100,4 @@ class GridChunk(GridChunkBase):
         :return: the instantiated GridChunk object
         """
         return cls(tuple(ChunkComponent(mass=tp[0], temperature=tp[1], component_type=tp[2]) for tp in args),
-                   volume, index=index, parent=parent)
+                   volume, index=index, earth=parent)

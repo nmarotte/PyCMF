@@ -18,6 +18,10 @@ class TickingEarth(Earth, TickingModel):
 
     @TickingModel.on_tick(enabled=True)
     def average_temperature(self):
+        """
+        Balances the temperature of each point on the earth
+        :return:
+        """
         temperature_gradiant = {}
         # First sweep of finding the temperature difference
         for elem in self.not_nones():
@@ -33,3 +37,13 @@ class TickingEarth(Earth, TickingModel):
                 energy_exchanged = temperature_gradiant[(elem.index, neighbour.index)] * elem.heat_transfer_coefficient * self.get_universe().TIME_DELTA / elem.surface
                 elem.add_energy(energy_exchanged * elem.specific_heat_capacity)
                 neighbour.add_energy(-energy_exchanged * elem.specific_heat_capacity)
+
+    @TickingModel.on_tick(enabled=False)
+    def carbon_cycle(self):
+        """
+        Globally computes carbon flow to be applied to each grid chunk
+        :return:
+        """
+        carbon = self.CARBON_EMISSIONS_PER_TIME_DELTA - self.carbon_flux_to_ocean + self.land_carbon_decay - self.biosphere_carbon_absorption
+        for chunk in self.not_nones():
+            chunk.carbon_ppm += carbon/self.nb_active_grid_chunks

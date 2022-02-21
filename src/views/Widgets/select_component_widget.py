@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 import qtawesome as qta
 
 from other.utils import LabelledWidget
+from views.Widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
@@ -33,6 +34,16 @@ class SelectComponentPopupView(QtWidgets.QDialog):
         self.cancel.clicked.connect(self.controller.cancelled)
         self.bottom_layout.addWidget(self.cancel)
 
+
+        physical_prop_bottom_layout = QtWidgets.QVBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
+        label = QtWidgets.QLabel("Carbon PPM")
+        self.carbon_widget = QtWidgets.QSpinBox()
+        self.carbon_widget.setMaximum(1000)
+        self.carbon_widget.setMinimum(0)
+        layout.addWidget(label)
+        layout.addWidget(self.carbon_widget)
+        physical_prop_bottom_layout.addLayout(layout)
         physical_properties_layout = QtWidgets.QHBoxLayout()
         self.mass_spinbox = LabelledWidget(QtWidgets.QDoubleSpinBox, "Total Mass", vertical=False)
         self.mass_spinbox.setMaximum(100000)
@@ -43,7 +54,9 @@ class SelectComponentPopupView(QtWidgets.QDialog):
         self.temperature_spinbox.setValue(21.0)
         physical_properties_layout.addWidget(self.mass_spinbox)
         physical_properties_layout.addWidget(self.temperature_spinbox)
-        self.layout().addLayout(physical_properties_layout)
+
+        physical_prop_bottom_layout.addLayout(physical_properties_layout)
+        self.layout().addLayout(physical_prop_bottom_layout)
         self.layout().addLayout(self.bottom_layout)
 
 
