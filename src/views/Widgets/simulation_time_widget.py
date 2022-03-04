@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
-import qtawesome as qta
 
+import qtawesome as qta
 from PyQt5 import QtWidgets
 
 if TYPE_CHECKING:

@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
+
 import qtawesome as qta
 
 from other.utils import LabelledWidget
-from views.Widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController

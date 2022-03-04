@@ -2,7 +2,7 @@ from typing import Optional, Iterator
 
 import numpy
 
-from modelsv2.physical_class.grid_chunk import GridChunk
+from models.physical_class.grid_chunk import GridChunk
 
 
 class EarthBase(list[Optional[GridChunk]]):

@@ -1,9 +1,6 @@
 from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets
-import qtawesome as qta
-
-from constants import ICON_SIZE
 
 if TYPE_CHECKING:
     from controller.exception_controller import MessageController

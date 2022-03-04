@@ -1,13 +1,13 @@
 import math
 from typing import TYPE_CHECKING
 
-from modelsv2.ABC.ticking_model import TickingModel
-from modelsv2.physical_class.sun import Sun
+from models.ABC.ticking_model import TickingModel
+from models.physical_class.sun import Sun
 
 if TYPE_CHECKING:
-    from modelsv2.ABC.celestial_body import CelestialBody
-from modelsv2.base_class.universe_base import UniverseBase
-from modelsv2.physical_class.earth import Earth
+    from models.ABC.celestial_body import CelestialBody
+from models.base_class.universe_base import UniverseBase
+from models.physical_class.earth import Earth
 
 
 class Universe(UniverseBase, TickingModel):

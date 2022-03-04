@@ -3,8 +3,6 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt
 
-from other.utils import LabelledWidget
-
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
 

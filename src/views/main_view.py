@@ -1,9 +1,8 @@
+from typing import TYPE_CHECKING
+
 from PyQt5 import QtWidgets
 
-import threading
-from typing import Optional, TYPE_CHECKING
-
-from modelsv2.physical_class.universe import Universe
+from models.physical_class.universe import Universe
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

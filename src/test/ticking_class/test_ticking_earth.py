@@ -1,7 +1,7 @@
 import unittest
 
-from modelsv2.physical_class.grid_chunk import GridChunk
-from modelsv2.ticking_class.ticking_earth import TickingEarth
+from models.physical_class.grid_chunk import GridChunk
+from models.ticking_class.ticking_earth import TickingEarth
 
 
 class TestTickingEarth(unittest.TestCase):

@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 
-from PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtCore import QPoint
+from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtCore import Qt
 
 from constants import CANVAS_SIZE
-from messages import MessageToProcess, CannotPaintNow, NoComponentBrushSelected
-from other.utils import color_from_ratio, color_from_chunk
+from messages import CannotPaintNow, NoComponentBrushSelected
+from other.utils import color_from_chunk
 
 if TYPE_CHECKING:
     from controller.CanvasArea.subcontrollers.canvas_controller import CanvasController

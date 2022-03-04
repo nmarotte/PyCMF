@@ -1,8 +1,8 @@
 import math
 
-from modelsv2.ABC.ticking_model import TickingModel
-from modelsv2.physical_class.earth import Earth
-from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
+from models.ABC.ticking_model import TickingModel
+from models.physical_class.earth import Earth
+from models.ticking_class.ticking_grid_chunk import TickingGridChunk
 
 
 class TickingEarth(Earth, TickingModel):

@@ -1,8 +1,7 @@
+from collections.abc import Collection, Iterator
 from typing import Optional
 
-from collections.abc import Collection, Iterator
-
-from modelsv2.physical_class.chunk_component import ChunkComponent
+from models.physical_class.chunk_component import ChunkComponent
 
 
 class GridChunkBase(list[ChunkComponent]):

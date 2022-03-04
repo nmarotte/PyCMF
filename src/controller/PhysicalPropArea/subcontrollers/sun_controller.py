@@ -3,7 +3,6 @@ from typing import TYPE_CHECKING
 from views.Widgets.PropertiesWidgets.sun_widget import SunWidget, SunPopupWidget
 
 if TYPE_CHECKING:
-    from controller.PhysicalPropArea.physical_prop_area_controller import PhysicalPropAreaController
     from controller.main_controller import MainController
 
 

@@ -1,10 +1,4 @@
-import math
-import random
 import unittest
-
-from modelsv2.ticking_class.ticking_earth import TickingEarth
-from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
-from modelsv2.ticking_class.ticking_sun import TickingSun
 
 
 class TestTickingUniverse(unittest.TestCase):

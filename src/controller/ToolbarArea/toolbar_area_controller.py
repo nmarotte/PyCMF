@@ -1,12 +1,11 @@
 from typing import TYPE_CHECKING
 
 from controller.PhysicalPropArea.physical_prop_area_controller import PhysicalPropAreaController
-from controller.update_methods_controller import UpdateMethodsController
-from views.toolbar_area import ToolbarArea
 from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
 from controller.ToolbarArea.subcontrollers.clear_canvas_controller import ClearCanvasController
 from controller.ToolbarArea.subcontrollers.simulation_time_controller import SimulationTimeController
-from messages import NoComponentBrushSelected
+from controller.update_methods_controller import UpdateMethodsController
+from views.toolbar_area import ToolbarArea
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

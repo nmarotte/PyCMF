@@ -2,9 +2,10 @@ import math
 from abc import abstractmethod
 from typing import TYPE_CHECKING
 
-import modelsv2.physical_class as ph_class
+import models.physical_class as ph_class
+
 if TYPE_CHECKING:
-    from modelsv2.physical_class.universe import Universe
+    from models.physical_class.universe import Universe
 
 
 class CelestialBody:
@@ -21,7 +22,7 @@ class CelestialBody:
     @staticmethod
     def get_universe() -> "Universe":
         if CelestialBody.__universe is None:
-            from modelsv2.physical_class import universe
+            from models.physical_class import universe
             # Reimport exactly the same once at run time when the rest of the program has been built
             CelestialBody.__universe = universe.Universe()
         return CelestialBody.__universe

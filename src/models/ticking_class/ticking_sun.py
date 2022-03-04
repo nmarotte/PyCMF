@@ -1,5 +1,5 @@
-from modelsv2.physical_class.sun import Sun
-from modelsv2.ABC.ticking_model import TickingModel
+from models.ABC.ticking_model import TickingModel
+from models.physical_class.sun import Sun
 
 
 class TickingSun(Sun, TickingModel):

@@ -1,10 +1,10 @@
 import math
 import unittest
 
-from modelsv2.physical_class.universe import Universe
-from modelsv2.ticking_class.ticking_earth import TickingEarth
-from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
-from modelsv2.ticking_class.ticking_sun import TickingSun
+from models.physical_class.universe import Universe
+from models.ticking_class.ticking_earth import TickingEarth
+from models.ticking_class.ticking_grid_chunk import TickingGridChunk
+from models.ticking_class.ticking_sun import TickingSun
 
 
 class TestTickingUniverse(unittest.TestCase):

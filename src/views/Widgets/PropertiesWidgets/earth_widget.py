@@ -4,7 +4,6 @@ from PyQt5 import QtWidgets, QtGui
 
 from other.utils import FloatValidator, LabelledWidget
 from views.Widgets.SpinBoxSlider import SpinBoxSlider
-from views.Widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.PhysicalPropArea.subcontrollers.earth_controller import EarthController

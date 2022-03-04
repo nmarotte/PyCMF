@@ -1,6 +1,6 @@
-from views.Widgets.select_component_widget import SelectComponentPopupView
 from constants import COMPONENTS
 from controller.ToolbarArea.subcontrollers.SelectComponent.slider_controller import SelectComponentSliderController
+from views.Widgets.select_component_widget import SelectComponentPopupView
 
 
 class SelectComponentPopupController:

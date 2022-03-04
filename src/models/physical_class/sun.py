@@ -1,7 +1,7 @@
 import math
 
-from modelsv2.ABC.celestial_body import CelestialBody
-from modelsv2.base_class.sun_base import SunBase
+from models.ABC.celestial_body import CelestialBody
+from models.base_class.sun_base import SunBase
 
 
 class Sun(SunBase, CelestialBody):

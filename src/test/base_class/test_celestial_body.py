@@ -1,8 +1,8 @@
 import unittest
 
-from modelsv2.ABC.celestial_body import CelestialBody
-from modelsv2.physical_class.earth import Earth
-from modelsv2.physical_class.sun import Sun
+from models.ABC.celestial_body import CelestialBody
+from models.physical_class.earth import Earth
+from models.physical_class.sun import Sun
 
 
 class TestCelestialBody(unittest.TestCase):

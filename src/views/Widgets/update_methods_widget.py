@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets, QtGui
 
-from other.utils import FloatValidator, LabelledWidget
-
 if TYPE_CHECKING:
     from controller.update_methods_controller import UpdateMethodsController
 

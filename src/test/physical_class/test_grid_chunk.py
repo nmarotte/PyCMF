@@ -1,7 +1,7 @@
 import unittest
 
-from modelsv2.physical_class.chunk_component import ChunkComponent
-from modelsv2.physical_class.grid_chunk import GridChunk
+from models.physical_class.chunk_component import ChunkComponent
+from models.physical_class.grid_chunk import GridChunk
 
 
 class TestGridChunkBase(unittest.TestCase):

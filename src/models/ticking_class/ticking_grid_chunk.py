@@ -1,9 +1,9 @@
 from collections.abc import Collection
 
-from modelsv2.physical_class.chunk_component import ChunkComponent
-from modelsv2.ABC.ticking_model import TickingModel
-from modelsv2.physical_class.grid_chunk import GridChunk
-import modelsv2.physical_class.universe as universe
+import models.physical_class.universe as universe
+from models.ABC.ticking_model import TickingModel
+from models.physical_class.chunk_component import ChunkComponent
+from models.physical_class.grid_chunk import GridChunk
 
 
 class TickingGridChunk(TickingModel, GridChunk):

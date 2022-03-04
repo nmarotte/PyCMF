@@ -1,7 +1,7 @@
 import unittest
 
-from modelsv2.physical_class.universe import Universe
-from modelsv2.ticking_class.ticking_grid_chunk import TickingGridChunk
+from models.physical_class.universe import Universe
+from models.ticking_class.ticking_grid_chunk import TickingGridChunk
 
 
 class TestTickingGridChunkBase(unittest.TestCase):

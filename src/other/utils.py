@@ -7,7 +7,7 @@ from PyQt5.QtGui import QValidator
 from constants import COMPONENTS
 
 if TYPE_CHECKING:
-    from modelsv2.physical_class.grid_chunk import GridChunk
+    from models.physical_class.grid_chunk import GridChunk
 
 
 def color_from_ratio(ratios: Union[list[float], dict[str, float]]):

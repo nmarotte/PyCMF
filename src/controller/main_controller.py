@@ -8,9 +8,9 @@ from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController
 from controller.exception_controller import MessageController
 from messages import MessageToProcess
-from modelsv2.physical_class.universe import Universe
-from modelsv2.ticking_class.ticking_earth import TickingEarth
-from modelsv2.ticking_class.ticking_sun import TickingSun
+from models.physical_class.universe import Universe
+from models.ticking_class.ticking_earth import TickingEarth
+from models.ticking_class.ticking_sun import TickingSun
 from views.main_view import MainView
 
 

@@ -2,7 +2,7 @@ import math
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from modelsv2.physical_class.grid_chunk import GridChunk
+    from models.physical_class.grid_chunk import GridChunk
 import constants
 
 

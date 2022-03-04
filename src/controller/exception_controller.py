@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING
-import qtawesome as qta
-from PyQt5.QtGui import QPixmap
 
-from views.Widgets.title_widget import Title
+import qtawesome as qta
+
 from constants import ICON_SIZE
 from messages import *
+from views.Widgets.title_widget import Title
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

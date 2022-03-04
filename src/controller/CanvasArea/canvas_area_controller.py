@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
-from views.canvas_area import CanvasArea
 from controller.CanvasArea.subcontrollers.canvas_controller import CanvasController
 from controller.CanvasArea.subcontrollers.text_edit_controller import TextEditController
+from views.canvas_area import CanvasArea
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController
