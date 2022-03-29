@@ -127,11 +127,3 @@ class MainController:
 
     def set_sun_radius(self, radius: float):
         self.model.sun.radius = radius
-
-
-if __name__ == '__main__':
-    app = QtWidgets.QApplication([])
-    controller = MainController()
-
-    controller.view.show()
-    app.exec_()

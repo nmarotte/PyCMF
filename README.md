@@ -10,10 +10,9 @@ UNDerstandable CLI MOdel (UCM for short) is a framework developped as part of my
 The framework is currently **not** able to provide accurate simulations of real-world physical process, but provides a few examples with placeholder simulations such as the averaging of the temperature at each time step
 
 ## Running the code
-With PyQt5, we can run the GUI by executing the `/src/controller/main_controller.py` Python script that contains the main_controller class and a `if __name__ == '__main__':` clause to run it
+To run the framework, you can edit the script in `main.py` and then execute it with `python3.9 main.py`.
 
-A placeholder example script can also be found in the `/main.py` Python script that will run the simulaton without graphical interface
-
+For running the program with the graphical interface, you can use the GUI command line argument and execute `python3.9 main.py GUI`. In that way you will be able to dynamically change the simulation
 ## Requirements
 
 Required Libraries : 
