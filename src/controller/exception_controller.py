@@ -4,7 +4,7 @@ import qtawesome as qta
 
 from constants import ICON_SIZE
 from messages import *
-from views.Widgets.title_widget import Title
+from views.widgets.title_widget import Title
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from PyQt5 import QtWidgets, QtGui
 
 from other.utils import FloatValidator, LabelledWidget
-from views.Widgets.SpinBoxSlider import SpinBoxSlider
+from views.widgets.spin_box_slider import SpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.PhysicalPropArea.subcontrollers.earth_controller import EarthController

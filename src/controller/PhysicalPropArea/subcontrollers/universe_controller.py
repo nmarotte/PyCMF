@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.PropertiesWidgets.universe_widget import UniverseWidget, UniversePopupWidget
+from views.widgets.properties_widgets.universe_widget import UniverseWidget, UniversePopupWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

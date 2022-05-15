@@ -4,7 +4,7 @@ from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller impo
 from messages import NoComponentBrushSelected
 from models.physical_class.chunk_component import ChunkComponent
 from models.ticking_class.ticking_grid_chunk import TickingGridChunk
-from views.Widgets.select_component_widget import SelectComponentWidget
+from views.widgets.select_component_widget import SelectComponentWidget
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.toolbar_area_controller import ToolbarController

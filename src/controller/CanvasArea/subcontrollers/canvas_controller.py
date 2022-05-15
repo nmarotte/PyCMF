@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from messages import Loading
-from views.Widgets.canvas_widget import CanvasWidget
+from views.widgets.canvas_widget import CanvasWidget
 
 if TYPE_CHECKING:
     from controller.CanvasArea.canvas_area_controller import CanvasAreaController

@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.PropertiesWidgets.earth_widget import EarthWidget, EarthPopupWidget
+from views.widgets.properties_widgets.earth_widget import EarthWidget, EarthPopupWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

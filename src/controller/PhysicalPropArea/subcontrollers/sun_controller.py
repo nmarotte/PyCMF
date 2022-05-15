@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.PropertiesWidgets.sun_widget import SunWidget, SunPopupWidget
+from views.widgets.properties_widgets.sun_widget import SunWidget, SunPopupWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

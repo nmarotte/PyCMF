@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from views.Widgets.update_methods_widget import UpdateMethodsWidget, UpdateMethodsPopupWidget
+from views.widgets.update_methods_widget import UpdateMethodsWidget, UpdateMethodsPopupWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController
