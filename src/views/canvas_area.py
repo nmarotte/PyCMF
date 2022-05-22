@@ -1,6 +1,7 @@
 from typing import TYPE_CHECKING
 
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QPushButton
 
 if TYPE_CHECKING:
     from controller.CanvasArea.canvas_area_controller import CanvasAreaController
@@ -13,7 +14,14 @@ class CanvasArea(QtWidgets.QWidget):
         self.main_controller = main_controller
         super().__init__()
         self.setLayout(QtWidgets.QVBoxLayout())
+        sub_layout = QtWidgets.QVBoxLayout()
         self.title = self.main_controller.message_controller.view
+        sub_layout.addWidget(self.title)
+        button = QPushButton("Temperature View")
+        button.clicked.connect(self.controller.show_temperature_view)
+        sub_layout.addWidget(button)
+        self.layout().addLayout(sub_layout)
+
 
         sub_layout = QtWidgets.QHBoxLayout()
         self.canvas = self.controller.canvas_controller.view
@@ -21,7 +29,6 @@ class CanvasArea(QtWidgets.QWidget):
         sub_layout.addWidget(self.canvas)
         sub_layout.addWidget(self.earth_info)
 
-        self.layout().addWidget(self.title)
         self.layout().addLayout(sub_layout)
 
     def clear_canvas(self):

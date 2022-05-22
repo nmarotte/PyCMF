@@ -28,7 +28,7 @@ def index_to_2D(index: int, shape: tuple[int, int]) -> tuple[int, int]:
     :param shape: Rows, Column
     :return:
     """
-    return index // shape[0], index % shape[1]
+    return index % shape[1], index // shape[0]
 
 
 class ComponentColor(QtGui.QColor):

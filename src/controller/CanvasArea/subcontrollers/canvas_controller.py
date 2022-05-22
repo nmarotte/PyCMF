@@ -44,3 +44,5 @@ class CanvasController:
         self.main_controller.components_painted(*self.last_painted_positions)
         self.last_painted_positions = []
         self.main_controller.finish_process_message(Loading)
+
+        self.parent_controller.temperature_view.update_pixels()
