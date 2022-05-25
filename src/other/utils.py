@@ -10,13 +10,6 @@ if TYPE_CHECKING:
     from models.physical_class.grid_chunk import GridChunk
 
 
-def color_from_ratio(ratios: Union[list[float], dict[str, float]]):
-    if isinstance(ratios, list):
-        total = sum(ratios)
-        ratios = {k: v for k, v in zip(COMPONENTS, [x / total for x in ratios])}
-    return ComponentColor(ratios)
-
-
 def color_from_chunk(chunk: "GridChunk"):
     return ComponentColor.from_chunk(chunk)
 
@@ -32,6 +25,9 @@ def index_to_2D(index: int, shape: tuple[int, int]) -> tuple[int, int]:
 
 
 class ComponentColor(QtGui.QColor):
+    """
+    Convert a component ratio to a color to draw
+    """
     WATER = QtGui.QColor("blue")
     AIR = QtGui.QColor("white")
     LAND = QtGui.QColor("brown")
@@ -60,6 +56,9 @@ class ComponentColor(QtGui.QColor):
 
 
 class LabelledWidget(QtWidgets.QWidget):
+    """
+    Simple widget with a label to the left or on top of it
+    """
     def __init__(self, widget_class: type[QtWidgets.QWidget], label: str, *, vertical: bool = True):
         super().__init__()
         self.widget_object = widget_class()
@@ -76,33 +75,10 @@ class LabelledWidget(QtWidgets.QWidget):
         return self.widget_object.__getattribute__(item)
 
 
-@dataclass
-class ComponentData:
-    component_type: str
-    ratio: float
-    mass: float
-    temperature: float
-
-
-@dataclass
-class ChunkData(Iterable):
-    def __iter__(self) -> Iterator[ComponentData]:
-        for i in range(len(self.component_types)):
-            yield ComponentData(self.component_types[i], self.ratios[i], self.masses[i], self.temperatures[i])
-
-    def __getitem__(self, item) -> ComponentData:
-        if isinstance(item, str):
-            index = self.component_types.index(item)
-            return ComponentData(self.component_types[index], self.ratios[index], self.masses[index],
-                                 self.temperatures[index])
-
-    component_types: list[str]
-    ratios: list[float]
-    masses: list[float]
-    temperatures: list[float]
-
-
 class FloatValidator(QValidator):
+    """
+    PyQt5 validator for float text edits to only accept numbers
+    """
     def validate(self, string: str, pos: int) -> tuple['QValidator.State', str, int]:
         if not len(string):  # If the size is 0, it is a correct state
             return QValidator.Acceptable, string, pos

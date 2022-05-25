@@ -1,7 +1,7 @@
 CANVAS_SIZE = (400, 400)
 ICON_SIZE = (16, 16)
 
-COMPONENTS = ["WATER", "AIR", "LAND"]
+COMPONENTS = ["WATER", "AIR", "LAND"]  # Here and not in the model universe because it is required by the GUI and the model
 
 SPECIFIC_HEAT_CAPACITY = {  # [J kg^-1 C^-1]
     "WATER": 4184,
