@@ -4,7 +4,6 @@ from views.widgets.select_component_slider import LabelledDoubleSpinBoxSlider
 
 if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
-#todo talk about python typing and how it makes us not need the usual abstract interfacing inheritance as seen in AMI
 
 
 class SelectComponentSliderController:

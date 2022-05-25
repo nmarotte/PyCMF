@@ -55,8 +55,6 @@ class GridChunk(GridChunkBase):
     @property
     def surface(self) -> float:
         # Assuming the chunk is cubic
-        # TODO link proof that the limit of the difference between the surface of a cube compared to the surface of a sphere of equivalent radius goes to 0
-        # TODO write that the program becomes more and more accurate the smaller the grid chunks are in volume
         return (self.volume ** (1 / 3)) ** 2
 
     @property

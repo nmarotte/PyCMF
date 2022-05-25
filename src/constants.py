@@ -1,13 +1,7 @@
-water_earth_mass = 1.4e21
-water_earth_volume = 1.4e21
-earth_radiation_ratio = 00000002.87e-7  # The proportion of the sun's radiation the earth receives DEPRECATED TODO
-# https://www.quora.com/What-percentage-of-the-suns-energy-actually-ends-up-on-Earth
-
 CANVAS_SIZE = (400, 400)
 ICON_SIZE = (16, 16)
 
 COMPONENTS = ["WATER", "AIR", "LAND"]
-AIR_COMPONENTS = ["NITROGEN", "OXYGEN", "ARGON"]
 
 SPECIFIC_HEAT_CAPACITY = {  # [J kg^-1 C^-1]
     "WATER": 4184,
