@@ -70,16 +70,6 @@ class GridChunk(GridChunkBase):
     def energy(self) -> float:
         return sum(c.energy for c in self)
 
-    #
-    # def update(self):
-    #     joule_per_time_scale = self.heat_transfer_coefficient * self.surface * self.universe.TIME_DELTA
-    #     for n in self.neighbours:
-    #         diff = n.temperature - self.temperature
-    #         if diff:
-    #             self.add_energy(joule_per_time_scale * diff * self.universe.TIME_DELTA)
-    #             n.add_energy(-joule_per_time_scale * diff * self.universe.TIME_DELTA)
-    #     self.tick()
-
     def deep_copy(self, new_index=None, new_parent=None) -> "GridChunk":
         return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index, earth=new_parent, carbon_ppm=self.carbon_ppm)
 
