@@ -22,7 +22,6 @@ class CanvasArea(QtWidgets.QWidget):
         sub_layout.addWidget(button)
         self.layout().addLayout(sub_layout)
 
-
         sub_layout = QtWidgets.QHBoxLayout()
         self.canvas = self.controller.canvas_controller.view
         self.earth_info = self.controller.text_edit_controller.view

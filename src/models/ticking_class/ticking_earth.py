@@ -34,7 +34,8 @@ class TickingEarth(Earth, TickingModel):
             for neighbour in elem.neighbours:
                 if neighbour.index < elem.index or (elem.index, neighbour.index) not in temperature_gradiant:
                     continue  # Already computed the other way around
-                energy_exchanged = temperature_gradiant[(elem.index, neighbour.index)] * elem.heat_transfer_coefficient * self.get_universe().TIME_DELTA / elem.surface
+                energy_exchanged = temperature_gradiant[(elem.index,
+                                                         neighbour.index)] * elem.heat_transfer_coefficient * self.get_universe().TIME_DELTA / elem.surface
                 elem.add_energy(energy_exchanged * elem.specific_heat_capacity)
                 neighbour.add_energy(-energy_exchanged * elem.specific_heat_capacity)
 
@@ -46,4 +47,4 @@ class TickingEarth(Earth, TickingModel):
         """
         carbon = self.CARBON_EMISSIONS_PER_TIME_DELTA - self.carbon_flux_to_ocean + self.land_carbon_decay - self.biosphere_carbon_absorption
         for chunk in self.not_nones():
-            chunk.carbon_ppm += carbon/self.nb_active_grid_chunks
+            chunk.carbon_ppm += carbon / self.nb_active_grid_chunks

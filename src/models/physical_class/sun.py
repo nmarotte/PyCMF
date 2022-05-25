@@ -13,7 +13,8 @@ class Sun(SunBase, CelestialBody):
         """
         return
 
-    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26, radius: float = 6.957e8):
+    def __init__(self, total_energy: float = math.inf, energy_radiated_per_second: float = 3.8e26,
+                 radius: float = 6.957e8):
         self.total_energy = total_energy
         self.energy_radiated_per_second = energy_radiated_per_second
         CelestialBody.__init__(self, radius)

@@ -30,5 +30,7 @@ class TestCelestialBody(unittest.TestCase):
 
     def test_all_objects_in_line_of_sight(self):
         self.universe.discover_everything()
-        self.assertIn(self.earth, self.sun.objects_in_line_of_sight, "After discovery, the earth can be seen from the sun")
-        self.assertIn(self.sun, self.earth.objects_in_line_of_sight, "After discovery, the sun can also be seen from the earth")
+        self.assertIn(self.earth, self.sun.objects_in_line_of_sight,
+                      "After discovery, the earth can be seen from the sun")
+        self.assertIn(self.sun, self.earth.objects_in_line_of_sight,
+                      "After discovery, the sun can also be seen from the earth")

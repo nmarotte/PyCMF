@@ -43,5 +43,3 @@ class MessageController:
         self.set_icon(message.icon, message.icon_color)
         self.set_text(message.text)
         self.view.update()
-
-

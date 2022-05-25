@@ -9,7 +9,8 @@ class Earth(EarthBase, CelestialBody):
 
     def __init__(self, shape: tuple, radius: float = 6.3781e6, *, parent=None):
         EarthBase.__init__(self, shape, parent=parent)
-        CelestialBody.__init__(self, radius)  # The default radius of the earth was found here https://arxiv.org/abs/1510.07674
+        CelestialBody.__init__(self,
+                               radius)  # The default radius of the earth was found here https://arxiv.org/abs/1510.07674
         self.get_universe().earth = self
         self.get_universe().discover_everything()
 
@@ -28,7 +29,8 @@ class Earth(EarthBase, CelestialBody):
         chunk: GridChunk
         for chunk in self.not_nones():
             for component in chunk:
-                composition_mass_dict[component.type] = composition_mass_dict.get(component.type, 0) + component.mass / total_mass
+                composition_mass_dict[component.type] = composition_mass_dict.get(component.type,
+                                                                                  0) + component.mass / total_mass
 
         return composition_mass_dict
 

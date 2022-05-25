@@ -2,7 +2,7 @@ import random
 from typing import TYPE_CHECKING
 
 import matplotlib.cm
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui
 from PyQt5.QtGui import QImage, QPixmap, QColor
 from PyQt5.QtWidgets import *
 
@@ -20,11 +20,12 @@ class PropertyViewWidget(QWidget):
     heatmap = matplotlib.cm.get_cmap('coolwarm')
 
     def temperature_to_color(self, temperature: float) -> QtGui.QColor:
-        ratio = (temperature - self.lowest_temperature_spinbox.value()) / (self.highest_temperature_spinbox.value() - self.lowest_temperature_spinbox.value())
+        ratio = (temperature - self.lowest_temperature_spinbox.value()) / (
+                    self.highest_temperature_spinbox.value() - self.lowest_temperature_spinbox.value())
         if ratio < 0.5:
-            return QColor(0, 0, int(255*(1-ratio)))
+            return QColor(0, 0, int(255 * (1 - ratio)))
         else:
-            return QColor(int(255*(1-ratio)), 0, 0)
+            return QColor(int(255 * (1 - ratio)), 0, 0)
 
     def __init__(self, controller: "CanvasAreaController"):
         self.controller = controller
@@ -89,16 +90,17 @@ class PropertyViewWidget(QWidget):
         self.update()
 
 
-
 if __name__ == '__main__':
     from controller.main_controller import MainController
+
     app = QApplication([])
     c = CanvasAreaController(MainController())
     earth = c.main_controller.model.earth
     for i in range(8000):
         # sets a random index of earth to a new grid chunk of random temperature
         index = random.randint(0, len(earth) - 1)
-        earth[random.randint(0, len(earth))] = GridChunk([ChunkComponent(1000, random.randint(250,350), "Water")], volume=1, index=index)
+        earth[random.randint(0, len(earth))] = GridChunk([ChunkComponent(1000, random.randint(250, 350), "Water")],
+                                                         volume=1, index=index)
     c.view.show()
 
     app.exec_()

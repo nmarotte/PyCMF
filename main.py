@@ -5,9 +5,7 @@ from PyQt5 import QtWidgets
 from tqdm import trange
 
 from controller.main_controller import MainController
-from models.physical_class.earth import Earth
 from models.physical_class.grid_chunk import GridChunk
-from models.physical_class.sun import Sun
 from models.physical_class.universe import Universe
 from models.ticking_class.ticking_earth import TickingEarth
 from models.ticking_class.ticking_sun import TickingSun
@@ -30,7 +28,8 @@ if __name__ == "__main__":
         print("Generating the earth...")
         for i in trange(len(universe.earth)):
             if random.uniform(0, 1) < filling_density:
-                universe.earth[i] = GridChunk.from_components_tuple((1000, 300+random.randint(-10, 10), "WATER"), volume=1, index=i, parent=universe.earth)
+                universe.earth[i] = GridChunk.from_components_tuple((1000, 300 + random.randint(-10, 10), "WATER"),
+                                                                    volume=1, index=i, parent=universe.earth)
         print("Done.")
         print("Updating Universe 10 times...")
         print(universe)

@@ -10,12 +10,14 @@ def on_tick_builder(cls: type["TickingModel"]):
     Or dynamically when adding a setting an attribute of the class to a function (with at least 1 parameters to catch the `self`)
     :return: the decorator
     """
+
     def decorator_factory(enabled: bool = True):
         """
         Allows for the decorator to take parameters
         :param enabled: if the on_tick method should be used on update
         :return:
         """
+
         def on_tick_decorator(func: callable) -> callable:
             """
             Appends the method to a specific list that is a CLASS attribute (static) of the class given to the outside function
@@ -25,7 +27,9 @@ def on_tick_builder(cls: type["TickingModel"]):
             func.enabled = enabled
             cls.on_tick_methods.append(func)
             return func
+
         return on_tick_decorator
+
     return decorator_factory
 
 

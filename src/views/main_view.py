@@ -21,4 +21,3 @@ class MainView(QtWidgets.QWidget):
 
         self.canvas_area_view = self.controller.canvas_controller.view
         self.layout().addWidget(self.canvas_area_view)
-

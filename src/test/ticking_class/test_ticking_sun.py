@@ -8,7 +8,8 @@ from models.ticking_class.ticking_sun import TickingSun
 
 
 class TestTickingUniverse(unittest.TestCase):
-    @unittest.skipIf(TickingSun.radiate_energy_outwards not in Universe.on_tick_methods,"Not testing disabled on_tick method")
+    @unittest.skipIf(TickingSun.radiate_energy_outwards not in Universe.on_tick_methods,
+                     "Not testing disabled on_tick method")
     def test_sun_radiate_earth(self):
         earth = TickingEarth(shape=(10, 1))
         earth[0] = TickingGridChunk.from_components_tuple((1000, 0, "WATER"), volume=1, index=0, parent=earth)

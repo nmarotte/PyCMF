@@ -15,7 +15,8 @@ class GridChunk(GridChunkBase):
 
     neighbours: list["GridChunk"]
 
-    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None, earth=None):
+    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None,
+                 earth=None):
         self.volume = volume
         GridChunkBase.__init__(self, components, index=index, earth=earth, carbon_ppm=carbon_ppm)
 
@@ -71,7 +72,8 @@ class GridChunk(GridChunkBase):
         return sum(c.energy for c in self)
 
     def deep_copy(self, new_index=None, new_parent=None) -> "GridChunk":
-        return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index, earth=new_parent, carbon_ppm=self.carbon_ppm)
+        return self.__class__(tuple(component.deep_copy() for component in self), self.volume, index=new_index,
+                              earth=new_parent, carbon_ppm=self.carbon_ppm)
 
     def add_energy(self, value: float):
         for component in self:

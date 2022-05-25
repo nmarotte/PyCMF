@@ -1,8 +1,6 @@
 import threading
 from typing import Optional
 
-from PyQt5 import QtWidgets
-
 from constants import CANVAS_SIZE
 from controller.CanvasArea.canvas_area_controller import CanvasAreaController
 from controller.ToolbarArea.toolbar_area_controller import ToolbarController

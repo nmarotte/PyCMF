@@ -28,11 +28,14 @@ class TestGridChunkBase(unittest.TestCase):
         self.assertNotEqual(self.grid_chunk_one, self.grid_chunk_two)
 
     def test_bracket_access(self):
-        self.assertIs(self.a_chunk["WaTer"], self.a_chunk["WATER"], "Bracket access can be used regardless of the capitalization")
-        self.assertIs(self.a_chunk["water"], self.a_chunk["Water"], "Bracket access can be used regardless of the capitalization")
+        self.assertIs(self.a_chunk["WaTer"], self.a_chunk["WATER"],
+                      "Bracket access can be used regardless of the capitalization")
+        self.assertIs(self.a_chunk["water"], self.a_chunk["Water"],
+                      "Bracket access can be used regardless of the capitalization")
 
     def test_access_variable(self):
-        self.assertIs(self.a_chunk.water_component, self.a_chunk["WATER"], "Variable access is equivalent to bracket access")
+        self.assertIs(self.a_chunk.water_component, self.a_chunk["WATER"],
+                      "Variable access is equivalent to bracket access")
 
     def test_error_unknown_component(self):
-        self.assertRaises(NotImplementedError, lambda:self.a_chunk.__setitem__("Chocolate", self.an_air_component))
+        self.assertRaises(NotImplementedError, lambda: self.a_chunk.__setitem__("Chocolate", self.an_air_component))

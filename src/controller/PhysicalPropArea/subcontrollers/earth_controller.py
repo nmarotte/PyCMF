@@ -24,4 +24,4 @@ class EarthController:
         result = self.popup.exec_()
         if result:
             self.main_controller.set_earth_radius(float(self.popup.radius_value.text()))
-            self.main_controller.set_earth_albedo(self.popup.albedo.get_value()/100)
+            self.main_controller.set_earth_albedo(self.popup.albedo.get_value() / 100)

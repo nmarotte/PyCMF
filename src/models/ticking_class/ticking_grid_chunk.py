@@ -7,7 +7,8 @@ from models.physical_class.grid_chunk import GridChunk
 
 
 class TickingGridChunk(TickingModel, GridChunk):
-    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None, earth=None):
+    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None,
+                 earth=None):
         GridChunk.__init__(self, components, volume, index=index, earth=earth, carbon_ppm=carbon_ppm)
         TickingModel.__init__(self)
 

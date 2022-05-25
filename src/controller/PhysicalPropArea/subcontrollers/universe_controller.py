@@ -27,4 +27,3 @@ class UniverseController:
         if result:
             self.time_delta = self.popup.time_delta_spinbox.value()
             self.main_controller.set_time_delta(self.time_delta)
-

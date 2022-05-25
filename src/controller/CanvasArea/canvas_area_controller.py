@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING
 
 from controller.CanvasArea.subcontrollers.canvas_controller import CanvasController
 from controller.CanvasArea.subcontrollers.text_edit_controller import TextEditController
-from views.widgets.properties_widgets.property_view_widget import PropertyViewWidget
 from views.canvas_area import CanvasArea
+from views.widgets.properties_widgets.property_view_widget import PropertyViewWidget
 
 if TYPE_CHECKING:
     from controller.main_controller import MainController

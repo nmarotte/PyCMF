@@ -45,7 +45,7 @@ class CanvasWidget(QtWidgets.QLabel):
             return
         with QtGui.QPainter(self.pixmap()) as painter:
             pen = QtGui.QPen()
-            brush_color = color_from_chunk(chunk) # color_from_ratio(ratios)
+            brush_color = color_from_chunk(chunk)  # color_from_ratio(ratios)
             pen.setColor(brush_color)
             width = self.controller.get_brush_width()
             pen.setWidth(width)

@@ -51,4 +51,3 @@ class UpdateMethodsPopupWidget(QtWidgets.QDialog):
         for checkbox, method in zip(self.checkboxes, self.controller.get_methods()):
             checkbox.setChecked(method.enabled)
         super().showEvent(a0)
-

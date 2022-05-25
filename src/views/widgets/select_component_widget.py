@@ -8,7 +8,6 @@ if TYPE_CHECKING:
     from controller.ToolbarArea.subcontrollers.SelectComponent.popup_controller import SelectComponentPopupController
     from controller.ToolbarArea.subcontrollers.SelectComponent.controller import SelectComponentController
 
-
 import PyQt5.QtWidgets as QtWidgets
 
 from constants import COMPONENTS
@@ -33,7 +32,6 @@ class SelectComponentPopupView(QtWidgets.QDialog):
         self.cancel = QtWidgets.QPushButton("Cancel")
         self.cancel.clicked.connect(self.controller.cancelled)
         self.bottom_layout.addWidget(self.cancel)
-
 
         physical_prop_bottom_layout = QtWidgets.QVBoxLayout()
         layout = QtWidgets.QHBoxLayout()
