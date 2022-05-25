@@ -7,6 +7,12 @@ from models.physical_class.grid_chunk import GridChunk
 
 
 class TickingGridChunk(TickingModel, GridChunk):
+    """
+    Third layer of the Grid chunk Model.
+    Contains only and all the rules for the model update.
+
+    /!\ Those methods for update must be marked with @TickingModel.on_tick(enabled=True)
+    """
     def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None,
                  earth=None):
         GridChunk.__init__(self, components, volume, index=index, earth=earth, carbon_ppm=carbon_ppm)

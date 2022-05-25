@@ -6,13 +6,13 @@ from models.physical_class.chunk_component import ChunkComponent
 
 class GridChunkBase(list[ChunkComponent]):
     """
-    The implementation aspect of the GridChunk
+    First layer of the grid chunk model.
+    This class takes care of the aggregation of the different Chunk Components.
     """
     COMPONENTS = "WATER", "AIR", "LAND"
     water_component: ChunkComponent = None
     air_component: ChunkComponent = None
     land_component: ChunkComponent = None
-    carbon_ppm: float = 0
 
     def reindex(self):
         """
@@ -21,7 +21,7 @@ class GridChunkBase(list[ChunkComponent]):
         """
         self.index = self.earth.index(self)
 
-    def __init__(self, components: Collection[ChunkComponent], *, carbon_ppm: float = 0, index: int = None, earth=None):
+    def __init__(self, components: Collection[ChunkComponent], *, index: int = None, earth=None):
         super().__init__()
         self.earth = earth
         self.index = index
@@ -37,7 +37,6 @@ class GridChunkBase(list[ChunkComponent]):
                 component.chunk = self
                 # Link the water/air/land _component object variable to the component of the corresponding type
                 self[component.type.upper()] = component
-        self.carbon_ppm = carbon_ppm
 
     def __len__(self) -> int:
         """

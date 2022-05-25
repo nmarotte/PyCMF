@@ -5,6 +5,10 @@ from models.base_class.sun_base import SunBase
 
 
 class Sun(SunBase, CelestialBody):
+    """
+    Second layer of the Sun Model.
+    Contains the methods and variable to compute the model of the sun
+    """
     def receive_radiation(self, energy: float):
         """
         No behaviour set for the Sun receiving radiation

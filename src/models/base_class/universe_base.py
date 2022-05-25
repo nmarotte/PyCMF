@@ -5,6 +5,10 @@ from models.physical_class.sun import Sun
 
 
 class UniverseBase:
+    """
+    First layer of the model Universe.
+    Allows iterating over all the objects in the universe.
+    """
     earth: Optional[Earth] = None
     sun: Optional[Sun] = None
 

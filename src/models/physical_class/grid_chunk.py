@@ -6,19 +6,22 @@ from models.physical_class.chunk_component import ChunkComponent
 
 class GridChunk(GridChunkBase):
     """
+    Second Layer of the GridChunk model
     The physical properties aspect of the GridChunk
     """
     specific_heat_capacity: float
     heat_transfer_coefficient: float
     total_mass: float  # [kg]
     volume: float  # [m3]
+    carbon_ppm: float  # [ppm]
 
     neighbours: list["GridChunk"]
 
-    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm=0, index: int = None,
+    def __init__(self, components: Collection[ChunkComponent], volume: float, *, carbon_ppm: float = 0, index: int = None,
                  earth=None):
         self.volume = volume
-        GridChunkBase.__init__(self, components, index=index, earth=earth, carbon_ppm=carbon_ppm)
+        self.carbon_ppm = carbon_ppm
+        GridChunkBase.__init__(self, components, index=index, earth=earth)
 
         if not len(self):
             return  # Do not compute specific heat capacity of empty Grid Chunk

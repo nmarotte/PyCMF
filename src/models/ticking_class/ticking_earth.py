@@ -6,11 +6,23 @@ from models.ticking_class.ticking_grid_chunk import TickingGridChunk
 
 
 class TickingEarth(Earth, TickingModel):
+    """
+    Third layer of the Earth Model.
+    Contains only and all the rules for the model update.
+
+    /!\ Those methods for update must be marked with @TickingModel.on_tick(enabled=True)
+    """
     def __init__(self, shape: tuple, radius: float = 6.3781e6, *, parent=None):
         Earth.__init__(self, shape, radius, parent=parent)
         TickingModel.__init__(self)
 
     def update(self):
+        """
+        Special reimplementation of update to update all the components of the earth as well.
+        Returns
+        -------
+
+        """
         super().update()
         for elem in self.not_nones():
             if isinstance(elem, TickingGridChunk):

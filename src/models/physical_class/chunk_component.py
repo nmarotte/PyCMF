@@ -8,27 +8,28 @@ import constants
 
 class ChunkComponent:
     """
-        A class to represent a component of a chunk.
+    Standalon Third layer implementation
+    A class to represent a component of a chunk.
 
-        ...
+    ...
 
-        Attributes
-        ----------
-        chunk: GridChunk
-            The reference to the parent (container) GridChunk
-        mass: float
-            The Mass of the component, will be used as kg
-        specific_heat_capacity:
-            The amount of heat that must be added to a material to increase its temperature
-            See https://en.wikipedia.org/wiki/Specific_heat_capacity
-            Expressed in Joules per Kilograms per Kelvin (Water = 4184 Jkg-1K-1)
-        heat_transfer_coefficient:
-            Coefficient for Newton's law of Cooling
-            See https://en.wikipedia.org/wiki/Heat_transfer_coefficient
-            Expressed in Watt per Meter squared per Kelvin
-        energy: float
-            The molecular kinetic energy of the component. It is used to store and compute the temperature of the
-            component
+    Attributes
+    ----------
+    chunk: GridChunk
+        The reference to the parent (container) GridChunk
+    mass: float
+        The Mass of the component, will be used as kg
+    specific_heat_capacity:
+        The amount of heat that must be added to a material to increase its temperature
+        See https://en.wikipedia.org/wiki/Specific_heat_capacity
+        Expressed in Joules per Kilograms per Kelvin (Water = 4184 Jkg-1K-1)
+    heat_transfer_coefficient:
+        Coefficient for Newton's law of Cooling
+        See https://en.wikipedia.org/wiki/Heat_transfer_coefficient
+        Expressed in Watt per Meter squared per Kelvin
+    energy: float
+        The molecular kinetic energy of the component. It is used to store and compute the temperature of the
+        component
         """
     chunk: "GridChunk" = None
     mass: float

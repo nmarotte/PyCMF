@@ -9,6 +9,11 @@ if TYPE_CHECKING:
 
 
 class CelestialBody:
+    """
+    Abstract class for celestial bodies. This class must be inherited by any model that has a galactic scale, that is
+    that interacts with the universe or other celestial bodies. Examples are the Sun, the Earth, an asteroid, a comet,
+    satellites, etc
+    """
     __universe: "Universe" = None
     radius: float
     objects_in_line_of_sight: list["CelestialBody"]

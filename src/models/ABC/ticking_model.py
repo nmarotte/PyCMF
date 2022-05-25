@@ -34,6 +34,17 @@ def on_tick_builder(cls: type["TickingModel"]):
 
 
 class TickableModelMeta(type):
+    """
+    This meta class must be meta inherited by TickingModel. It takes care of adding an "on_tick" method to the class
+    meta inheriting from it.
+
+    This method is built with the on_tick_builder function that take the variable x (which is a CLASS, not an object !!!)
+    and returns a decorator factory function. Therefore the variable x representing a class now has a new method called
+    "on_tick".
+
+    The on_tick method, when used as a decorator, will at definition time add the "enabled" attribute to the function, and
+    append that function to a list of the class.
+    """
     def __new__(mcs, name, bases, dct: dict[str, Any]):
         x = super().__new__(mcs, name, bases, dct)
         # Ignore the warning, it is due to the fact that super().__new__ returns a basic type
@@ -43,6 +54,14 @@ class TickableModelMeta(type):
 
 
 class TickingModel(metaclass=TickableModelMeta):
+    """
+    Base class for all models that need to be updated every tick. When a class inherits from this class, it will have
+    the on_tick method that can be used as a decorator to describe a method that must be executed every tick.
+
+    This is done by adding the method itself, at definition time, to a list of the class. The list is therefore a class
+    attribute since there are no objects at that time of the program. This is why we check that the method's class is
+    the same as self
+    """
     on_tick_methods: list[Callable] = []
     on_tick: Callable[[callable], callable]
 

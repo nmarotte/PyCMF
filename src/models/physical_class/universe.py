@@ -12,7 +12,12 @@ from models.physical_class.earth import Earth
 
 class Universe(UniverseBase, TickingModel):
     """
-    Singleton class that will contain all other models
+    Special case of the second layer of the model. This is a special case because it is a Singleton and contains all the
+    other models
+    Also contains multiple universal constant or approximations of physical properties.
+    Contains the update method that will update all the components of the universe as well as itself right after.
+
+    The universe does not contain itself.
     """
     TIME_DELTA: float = 0.01
     EVAPORATION_RATE: float = 0.0001

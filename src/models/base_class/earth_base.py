@@ -6,6 +6,11 @@ from models.physical_class.grid_chunk import GridChunk
 
 
 class EarthBase(list[Optional[GridChunk]]):
+    """
+    First layer of the earth model.
+    The Python implementation of the Earth class to deal with the dunder method, index access, etc...
+    There should be no reference to the physical properties of the Earth since it is taken care of in the second layer.
+    """
     nb_active_grid_chunks: int = 0
 
     def __init__(self, shape: tuple, *, parent=None):

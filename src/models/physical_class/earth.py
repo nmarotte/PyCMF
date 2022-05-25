@@ -4,6 +4,11 @@ from models.physical_class.grid_chunk import GridChunk
 
 
 class Earth(EarthBase, CelestialBody):
+    """
+    Second layer of the Earth model.
+    In this layer are all the physical properties and functions of the Earth implemented. It is here that we will add
+    new model variables
+    """
     albedo: float = 0.3
     CARBON_EMISSIONS_PER_TIME_DELTA: float = 1_000_000  # ppm
 
