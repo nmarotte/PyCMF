@@ -56,7 +56,8 @@ class Universe(UniverseBase, TickingModel):
 
     def update_all(self):
         for elem in self:
-            elem.update()
+            if isinstance(elem, TickingModel):
+                elem.update()
         self.update()
 
     def __update_loop(self):

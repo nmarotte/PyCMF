@@ -27,6 +27,7 @@ class MainController:
         self.toolbar_controller = ToolbarController(parent_controller=self)
         self.canvas_controller = CanvasAreaController(parent_controller=self)
         self.view = MainView(controller=self)
+        self.canvas_controller.clear_canvas()
 
     def clear_pressed(self):
         self.canvas_controller.clear_canvas()

@@ -2,6 +2,7 @@ import random
 import sys
 
 from PyQt5 import QtWidgets
+from tqdm import trange
 
 from controller.main_controller import MainController
 from models.physical_class.earth import Earth
@@ -25,14 +26,14 @@ if __name__ == "__main__":
         universe.discover_everything()
 
         # Fills the earth with random GridChunk of water
-        filling_density = 0.1
-        for i in range(len(universe.earth)):
-            if random.randint(0, int(1/filling_density)):
-                continue
-            universe.earth[i] = GridChunk.from_components_tuple((1000, 300+random.randint(-10, 10), "WATER"), volume=1, index=0, parent=universe.earth)
-
+        filling_density = 1
+        print("Generating the earth...")
+        for i in trange(len(universe.earth)):
+            if random.uniform(0, 1) < filling_density:
+                universe.earth[i] = GridChunk.from_components_tuple((1000, 300+random.randint(-10, 10), "WATER"), volume=1, index=i, parent=universe.earth)
+        print("Done.")
+        print("Updating Universe 10 times...")
         print(universe)
-        if isinstance(universe.earth, TickingEarth) and isinstance(universe.sun, TickingSun):
-            for i in range(10):
-                universe.update_all()
-            print(universe)
+        for i in trange(10):
+            universe.update_all()
+        print(universe)
