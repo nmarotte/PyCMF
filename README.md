@@ -1,5 +1,9 @@
 # PyCMF
 
+## Objectives
+
+The objective of this project was to experiment with Object-Oriented technology in a Climate Modelling context. We used Climate Models as a basis on which to build a framework in OO to research the advantages and drawback of the use of Object-Oriented in a compute-intensive setting.
+
 ## Introduction
 
 PYthon Climate Modelling Framework (or PyCMF for short) is a framework developped as part of my Master's thesis in Computer Science at
@@ -18,15 +22,28 @@ few examples with placeholder simulations such as the averaging of the temperatu
 
 ## Running the code
 
+### Required Libraries
+
+- unittest for testing
+- PyQt5 for the graphical interface
+- numpy for the models
+
+
 To run the framework, you can edit the script in `main.py` and then execute it with `python3.9 main.py`.
 
 For running the program with the graphical interface, you can use the GUI command line argument and
 execute `python3.9 main.py GUI`. In that way you will be able to dynamically change the simulation
 
-## Requirements
+## How to add a new model
 
-Required Libraries :
+To add a new model, you have to add between 1 and 3 files since the models are split in 3 different layers. First, create your $model.py file in physical_class and add all the physical properties of that model you need. Then, if necessary, create another file in base_class to handle all the pythonic behavior, such as iteration behavior, adding, substracting, memory use, data storage, saving the simulation, loading a simulation, etc ... Don't forget to make your second layer model inherit from the first layer model.
 
-- unittest for testing
-- PyQt5 for the graphical interface
-- numpy for the models
+Finally, if you model has some variables that are updated over time, you will have to create a third file in ticking_class to define the different updates behavior with the `@TickingModel.on_tick(enabled=True)` decorator that you obtain by inheriting from TickingModel. Also, you must inherit from your second layer class to get all of your physical properties variables on which the update is done.
+
+## How to add a new variable to the model
+
+To enrich the framework, you can add new physical properties and all their associated methods for conveniance (getters, setters, etc ... ) in the second layer, physical_class. You can also change the `__init__` method of the class to allow for setting your variable when the model is built, in which case you will have to find the other use of that model and change the constructor's parameters as well.
+
+Then, if your variable has a temporal dimension to it, you can add the temporal evolution in the third layer, ticking_class, where you can define a function decorated by `@TickingModel.on_tick(enabled=True)`
+
+
